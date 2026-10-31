@@ -2,10 +2,10 @@
   "id": "unit-1f92ee8f80da27f2",
   "suite": "unit",
   "name": "TestPagesPublicationProvenance/wrong-repository",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/gates_test.go#L59",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tests/gates_test.go#L59",
   "package": "github.com/newdarwindev/firm-payments/tests",
   "command": [
     "go",
@@ -42,6 +42,22 @@
   "total": 0,
   "covered": 0,
   "files": [],
+  "assertions": [
+    {
+      "path": "tests/gates_test.go",
+      "label": "Selected test / case body · TestPagesPublicationProvenance",
+      "source": "func TestPagesPublicationProvenance(t *testing.T) {\n\tscript, err := filepath.Abs(\"../scripts/site-publication\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tsha := strings.Repeat(\"a\", 40)\n\tpublic := strings.Repeat(\"b\", 40)\n\tfor _, tc := range []struct {\n\t\tname, source, target, repository, url string\n\t\tok                                    bool\n\t}{\n\t\t{\"matching\", sha, public, \"newdarwindev/firm-payments-docs\", \"https://newdarwindev.github.io/firm-payments-docs/\", true},\n\t\t{\"stale\", public, public, \"newdarwindev/firm-payments-docs\", \"https://newdarwindev.github.io/firm-payments-docs/\", false},\n\t\t{\"invalid-commit\", sha, \"main\", \"newdarwindev/firm-payments-docs\", \"https://newdarwindev.github.io/firm-payments-docs/\", false},\n\t\t{\"wrong-repository\", sha, public, \"another/repository\", \"https://newdarwindev.github.io/firm-payments-docs/\", false},\n\t\t{\"redirected-site\", sha, public, \"newdarwindev/firm-payments-docs\", \"https://example.com/\", false},\n\t} {\n\t\tt.Run(tc.name, func(t *testing.T) {\n\t\t\tb, err := json.Marshal(map[string]string{\"SourceSHA\": tc.source, \"PublicSHA\": tc.target, \"Repository\": tc.repository, \"SiteURL\": tc.url})\n\t\t\tif err != nil {\n\t\t\t\tt.Fatal(err)\n\t\t\t}\n\t\t\tmanifest := filepath.Join(t.TempDir(), \"publication.json\")\n\t\t\tif err := os.WriteFile(manifest, b, 0o600); err != nil {\n\t\t\t\tt.Fatal(err)\n\t\t\t}\n\t\t\tout, err := exec.CommandContext(t.Context(), \"bash\", script, manifest, sha).CombinedOutput()\n\t\t\tif (err == nil) != tc.ok || (tc.ok && strings.TrimSpace(string(out)) != public) {\n\t\t\t\tt.Fatalf(\"publication result %v, expected pass=%v: %s\", err, tc.ok, out)\n\t\t\t}\n\t\t})\n\t}\n}",
+      "sha256": "cecaf47f05d84d56162722e8cc87cf4a2c24879befdd7f7cd730975849547b04",
+      "startLine": 59,
+      "endLine": 91,
+      "assertLines": [
+        62,
+        79,
+        83,
+        87
+      ]
+    }
+  ],
   "profileSHA256": "15e39ee7d1ea1e23c2caa82c7fa07907bc8ae826847b1499a894308734780a89",
-  "gifSHA256": "5761c42540f3ae9ccb9c2fc39812ad9e9b43ae93b0ca04c8051d0b456764a797"
+  "gifSHA256": "5b7cc8aadcca15c88fa57c99e699acfa9f404a548fdcdaa22cd052797e1d3123"
 }

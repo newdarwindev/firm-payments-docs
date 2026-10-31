@@ -2,10 +2,10 @@
   "id": "unit-cd25af6d5b429bf1",
   "suite": "unit",
   "name": "TestSiteInternalLinksAndPublicAllowlistFailClosed",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/requirements-site/main_test.go#L138",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tools/requirements-site/main_test.go#L138",
   "package": "github.com/newdarwindev/firm-payments/tools/requirements-site",
   "command": [
     "go",
@@ -31,20 +31,595 @@
     "-covermode=atomic",
     "."
   ],
-  "binarySHA256": "9d28561128d3b8ab14078425c997ca7f632a9112d21595c381f759d3ac5659e8",
+  "binarySHA256": "d866313c631a43483ebb20002b7846c29d8893442dbee92860d012340e679cc0",
   "selected": "TestSiteInternalLinksAndPublicAllowlistFailClosed",
   "executed": [
     "TestSiteInternalLinksAndPublicAllowlistFailClosed"
   ],
   "group": false,
   "scope": "Go package test; includes parent setup and teardown. Unit tests may use test doubles. Full-suite race checks run separately.",
-  "total": 551,
+  "total": 661,
   "covered": 124,
   "files": [
     {
+      "path": "tools/requirements-site/assertions.go",
+      "sha256": "c964a1317431f5bf4ea7e121c038a05177cddf387f1734773eccb38049b1e994",
+      "source": "package main\n\nimport (\n\t\"errors\"\n\t\"go/ast\"\n\t\"go/parser\"\n\t\"go/token\"\n\t\"os\"\n\t\"path/filepath\"\n\t\"sort\"\n\t\"strconv\"\n\t\"strings\"\n)\n\n// Test source is literal source, not a claim that every assertion branch ran.\ntype assertionSource struct {\n\tPath        string `json:\"path\"`\n\tLabel       string `json:\"label\"`\n\tSource      string `json:\"source\"`\n\tSHA256      string `json:\"sha256\"`\n\tStartLine   int    `json:\"startLine\"`\n\tEndLine     int    `json:\"endLine\"`\n\tAssertLines []int  `json:\"assertLines\"`\n}\ntype sourceNode struct {\n\tfile string\n\tnode ast.Node\n\tfset *token.FileSet\n}\ntype testSourceIndex struct {\n\tfunctions map[string]sourceNode\n\tlocations map[string]sourceNode\n}\n\nfunc indexTestSources(root, dir string) (testSourceIndex, error) {\n\tindex := testSourceIndex{map[string]sourceNode{}, map[string]sourceNode{}}\n\tfiles, err := filepath.Glob(filepath.Join(root, dir, \"*_test.go\"))\n\tif err != nil {\n\t\treturn index, err\n\t}\n\tfor _, path := range files {\n\t\tfset := token.NewFileSet()\n\t\tfile, err := parser.ParseFile(fset, path, nil, 0)\n\t\tif err != nil {\n\t\t\treturn index, err\n\t\t}\n\t\trelative, err := filepath.Rel(root, path)\n\t\tif err != nil {\n\t\t\treturn index, err\n\t\t}\n\t\trelative = filepath.ToSlash(relative)\n\t\tast.Inspect(file, func(node ast.Node) bool {\n\t\t\tswitch value := node.(type) {\n\t\t\tcase *ast.FuncDecl:\n\t\t\t\tif value.Recv == nil {\n\t\t\t\t\tindex.functions[value.Name.Name] = sourceNode{relative, value, fset}\n\t\t\t\t}\n\t\t\t\tindex.locations[relative+\"#L\"+strconv.Itoa(fset.Position(value.Pos()).Line)] = sourceNode{relative, value, fset}\n\t\t\tcase *ast.KeyValueExpr:\n\t\t\t\tif _, ok := value.Key.(*ast.BasicLit); ok {\n\t\t\t\t\tindex.locations[relative+\"#L\"+strconv.Itoa(fset.Position(value.Pos()).Line)] = sourceNode{relative, value, fset}\n\t\t\t\t}\n\t\t\t}\n\t\t\treturn true\n\t\t})\n\t}\n\treturn index, nil\n}\n\nfunc (index testSourceIndex) snippets(root, location string) ([]assertionSource, error) {\n\tentry, ok := index.locations[location]\n\tif !ok {\n\t\treturn nil, errors.New(\"test source location has no matching Go syntax node\")\n\t}\n\tqueue := []sourceNode{entry}\n\tseen := map[string]bool{}\n\tresult := []assertionSource{}\n\tfor len(queue) > 0 {\n\t\tcurrent := queue[0]\n\t\tqueue = queue[1:]\n\t\tkey := current.file + \":\" + strconv.Itoa(int(current.node.Pos()))\n\t\tif seen[key] {\n\t\t\tcontinue\n\t\t}\n\t\tseen[key] = true\n\t\tsnippet, err := literalSnippet(root, current, len(result) == 0)\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\tresult = append(result, snippet)\n\t\tfor _, name := range localCalls(current.node) {\n\t\t\tif helper, exists := index.functions[name]; exists {\n\t\t\t\tqueue = append(queue, helper)\n\t\t\t}\n\t\t}\n\t}\n\treturn result, nil\n}\n\nfunc localCalls(node ast.Node) []string {\n\tnames := map[string]bool{}\n\tast.Inspect(node, func(node ast.Node) bool {\n\t\tif call, ok := node.(*ast.CallExpr); ok {\n\t\t\tif name, ok := call.Fun.(*ast.Ident); ok {\n\t\t\t\tnames[name.Name] = true\n\t\t\t}\n\t\t}\n\t\t// Registry entries can refer to a named function rather than a literal.\n\t\tif entry, ok := node.(*ast.KeyValueExpr); ok {\n\t\t\tif name, ok := entry.Value.(*ast.Ident); ok {\n\t\t\t\tnames[name.Name] = true\n\t\t\t}\n\t\t}\n\t\treturn true\n\t})\n\tresult := []string{}\n\tfor name := range names {\n\t\tresult = append(result, name)\n\t}\n\tsort.Strings(result)\n\treturn result\n}\n\nfunc literalSnippet(root string, value sourceNode, selected bool) (assertionSource, error) {\n\tdata, err := os.ReadFile(filepath.Join(root, value.file))\n\tif err != nil {\n\t\treturn assertionSource{}, err\n\t}\n\tstart, end := value.fset.Position(value.node.Pos()).Line, value.fset.Position(value.node.End()).Line\n\tlabel := \"Referenced test helper (static call graph)\"\n\tif selected {\n\t\tlabel = \"Selected test / case body\"\n\t}\n\tif declaration, ok := value.node.(*ast.FuncDecl); ok {\n\t\tlabel += \" · \" + declaration.Name.Name\n\t}\n\tlines := []int{}\n\tast.Inspect(value.node, func(node ast.Node) bool {\n\t\tcall, ok := node.(*ast.CallExpr)\n\t\tif !ok {\n\t\t\treturn true\n\t\t}\n\t\tselector, ok := call.Fun.(*ast.SelectorExpr)\n\t\tif !ok {\n\t\t\treturn true\n\t\t}\n\t\treceiver, ok := selector.X.(*ast.Ident)\n\t\tif !ok || (receiver.Name != \"t\" && receiver.Name != \"b\") {\n\t\t\treturn true\n\t\t}\n\t\tfor _, name := range []string{\"Fatal\", \"Fatalf\", \"Error\", \"Errorf\", \"Fail\", \"FailNow\"} {\n\t\t\tif selector.Sel.Name == name {\n\t\t\t\tlines = append(lines, value.fset.Position(call.Pos()).Line)\n\t\t\t}\n\t\t}\n\t\treturn true\n\t})\n\thash, err := fileHash(filepath.Join(root, value.file))\n\tif err != nil {\n\t\treturn assertionSource{}, err\n\t}\n\treturn assertionSource{value.file, label, strings.Join(strings.Split(string(data), \"\\n\")[start-1:end], \"\\n\"), hash, start, end, lines}, nil\n}\n\nfunc attachAssertions(root, revision string, results []result) error {\n\tindexes := map[string]testSourceIndex{}\n\tfor i := range results {\n\t\tif !strings.HasPrefix(results[i].SourceURL, repository+\"/blob/\"+revision+\"/\") {\n\t\t\treturn errors.New(\"test source revision mismatch\")\n\t\t}\n\t\tlocation := strings.TrimPrefix(results[i].SourceURL, repository+\"/blob/\"+revision+\"/\")\n\t\tpath, _, ok := strings.Cut(location, \"#L\")\n\t\tif !ok || !filepath.IsLocal(path) || !strings.HasSuffix(path, \"_test.go\") {\n\t\t\treturn errors.New(\"unsafe test source URL\")\n\t\t}\n\t\tdir := filepath.Dir(path)\n\t\tindex, ok := indexes[dir]\n\t\tif !ok {\n\t\t\tvar err error\n\t\t\tindex, err = indexTestSources(root, dir)\n\t\t\tif err != nil {\n\t\t\t\treturn err\n\t\t\t}\n\t\t\tindexes[dir] = index\n\t\t}\n\t\tsources, err := index.snippets(root, location)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tresults[i].Assertions = sources\n\t}\n\treturn nil\n}\n",
+      "blocks": [
+        {
+          "startLine": 36,
+          "startColumn": 2,
+          "endLine": 38,
+          "endColumn": 16,
+          "statements": 3,
+          "count": 0
+        },
+        {
+          "startLine": 39,
+          "startColumn": 3,
+          "endLine": 40,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 41,
+          "startColumn": 2,
+          "endLine": 41,
+          "endColumn": 29,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 42,
+          "startColumn": 3,
+          "endLine": 44,
+          "endColumn": 17,
+          "statements": 3,
+          "count": 0
+        },
+        {
+          "startLine": 45,
+          "startColumn": 4,
+          "endLine": 46,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 47,
+          "startColumn": 3,
+          "endLine": 48,
+          "endColumn": 17,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 49,
+          "startColumn": 4,
+          "endLine": 50,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 51,
+          "startColumn": 3,
+          "endLine": 52,
+          "endColumn": 46,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 53,
+          "startColumn": 4,
+          "endLine": 53,
+          "endColumn": 32,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 55,
+          "startColumn": 5,
+          "endLine": 55,
+          "endColumn": 26,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 56,
+          "startColumn": 6,
+          "endLine": 57,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 58,
+          "startColumn": 5,
+          "endLine": 58,
+          "endColumn": 117,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 60,
+          "startColumn": 5,
+          "endLine": 60,
+          "endColumn": 47,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 61,
+          "startColumn": 6,
+          "endLine": 62,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 64,
+          "startColumn": 4,
+          "endLine": 64,
+          "endColumn": 15,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 67,
+          "startColumn": 2,
+          "endLine": 67,
+          "endColumn": 19,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 71,
+          "startColumn": 2,
+          "endLine": 72,
+          "endColumn": 9,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 73,
+          "startColumn": 3,
+          "endLine": 74,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 75,
+          "startColumn": 2,
+          "endLine": 78,
+          "endColumn": 21,
+          "statements": 4,
+          "count": 0
+        },
+        {
+          "startLine": 79,
+          "startColumn": 3,
+          "endLine": 82,
+          "endColumn": 16,
+          "statements": 4,
+          "count": 0
+        },
+        {
+          "startLine": 83,
+          "startColumn": 4,
+          "endLine": 83,
+          "endColumn": 12,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 85,
+          "startColumn": 3,
+          "endLine": 87,
+          "endColumn": 17,
+          "statements": 3,
+          "count": 0
+        },
+        {
+          "startLine": 88,
+          "startColumn": 4,
+          "endLine": 89,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 90,
+          "startColumn": 3,
+          "endLine": 91,
+          "endColumn": 49,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 92,
+          "startColumn": 4,
+          "endLine": 92,
+          "endColumn": 55,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 93,
+          "startColumn": 5,
+          "endLine": 94,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 97,
+          "startColumn": 2,
+          "endLine": 97,
+          "endColumn": 20,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 101,
+          "startColumn": 2,
+          "endLine": 102,
+          "endColumn": 45,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 103,
+          "startColumn": 3,
+          "endLine": 103,
+          "endColumn": 43,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 104,
+          "startColumn": 4,
+          "endLine": 104,
+          "endColumn": 45,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 105,
+          "startColumn": 5,
+          "endLine": 106,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 109,
+          "startColumn": 3,
+          "endLine": 109,
+          "endColumn": 48,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 110,
+          "startColumn": 4,
+          "endLine": 110,
+          "endColumn": 48,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 111,
+          "startColumn": 5,
+          "endLine": 112,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 114,
+          "startColumn": 3,
+          "endLine": 114,
+          "endColumn": 14,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 116,
+          "startColumn": 2,
+          "endLine": 117,
+          "endColumn": 26,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 118,
+          "startColumn": 3,
+          "endLine": 119,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 120,
+          "startColumn": 2,
+          "endLine": 121,
+          "endColumn": 15,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 125,
+          "startColumn": 2,
+          "endLine": 126,
+          "endColumn": 16,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 127,
+          "startColumn": 3,
+          "endLine": 128,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 129,
+          "startColumn": 2,
+          "endLine": 131,
+          "endColumn": 14,
+          "statements": 3,
+          "count": 0
+        },
+        {
+          "startLine": 132,
+          "startColumn": 3,
+          "endLine": 133,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 134,
+          "startColumn": 2,
+          "endLine": 134,
+          "endColumn": 55,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 135,
+          "startColumn": 3,
+          "endLine": 136,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 137,
+          "startColumn": 2,
+          "endLine": 138,
+          "endColumn": 51,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 139,
+          "startColumn": 3,
+          "endLine": 140,
+          "endColumn": 10,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 141,
+          "startColumn": 4,
+          "endLine": 142,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 143,
+          "startColumn": 3,
+          "endLine": 144,
+          "endColumn": 10,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 145,
+          "startColumn": 4,
+          "endLine": 146,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 147,
+          "startColumn": 3,
+          "endLine": 148,
+          "endColumn": 60,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 149,
+          "startColumn": 4,
+          "endLine": 150,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 151,
+          "startColumn": 3,
+          "endLine": 151,
+          "endColumn": 90,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 152,
+          "startColumn": 4,
+          "endLine": 152,
+          "endColumn": 33,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 153,
+          "startColumn": 5,
+          "endLine": 154,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 156,
+          "startColumn": 3,
+          "endLine": 156,
+          "endColumn": 14,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 158,
+          "startColumn": 2,
+          "endLine": 159,
+          "endColumn": 16,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 160,
+          "startColumn": 3,
+          "endLine": 161,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 162,
+          "startColumn": 2,
+          "endLine": 162,
+          "endColumn": 141,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 166,
+          "startColumn": 2,
+          "endLine": 167,
+          "endColumn": 25,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 168,
+          "startColumn": 3,
+          "endLine": 168,
+          "endColumn": 81,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 169,
+          "startColumn": 4,
+          "endLine": 170,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 171,
+          "startColumn": 3,
+          "endLine": 173,
+          "endColumn": 77,
+          "statements": 3,
+          "count": 0
+        },
+        {
+          "startLine": 174,
+          "startColumn": 4,
+          "endLine": 175,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 176,
+          "startColumn": 3,
+          "endLine": 178,
+          "endColumn": 10,
+          "statements": 3,
+          "count": 0
+        },
+        {
+          "startLine": 179,
+          "startColumn": 4,
+          "endLine": 181,
+          "endColumn": 18,
+          "statements": 3,
+          "count": 0
+        },
+        {
+          "startLine": 182,
+          "startColumn": 5,
+          "endLine": 183,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 184,
+          "startColumn": 4,
+          "endLine": 184,
+          "endColumn": 24,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 186,
+          "startColumn": 3,
+          "endLine": 187,
+          "endColumn": 17,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 188,
+          "startColumn": 4,
+          "endLine": 189,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 190,
+          "startColumn": 3,
+          "endLine": 190,
+          "endColumn": 34,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 192,
+          "startColumn": 2,
+          "endLine": 192,
+          "endColumn": 12,
+          "statements": 1,
+          "count": 0
+        }
+      ]
+    },
+    {
       "path": "tools/requirements-site/build.go",
-      "sha256": "004f6625bd6f9259ee7b4388f79968c8ab928e25c9444b3b0e1e2efb38820e31",
-      "source": "package main\n\nimport (\n\t\"bytes\"\n\t\"encoding/json\"\n\t\"errors\"\n\t\"fmt\"\n\t\"html/template\"\n\t\"os\"\n\t\"path/filepath\"\n\t\"regexp\"\n\t\"sort\"\n\t\"strings\"\n\n\t\"github.com/yuin/goldmark\"\n\t\"github.com/yuin/goldmark/extension\"\n)\n\nvar rowMarker = regexp.MustCompile(`(?m)^<!-- requirement: ([a-z0-9-]+) page: ([1-5]) -->\\n`)\n\ntype testRef struct{ Suite, Name string }\ntype reference struct{ Path, Symbol string }\ntype mapping struct {\n\tID, Kind, Note    string\n\tTests             []testRef\n\tReferences        []reference\n\tArtifacts, Checks []string\n}\ntype taskRow struct {\n\tID, Markdown string\n\tPage, Line   int\n}\ntype link struct{ Label, URL string }\ntype row struct {\n\tID, Kind, Label, Note, Markdown string\n\tHTML                            template.HTML\n\tPage, Line                      int\n\tTests                           []result\n\tReferences, Artifacts           []link\n\tChecks                          []check\n}\ntype view struct {\n\tTitle, Prefix, SHA, ShortSHA, Mode, VerifiedAt, BuildURL, SourceURL string\n\tCoverage                                                            string\n\tFunctionalCount                                                     int\n\tRows                                                                []row\n\tResults                                                             []result\n\tChecks                                                              []check\n\tArtifacts                                                           []link\n\tTranscription                                                       string\n}\n\nfunc parseRecital(text string) ([]taskRow, error) {\n\tmatches := rowMarker.FindAllStringSubmatchIndex(text, -1)\n\tif len(matches) == 0 || strings.TrimSpace(text[:matches[0][0]]) != \"\" {\n\t\treturn nil, errors.New(\"recital needs explicit requirement markers\")\n\t}\n\tseen := map[string]bool{}\n\trows := []taskRow{}\n\tfor i, m := range matches {\n\t\tid := text[m[2]:m[3]]\n\t\tif seen[id] {\n\t\t\treturn nil, errors.New(\"duplicate requirement ID\")\n\t\t}\n\t\tseen[id] = true\n\t\tend := len(text)\n\t\tif i+1 < len(matches) {\n\t\t\tend = matches[i+1][0]\n\t\t}\n\t\tbody := strings.TrimSpace(text[m[1]:end])\n\t\tif body == \"\" {\n\t\t\treturn nil, errors.New(\"empty recital row\")\n\t\t}\n\t\trows = append(rows, taskRow{id, body, int(text[m[4]] - '0'), strings.Count(text[:m[1]], \"\\n\") + 1})\n\t}\n\treturn rows, nil\n}\nfunc loadRecital(root string) ([]taskRow, []mapping, string, error) {\n\tb, err := os.ReadFile(filepath.Join(root, \"site/assignment.md\"))\n\tif err != nil {\n\t\treturn nil, nil, \"\", err\n\t}\n\trows, err := parseRecital(string(b))\n\tif err != nil {\n\t\treturn nil, nil, \"\", err\n\t}\n\tvar mappings []mapping\n\tif err := readJSON(filepath.Join(root, \"site/requirements.json\"), &mappings); err != nil {\n\t\treturn nil, nil, \"\", err\n\t}\n\tif len(rows) != len(mappings) {\n\t\treturn nil, nil, \"\", errors.New(\"every recital row must have exactly one evidence mapping\")\n\t}\n\tfor i, r := range rows {\n\t\tif mappings[i].ID != r.ID {\n\t\t\treturn nil, nil, \"\", errors.New(\"recital/map order or IDs differ\")\n\t\t}\n\t\tif mappings[i].Note == \"\" {\n\t\t\treturn nil, nil, \"\", errors.New(\"requirement explanation is missing\")\n\t\t}\n\t\tkind := mappings[i].Kind\n\t\tif kind != \"verified\" && kind != \"documented\" && kind != \"manual\" && kind != \"context\" {\n\t\t\treturn nil, nil, \"\", errors.New(\"unknown verification kind\")\n\t\t}\n\t\tif kind == \"verified\" && len(mappings[i].Tests) == 0 && len(mappings[i].Checks) == 0 {\n\t\t\treturn nil, nil, \"\", errors.New(\"verified row has no executable evidence\")\n\t\t}\n\t}\n\tvar source struct {\n\t\tPDF, SHA256, Transcription string\n\t\tPages                      int\n\t}\n\tif err := readJSON(filepath.Join(root, \"site/source.json\"), &source); err != nil {\n\t\treturn nil, nil, \"\", err\n\t}\n\tif source.PDF != \"docs/source/assignment.pdf\" || source.Pages != 5 {\n\t\treturn nil, nil, \"\", errors.New(\"unexpected assignment provenance\")\n\t}\n\thash, err := fileHash(filepath.Join(root, source.PDF))\n\tif err != nil {\n\t\treturn nil, nil, \"\", err\n\t}\n\tif hash != source.SHA256 {\n\t\treturn nil, nil, \"\", errors.New(\"assignment PDF changed; re-audit the recital\")\n\t}\n\tfor _, file := range []string{\"testdata/original/request-format.jsonc\", \"testdata/original/seed.sql\", \"testdata/original/sample-request.json\"} {\n\t\texample, err := os.ReadFile(filepath.Join(root, file))\n\t\tif err != nil {\n\t\t\treturn nil, nil, \"\", err\n\t\t}\n\t\tif !strings.Contains(string(b), strings.TrimSpace(string(example))) {\n\t\t\treturn nil, nil, \"\", fmt.Errorf(\"original example changed in recital: %s\", file)\n\t\t}\n\t}\n\treturn rows, mappings, source.Transcription, nil\n}\nfunc build(root, input, out, revision string) error {\n\trows, mappings, transcription, err := loadRecital(root)\n\tif err != nil {\n\t\treturn err\n\t}\n\tdata, err := loadInputs(root, input, revision)\n\tif err != nil {\n\t\treturn err\n\t}\n\tv := view{Title: \"Assignment × evidence\", Prefix: \"\", SHA: revision, ShortSHA: revision[:7], Mode: data.Evidence.Mode, VerifiedAt: data.Evidence.VerifiedAt, BuildURL: data.Evidence.Service.URL, SourceURL: repository + \"/tree/\" + revision, Coverage: fmt.Sprintf(\"%.2f\", data.Coverage), Transcription: transcription, Results: data.Results}\n\tif err := mapRows(root, revision, rows, mappings, data, &v); err != nil {\n\t\treturn err\n\t}\n\tfor _, r := range data.Results {\n\t\tif r.Suite == \"functional\" {\n\t\t\tv.FunctionalCount++\n\t\t}\n\t}\n\tfor _, key := range []string{\"service\", \"functional\", \"coverage\", \"conversation\"} {\n\t\ta := data.Artifacts[key]\n\t\tv.Artifacts = append(v.Artifacts, link{a.Name, a.URL})\n\t}\n\tfor _, c := range data.Checks {\n\t\tv.Checks = append(v.Checks, c)\n\t}\n\tsort.Slice(v.Checks, func(i, j int) bool { return v.Checks[i].ID < v.Checks[j].ID })\n\tif err := os.MkdirAll(out, 0o755); err != nil {\n\t\treturn err\n\t}\n\tentries, err := os.ReadDir(out)\n\tif err != nil {\n\t\treturn err\n\t}\n\tif len(entries) != 0 {\n\t\treturn errors.New(\"site output must be empty; refuse stale public files\")\n\t}\n\ttmpl, err := template.New(\"site\").Funcs(template.FuncMap{\"resultLink\": func(r result) string { return \"results/#\" + r.Anchor }}).Parse(siteTemplate)\n\tif err != nil {\n\t\treturn err\n\t}\n\tfor _, page := range []struct{ name, title, template, prefix string }{{\"index.html\", \"Assignment × evidence\", \"requirements\", \"\"}, {\"results/index.html\", \"Test results\", \"results\", \"../\"}, {\"build/index.html\", \"Build evidence\", \"build\", \"../\"}} {\n\t\tv.Title = page.title\n\t\tv.Prefix = page.prefix\n\t\tif err := os.MkdirAll(filepath.Dir(filepath.Join(out, page.name)), 0o755); err != nil {\n\t\t\treturn err\n\t\t}\n\t\tfile, err := os.Create(filepath.Join(out, page.name))\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\trenderErr := tmpl.ExecuteTemplate(file, page.template, v)\n\t\tcloseErr := file.Close()\n\t\tif err := errors.Join(renderErr, closeErr); err != nil {\n\t\t\treturn err\n\t\t}\n\t}\n\tfor _, name := range []string{\"style.css\", \"site.js\"} {\n\t\tb, err := os.ReadFile(filepath.Join(root, \"site/assets\", name))\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif err := os.MkdirAll(filepath.Join(out, \"assets\"), 0o755); err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif err := os.WriteFile(filepath.Join(out, \"assets\", name), b, 0o644); err != nil {\n\t\t\treturn err\n\t\t}\n\t}\n\tb, err := os.ReadFile(filepath.Join(root, \"site/assignment.md\"))\n\tif err != nil {\n\t\treturn err\n\t}\n\tif err := os.WriteFile(filepath.Join(out, \"assignment.md\"), b, 0o644); err != nil {\n\t\treturn err\n\t}\n\t// Only selected report fields are serialized. Raw test output, conversations,\n\t// source-code coverage HTML and binaries are deliberately outside the public payload.\n\tfor _, file := range []struct {\n\t\tpath  string\n\t\tvalue any\n\t}{{\"results/results.json\", data.Results}, {\"verification.json\", struct {\n\t\tSourceSHA, Mode, VerifiedAt string\n\t\tFunctionalCases             int\n\t\tCoveragePercent             float64\n\t\tRows                        int\n\t\tServiceURL, ConversationURL string\n\t}{revision, data.Evidence.Mode, data.Evidence.VerifiedAt, v.FunctionalCount, data.Coverage, len(rows), data.Evidence.Service.URL, data.Evidence.Conversation.URL}}} {\n\t\tif err := writePublicJSON(filepath.Join(out, file.path), file.value); err != nil {\n\t\t\treturn err\n\t\t}\n\t}\n\tif err := os.WriteFile(filepath.Join(out, \".nojekyll\"), nil, 0o644); err != nil {\n\t\treturn err\n\t}\n\tif err := writeSiteChecksums(out); err != nil {\n\t\treturn err\n\t}\n\treturn verifySite(out)\n}\nfunc mapRows(root, revision string, rows []taskRow, mappings []mapping, data inputData, v *view) error {\n\tfor i, r := range rows {\n\t\tm := mappings[i]\n\t\trendered, err := renderMarkdown(r.Markdown)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\titem := row{ID: r.ID, Kind: m.Kind, Note: m.Note, Markdown: r.Markdown, HTML: rendered, Page: r.Page, Line: r.Line}\n\t\titem.Label = map[string]string{\"verified\": \"Verified by checks\", \"documented\": \"Documented + checked\", \"manual\": \"Owner action pending\", \"context\": \"Assignment context\"}[m.Kind]\n\t\tfor _, ref := range m.Tests {\n\t\t\tvar found []result\n\t\t\tfor _, test := range data.Results {\n\t\t\t\tif test.Suite == ref.Suite && test.Name == ref.Name {\n\t\t\t\t\tfound = append(found, test)\n\t\t\t\t}\n\t\t\t}\n\t\t\tif len(found) != 1 || found[0].Status != \"pass\" {\n\t\t\t\treturn fmt.Errorf(\"missing, ambiguous or failed requirement test: %s:%s\", ref.Suite, ref.Name)\n\t\t\t}\n\t\t\titem.Tests = append(item.Tests, found[0])\n\t\t}\n\t\tfor _, ref := range m.References {\n\t\t\tline, err := sourceLine(root, ref.Path, ref.Symbol)\n\t\t\tif err != nil {\n\t\t\t\treturn err\n\t\t\t}\n\t\t\titem.References = append(item.References, link{filepath.Base(ref.Path) + fmt.Sprintf(\":%d\", line), sourceURL(revision, ref.Path, line)})\n\t\t}\n\t\titem.References = append(item.References, link{\"Markdown source\", sourceURL(revision, \"site/assignment.md\", r.Line)}, link{fmt.Sprintf(\"Original PDF · p.%d\", r.Page), repository + \"/blob/\" + revision + \"/docs/source/assignment.pdf#page=\" + fmt.Sprint(r.Page)})\n\t\tfor _, kind := range m.Artifacts {\n\t\t\ta, ok := data.Artifacts[kind]\n\t\t\tif !ok {\n\t\t\t\treturn errors.New(\"mapping references unknown artifact\")\n\t\t\t}\n\t\t\titem.Artifacts = append(item.Artifacts, link{kind + \" artifact\", a.URL})\n\t\t}\n\t\tfor _, id := range m.Checks {\n\t\t\tc, ok := data.Checks[id]\n\t\t\tif !ok || c.Status != \"pass\" {\n\t\t\t\treturn errors.New(\"mapping check is missing or failed\")\n\t\t\t}\n\t\t\titem.Checks = append(item.Checks, c)\n\t\t}\n\t\tv.Rows = append(v.Rows, item)\n\t}\n\treturn nil\n}\nfunc writePublicJSON(path string, value any) error {\n\tb, err := json.MarshalIndent(value, \"\", \"  \")\n\tif err != nil {\n\t\treturn err\n\t}\n\treturn os.WriteFile(path, append(b, '\\n'), 0o644)\n}\nfunc writeSiteChecksums(root string) error {\n\tpaths := []string{}\n\tif err := filepath.WalkDir(root, func(path string, d os.DirEntry, err error) error {\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif !d.IsDir() {\n\t\t\trel, err := filepath.Rel(root, path)\n\t\t\tif err != nil {\n\t\t\t\treturn err\n\t\t\t}\n\t\t\tif rel != \"SHA256SUMS\" {\n\t\t\t\tpaths = append(paths, filepath.ToSlash(rel))\n\t\t\t}\n\t\t}\n\t\treturn nil\n\t}); err != nil {\n\t\treturn err\n\t}\n\tsort.Strings(paths)\n\tvar b strings.Builder\n\tfor _, path := range paths {\n\t\tsum, err := fileHash(filepath.Join(root, path))\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tfmt.Fprintf(&b, \"%s  ./%s\\n\", sum, path)\n\t}\n\treturn os.WriteFile(filepath.Join(root, \"SHA256SUMS\"), []byte(b.String()), 0o644)\n}\n\nfunc renderMarkdown(text string) (template.HTML, error) {\n\tvar rendered bytes.Buffer\n\tmarkdown := goldmark.New(goldmark.WithExtensions(extension.Table, extension.Strikethrough, extension.TaskList))\n\tif err := markdown.Convert([]byte(text), &rendered); err != nil {\n\t\treturn \"\", err\n\t}\n\treturn template.HTML(rendered.String()), nil\n}\n",
+      "sha256": "6b4473ec5917141db8280038289a20f65b89a787c05e8e1b8a935fd6546ba652",
+      "source": "package main\n\nimport (\n\t\"bytes\"\n\t\"encoding/json\"\n\t\"errors\"\n\t\"fmt\"\n\t\"html/template\"\n\t\"os\"\n\t\"path/filepath\"\n\t\"regexp\"\n\t\"sort\"\n\t\"strings\"\n\n\t\"github.com/yuin/goldmark\"\n\t\"github.com/yuin/goldmark/extension\"\n)\n\nvar rowMarker = regexp.MustCompile(`(?m)^<!-- requirement: ([a-z0-9-]+) page: ([1-5]) -->\\n`)\n\ntype testRef struct{ Suite, Name string }\ntype reference struct{ Path, Symbol string }\ntype mapping struct {\n\tID, Kind, Note    string\n\tTests             []testRef\n\tReferences        []reference\n\tArtifacts, Checks []string\n}\ntype taskRow struct {\n\tID, Markdown string\n\tPage, Line   int\n}\ntype link struct{ Label, URL string }\ntype row struct {\n\tID, Kind, Label, Note, Markdown string\n\tHTML                            template.HTML\n\tPage, Line                      int\n\tTests                           []result\n\tReferences, Artifacts           []link\n\tChecks                          []check\n}\ntype view struct {\n\tTitle, Prefix, SHA, ShortSHA, Mode, VerifiedAt, BuildURL, SourceURL string\n\tCoverage                                                            string\n\tFunctionalCount                                                     int\n\tRows                                                                []row\n\tResults                                                             []result\n\tChecks                                                              []check\n\tArtifacts                                                           []link\n\tTranscription                                                       string\n}\n\nfunc parseRecital(text string) ([]taskRow, error) {\n\tmatches := rowMarker.FindAllStringSubmatchIndex(text, -1)\n\tif len(matches) == 0 || strings.TrimSpace(text[:matches[0][0]]) != \"\" {\n\t\treturn nil, errors.New(\"recital needs explicit requirement markers\")\n\t}\n\tseen := map[string]bool{}\n\trows := []taskRow{}\n\tfor i, m := range matches {\n\t\tid := text[m[2]:m[3]]\n\t\tif seen[id] {\n\t\t\treturn nil, errors.New(\"duplicate requirement ID\")\n\t\t}\n\t\tseen[id] = true\n\t\tend := len(text)\n\t\tif i+1 < len(matches) {\n\t\t\tend = matches[i+1][0]\n\t\t}\n\t\tbody := strings.TrimSpace(text[m[1]:end])\n\t\tif body == \"\" {\n\t\t\treturn nil, errors.New(\"empty recital row\")\n\t\t}\n\t\trows = append(rows, taskRow{id, body, int(text[m[4]] - '0'), strings.Count(text[:m[1]], \"\\n\") + 1})\n\t}\n\treturn rows, nil\n}\nfunc loadRecital(root string) ([]taskRow, []mapping, string, error) {\n\tb, err := os.ReadFile(filepath.Join(root, \"site/assignment.md\"))\n\tif err != nil {\n\t\treturn nil, nil, \"\", err\n\t}\n\trows, err := parseRecital(string(b))\n\tif err != nil {\n\t\treturn nil, nil, \"\", err\n\t}\n\tvar mappings []mapping\n\tif err := readJSON(filepath.Join(root, \"site/requirements.json\"), &mappings); err != nil {\n\t\treturn nil, nil, \"\", err\n\t}\n\tif len(rows) != len(mappings) {\n\t\treturn nil, nil, \"\", errors.New(\"every recital row must have exactly one evidence mapping\")\n\t}\n\tfor i, r := range rows {\n\t\tif mappings[i].ID != r.ID {\n\t\t\treturn nil, nil, \"\", errors.New(\"recital/map order or IDs differ\")\n\t\t}\n\t\tif mappings[i].Note == \"\" {\n\t\t\treturn nil, nil, \"\", errors.New(\"requirement explanation is missing\")\n\t\t}\n\t\tkind := mappings[i].Kind\n\t\tif kind != \"verified\" && kind != \"documented\" && kind != \"manual\" && kind != \"context\" {\n\t\t\treturn nil, nil, \"\", errors.New(\"unknown verification kind\")\n\t\t}\n\t\tif kind == \"verified\" && len(mappings[i].Tests) == 0 && len(mappings[i].Checks) == 0 {\n\t\t\treturn nil, nil, \"\", errors.New(\"verified row has no executable evidence\")\n\t\t}\n\t}\n\tvar source struct {\n\t\tPDF, SHA256, Transcription string\n\t\tPages                      int\n\t}\n\tif err := readJSON(filepath.Join(root, \"site/source.json\"), &source); err != nil {\n\t\treturn nil, nil, \"\", err\n\t}\n\tif source.PDF != \"docs/source/assignment.pdf\" || source.Pages != 5 {\n\t\treturn nil, nil, \"\", errors.New(\"unexpected assignment provenance\")\n\t}\n\thash, err := fileHash(filepath.Join(root, source.PDF))\n\tif err != nil {\n\t\treturn nil, nil, \"\", err\n\t}\n\tif hash != source.SHA256 {\n\t\treturn nil, nil, \"\", errors.New(\"assignment PDF changed; re-audit the recital\")\n\t}\n\tfor _, file := range []string{\"testdata/original/request-format.jsonc\", \"testdata/original/seed.sql\", \"testdata/original/sample-request.json\"} {\n\t\texample, err := os.ReadFile(filepath.Join(root, file))\n\t\tif err != nil {\n\t\t\treturn nil, nil, \"\", err\n\t\t}\n\t\tif !strings.Contains(string(b), strings.TrimSpace(string(example))) {\n\t\t\treturn nil, nil, \"\", fmt.Errorf(\"original example changed in recital: %s\", file)\n\t\t}\n\t}\n\treturn rows, mappings, source.Transcription, nil\n}\nfunc build(root, input, out, revision string) error {\n\trows, mappings, transcription, err := loadRecital(root)\n\tif err != nil {\n\t\treturn err\n\t}\n\tdata, err := loadInputs(root, input, revision)\n\tif err != nil {\n\t\treturn err\n\t}\n\tif err := attachAssertions(root, revision, data.Results); err != nil {\n\t\treturn err\n\t}\n\tv := view{Title: \"Assignment × evidence\", Prefix: \"\", SHA: revision, ShortSHA: revision[:7], Mode: data.Evidence.Mode, VerifiedAt: data.Evidence.VerifiedAt, BuildURL: data.Evidence.Service.URL, SourceURL: repository + \"/tree/\" + revision, Coverage: fmt.Sprintf(\"%.2f\", data.Coverage), Transcription: transcription, Results: data.Results}\n\tif err := mapRows(root, revision, rows, mappings, data, &v); err != nil {\n\t\treturn err\n\t}\n\tfor _, r := range data.Results {\n\t\tif r.Suite == \"functional\" {\n\t\t\tv.FunctionalCount++\n\t\t}\n\t}\n\tfor _, key := range []string{\"service\", \"functional\", \"coverage\", \"conversation\"} {\n\t\ta := data.Artifacts[key]\n\t\tv.Artifacts = append(v.Artifacts, link{a.Name, a.URL})\n\t}\n\tfor _, c := range data.Checks {\n\t\tv.Checks = append(v.Checks, c)\n\t}\n\tsort.Slice(v.Checks, func(i, j int) bool { return v.Checks[i].ID < v.Checks[j].ID })\n\tif err := os.MkdirAll(out, 0o755); err != nil {\n\t\treturn err\n\t}\n\tentries, err := os.ReadDir(out)\n\tif err != nil {\n\t\treturn err\n\t}\n\tif len(entries) != 0 {\n\t\treturn errors.New(\"site output must be empty; refuse stale public files\")\n\t}\n\ttmpl, err := template.New(\"site\").Funcs(template.FuncMap{\"resultLink\": func(r result) string { return \"results/#\" + r.Anchor }}).Parse(siteTemplate)\n\tif err != nil {\n\t\treturn err\n\t}\n\tfor _, page := range []struct{ name, title, template, prefix string }{{\"index.html\", \"Assignment × evidence\", \"requirements\", \"\"}, {\"results/index.html\", \"Test results\", \"results\", \"../\"}, {\"build/index.html\", \"Build evidence\", \"build\", \"../\"}} {\n\t\tv.Title = page.title\n\t\tv.Prefix = page.prefix\n\t\tif err := os.MkdirAll(filepath.Dir(filepath.Join(out, page.name)), 0o755); err != nil {\n\t\t\treturn err\n\t\t}\n\t\tfile, err := os.Create(filepath.Join(out, page.name))\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\trenderErr := tmpl.ExecuteTemplate(file, page.template, v)\n\t\tcloseErr := file.Close()\n\t\tif err := errors.Join(renderErr, closeErr); err != nil {\n\t\t\treturn err\n\t\t}\n\t}\n\tfor _, name := range []string{\"style.css\", \"site.js\"} {\n\t\tb, err := os.ReadFile(filepath.Join(root, \"site/assets\", name))\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif err := os.MkdirAll(filepath.Join(out, \"assets\"), 0o755); err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif err := os.WriteFile(filepath.Join(out, \"assets\", name), b, 0o644); err != nil {\n\t\t\treturn err\n\t\t}\n\t}\n\tb, err := os.ReadFile(filepath.Join(root, \"site/assignment.md\"))\n\tif err != nil {\n\t\treturn err\n\t}\n\tif err := os.WriteFile(filepath.Join(out, \"assignment.md\"), b, 0o644); err != nil {\n\t\treturn err\n\t}\n\t// Only selected report fields are serialized. Raw test output, conversations,\n\t// source-code coverage HTML and binaries are deliberately outside the public payload.\n\tfor _, file := range []struct {\n\t\tpath  string\n\t\tvalue any\n\t}{{\"results/results.json\", data.Results}, {\"verification.json\", struct {\n\t\tSourceSHA, Mode, VerifiedAt string\n\t\tFunctionalCases             int\n\t\tCoveragePercent             float64\n\t\tRows                        int\n\t\tServiceURL, ConversationURL string\n\t}{revision, data.Evidence.Mode, data.Evidence.VerifiedAt, v.FunctionalCount, data.Coverage, len(rows), data.Evidence.Service.URL, data.Evidence.Conversation.URL}}} {\n\t\tif err := writePublicJSON(filepath.Join(out, file.path), file.value); err != nil {\n\t\t\treturn err\n\t\t}\n\t}\n\tif err := writePublicJSON(filepath.Join(out, \"requirements.json\"), v.Rows); err != nil {\n\t\treturn err\n\t}\n\tif err := os.WriteFile(filepath.Join(out, \".nojekyll\"), nil, 0o644); err != nil {\n\t\treturn err\n\t}\n\tif err := writeSiteChecksums(out); err != nil {\n\t\treturn err\n\t}\n\treturn verifySite(out)\n}\nfunc mapRows(root, revision string, rows []taskRow, mappings []mapping, data inputData, v *view) error {\n\tfor i, r := range rows {\n\t\tm := mappings[i]\n\t\trendered, err := renderMarkdown(r.Markdown)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\titem := row{ID: r.ID, Kind: m.Kind, Note: m.Note, Markdown: r.Markdown, HTML: rendered, Page: r.Page, Line: r.Line}\n\t\titem.Label = map[string]string{\"verified\": \"Verified by checks\", \"documented\": \"Documented + checked\", \"manual\": \"Owner action pending\", \"context\": \"Assignment context\"}[m.Kind]\n\t\tfor _, ref := range m.Tests {\n\t\t\tvar found []result\n\t\t\tfor _, test := range data.Results {\n\t\t\t\tif test.Suite == ref.Suite && test.Name == ref.Name {\n\t\t\t\t\tfound = append(found, test)\n\t\t\t\t}\n\t\t\t}\n\t\t\tif len(found) != 1 || found[0].Status != \"pass\" {\n\t\t\t\treturn fmt.Errorf(\"missing, ambiguous or failed requirement test: %s:%s\", ref.Suite, ref.Name)\n\t\t\t}\n\t\t\titem.Tests = append(item.Tests, found[0])\n\t\t}\n\t\tfor _, ref := range m.References {\n\t\t\tline, err := sourceLine(root, ref.Path, ref.Symbol)\n\t\t\tif err != nil {\n\t\t\t\treturn err\n\t\t\t}\n\t\t\titem.References = append(item.References, link{filepath.Base(ref.Path) + fmt.Sprintf(\":%d\", line), sourceURL(revision, ref.Path, line)})\n\t\t}\n\t\titem.References = append(item.References, link{\"Markdown source\", sourceURL(revision, \"site/assignment.md\", r.Line)}, link{fmt.Sprintf(\"Original PDF · p.%d\", r.Page), repository + \"/blob/\" + revision + \"/docs/source/assignment.pdf#page=\" + fmt.Sprint(r.Page)})\n\t\tfor _, kind := range m.Artifacts {\n\t\t\ta, ok := data.Artifacts[kind]\n\t\t\tif !ok {\n\t\t\t\treturn errors.New(\"mapping references unknown artifact\")\n\t\t\t}\n\t\t\titem.Artifacts = append(item.Artifacts, link{kind + \" artifact\", a.URL})\n\t\t}\n\t\tfor _, id := range m.Checks {\n\t\t\tc, ok := data.Checks[id]\n\t\t\tif !ok || c.Status != \"pass\" {\n\t\t\t\treturn errors.New(\"mapping check is missing or failed\")\n\t\t\t}\n\t\t\titem.Checks = append(item.Checks, c)\n\t\t}\n\t\tv.Rows = append(v.Rows, item)\n\t}\n\treturn nil\n}\nfunc writePublicJSON(path string, value any) error {\n\tb, err := json.MarshalIndent(value, \"\", \"  \")\n\tif err != nil {\n\t\treturn err\n\t}\n\treturn os.WriteFile(path, append(b, '\\n'), 0o644)\n}\nfunc writeSiteChecksums(root string) error {\n\tpaths := []string{}\n\tif err := filepath.WalkDir(root, func(path string, d os.DirEntry, err error) error {\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif !d.IsDir() {\n\t\t\trel, err := filepath.Rel(root, path)\n\t\t\tif err != nil {\n\t\t\t\treturn err\n\t\t\t}\n\t\t\tif rel != \"SHA256SUMS\" {\n\t\t\t\tpaths = append(paths, filepath.ToSlash(rel))\n\t\t\t}\n\t\t}\n\t\treturn nil\n\t}); err != nil {\n\t\treturn err\n\t}\n\tsort.Strings(paths)\n\tvar b strings.Builder\n\tfor _, path := range paths {\n\t\tsum, err := fileHash(filepath.Join(root, path))\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tfmt.Fprintf(&b, \"%s  ./%s\\n\", sum, path)\n\t}\n\treturn os.WriteFile(filepath.Join(root, \"SHA256SUMS\"), []byte(b.String()), 0o644)\n}\n\nfunc renderMarkdown(text string) (template.HTML, error) {\n\tvar rendered bytes.Buffer\n\tmarkdown := goldmark.New(goldmark.WithExtensions(extension.Table, extension.Strikethrough, extension.TaskList))\n\tif err := markdown.Convert([]byte(text), &rendered); err != nil {\n\t\treturn \"\", err\n\t}\n\treturn template.HTML(rendered.String()), nil\n}\n",
       "blocks": [
         {
           "startLine": 54,
@@ -425,129 +1000,129 @@
         {
           "startLine": 146,
           "startColumn": 2,
-          "endLine": 147,
+          "endLine": 146,
+          "endColumn": 71,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 147,
+          "startColumn": 3,
+          "endLine": 148,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 149,
+          "startColumn": 2,
+          "endLine": 150,
           "endColumn": 74,
           "statements": 2,
           "count": 0
         },
         {
-          "startLine": 148,
+          "startLine": 151,
           "startColumn": 3,
-          "endLine": 149,
+          "endLine": 152,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 150,
+          "startLine": 153,
           "startColumn": 2,
-          "endLine": 150,
+          "endLine": 153,
           "endColumn": 33,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 151,
+          "startLine": 154,
           "startColumn": 3,
-          "endLine": 151,
+          "endLine": 154,
           "endColumn": 30,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 152,
+          "startLine": 155,
           "startColumn": 4,
-          "endLine": 153,
+          "endLine": 156,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 155,
+          "startLine": 158,
           "startColumn": 2,
-          "endLine": 155,
+          "endLine": 158,
           "endColumn": 84,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 156,
+          "startLine": 159,
           "startColumn": 3,
-          "endLine": 158,
+          "endLine": 161,
           "endColumn": 1,
           "statements": 2,
           "count": 0
         },
         {
-          "startLine": 159,
+          "startLine": 162,
           "startColumn": 2,
-          "endLine": 159,
+          "endLine": 162,
           "endColumn": 32,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 160,
+          "startLine": 163,
           "startColumn": 3,
-          "endLine": 161,
+          "endLine": 164,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 162,
+          "startLine": 165,
           "startColumn": 2,
-          "endLine": 162,
+          "endLine": 165,
           "endColumn": 43,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 162,
+          "startLine": 165,
           "startColumn": 45,
-          "endLine": 162,
-          "endColumn": 85,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 163,
-          "startColumn": 2,
-          "endLine": 163,
-          "endColumn": 48,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 164,
-          "startColumn": 3,
           "endLine": 165,
-          "endColumn": 1,
+          "endColumn": 85,
           "statements": 1,
           "count": 0
         },
         {
           "startLine": 166,
           "startColumn": 2,
-          "endLine": 167,
-          "endColumn": 16,
-          "statements": 2,
+          "endLine": 166,
+          "endColumn": 48,
+          "statements": 1,
           "count": 0
         },
         {
-          "startLine": 168,
+          "startLine": 167,
           "startColumn": 3,
-          "endLine": 169,
+          "endLine": 168,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 170,
+          "startLine": 169,
           "startColumn": 2,
           "endLine": 170,
-          "endColumn": 23,
-          "statements": 1,
+          "endColumn": 16,
+          "statements": 2,
           "count": 0
         },
         {
@@ -562,31 +1137,31 @@
           "startLine": 173,
           "startColumn": 2,
           "endLine": 173,
-          "endColumn": 95,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 173,
-          "startColumn": 97,
-          "endLine": 173,
-          "endColumn": 128,
+          "endColumn": 23,
           "statements": 1,
           "count": 0
         },
         {
           "startLine": 174,
-          "startColumn": 2,
-          "endLine": 174,
-          "endColumn": 16,
+          "startColumn": 3,
+          "endLine": 175,
+          "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 175,
-          "startColumn": 3,
+          "startLine": 176,
+          "startColumn": 2,
           "endLine": 176,
-          "endColumn": 1,
+          "endColumn": 95,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 176,
+          "startColumn": 97,
+          "endLine": 176,
+          "endColumn": 128,
           "statements": 1,
           "count": 0
         },
@@ -594,88 +1169,88 @@
           "startLine": 177,
           "startColumn": 2,
           "endLine": 177,
-          "endColumn": 248,
+          "endColumn": 16,
           "statements": 1,
           "count": 0
         },
         {
           "startLine": 178,
           "startColumn": 3,
+          "endLine": 179,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 180,
+          "startColumn": 2,
           "endLine": 180,
+          "endColumn": 248,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 181,
+          "startColumn": 3,
+          "endLine": 183,
           "endColumn": 89,
           "statements": 3,
           "count": 0
         },
         {
-          "startLine": 181,
+          "startLine": 184,
           "startColumn": 4,
-          "endLine": 182,
+          "endLine": 185,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 183,
+          "startLine": 186,
           "startColumn": 3,
-          "endLine": 184,
+          "endLine": 187,
           "endColumn": 17,
           "statements": 2,
           "count": 0
         },
         {
-          "startLine": 185,
+          "startLine": 188,
           "startColumn": 4,
-          "endLine": 186,
+          "endLine": 189,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 187,
+          "startLine": 190,
           "startColumn": 3,
-          "endLine": 189,
+          "endLine": 192,
           "endColumn": 58,
           "statements": 3,
           "count": 0
         },
         {
-          "startLine": 190,
+          "startLine": 193,
           "startColumn": 4,
-          "endLine": 191,
+          "endLine": 194,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 193,
+          "startLine": 196,
           "startColumn": 2,
-          "endLine": 193,
+          "endLine": 196,
           "endColumn": 56,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 194,
-          "startColumn": 3,
-          "endLine": 195,
-          "endColumn": 17,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 196,
-          "startColumn": 4,
-          "endLine": 197,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 198,
+          "startLine": 197,
           "startColumn": 3,
           "endLine": 198,
-          "endColumn": 74,
-          "statements": 1,
+          "endColumn": 17,
+          "statements": 2,
           "count": 0
         },
         {
@@ -690,7 +1265,7 @@
           "startLine": 201,
           "startColumn": 3,
           "endLine": 201,
-          "endColumn": 84,
+          "endColumn": 74,
           "statements": 1,
           "count": 0
         },
@@ -703,27 +1278,27 @@
           "count": 0
         },
         {
-          "startLine": 205,
-          "startColumn": 2,
-          "endLine": 206,
-          "endColumn": 16,
-          "statements": 2,
+          "startLine": 204,
+          "startColumn": 3,
+          "endLine": 204,
+          "endColumn": 84,
+          "statements": 1,
           "count": 0
         },
         {
-          "startLine": 207,
-          "startColumn": 3,
-          "endLine": 208,
+          "startLine": 205,
+          "startColumn": 4,
+          "endLine": 206,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 209,
+          "startLine": 208,
           "startColumn": 2,
           "endLine": 209,
-          "endColumn": 84,
-          "statements": 1,
+          "endColumn": 16,
+          "statements": 2,
           "count": 0
         },
         {
@@ -735,41 +1310,41 @@
           "count": 0
         },
         {
-          "startLine": 214,
+          "startLine": 212,
           "startColumn": 2,
-          "endLine": 223,
-          "endColumn": 166,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 224,
-          "startColumn": 3,
-          "endLine": 224,
+          "endLine": 212,
           "endColumn": 84,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 225,
-          "startColumn": 4,
-          "endLine": 226,
+          "startLine": 213,
+          "startColumn": 3,
+          "endLine": 214,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 228,
+          "startLine": 217,
           "startColumn": 2,
-          "endLine": 228,
-          "endColumn": 82,
+          "endLine": 226,
+          "endColumn": 166,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 229,
+          "startLine": 227,
           "startColumn": 3,
-          "endLine": 230,
+          "endLine": 227,
+          "endColumn": 84,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 228,
+          "startColumn": 4,
+          "endLine": 229,
           "endColumn": 1,
           "statements": 1,
           "count": 0
@@ -778,7 +1353,7 @@
           "startLine": 231,
           "startColumn": 2,
           "endLine": 231,
-          "endColumn": 48,
+          "endColumn": 89,
           "statements": 1,
           "count": 0
         },
@@ -794,1124 +1369,13 @@
           "startLine": 234,
           "startColumn": 2,
           "endLine": 234,
-          "endColumn": 24,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 237,
-          "startColumn": 2,
-          "endLine": 237,
-          "endColumn": 25,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 238,
-          "startColumn": 3,
-          "endLine": 240,
-          "endColumn": 17,
-          "statements": 3,
-          "count": 0
-        },
-        {
-          "startLine": 241,
-          "startColumn": 4,
-          "endLine": 242,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 243,
-          "startColumn": 3,
-          "endLine": 245,
-          "endColumn": 31,
-          "statements": 3,
-          "count": 0
-        },
-        {
-          "startLine": 246,
-          "startColumn": 4,
-          "endLine": 247,
-          "endColumn": 38,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 248,
-          "startColumn": 5,
-          "endLine": 248,
-          "endColumn": 57,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 249,
-          "startColumn": 6,
-          "endLine": 250,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 252,
-          "startColumn": 4,
-          "endLine": 252,
-          "endColumn": 52,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 253,
-          "startColumn": 5,
-          "endLine": 254,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 255,
-          "startColumn": 4,
-          "endLine": 255,
-          "endColumn": 45,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 257,
-          "startColumn": 3,
-          "endLine": 257,
-          "endColumn": 36,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 258,
-          "startColumn": 4,
-          "endLine": 259,
-          "endColumn": 18,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 260,
-          "startColumn": 5,
-          "endLine": 261,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 262,
-          "startColumn": 4,
-          "endLine": 262,
-          "endColumn": 140,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 264,
-          "startColumn": 3,
-          "endLine": 265,
-          "endColumn": 36,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 266,
-          "startColumn": 4,
-          "endLine": 267,
-          "endColumn": 11,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 268,
-          "startColumn": 5,
-          "endLine": 269,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 270,
-          "startColumn": 4,
-          "endLine": 270,
-          "endColumn": 76,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 272,
-          "startColumn": 3,
-          "endLine": 272,
-          "endColumn": 31,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 273,
-          "startColumn": 4,
-          "endLine": 274,
-          "endColumn": 33,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 275,
-          "startColumn": 5,
-          "endLine": 276,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 277,
-          "startColumn": 4,
-          "endLine": 277,
-          "endColumn": 40,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 279,
-          "startColumn": 3,
-          "endLine": 279,
-          "endColumn": 32,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 281,
-          "startColumn": 2,
-          "endLine": 281,
-          "endColumn": 12,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 284,
-          "startColumn": 2,
-          "endLine": 285,
-          "endColumn": 16,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 286,
-          "startColumn": 3,
-          "endLine": 287,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 288,
-          "startColumn": 2,
-          "endLine": 288,
-          "endColumn": 51,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 291,
-          "startColumn": 2,
-          "endLine": 292,
-          "endColumn": 85,
-          "statements": 2,
-          "count": 4
-        },
-        {
-          "startLine": 293,
-          "startColumn": 3,
-          "endLine": 293,
-          "endColumn": 17,
-          "statements": 1,
-          "count": 55
-        },
-        {
-          "startLine": 294,
-          "startColumn": 4,
-          "endLine": 295,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 296,
-          "startColumn": 3,
-          "endLine": 296,
-          "endColumn": 17,
-          "statements": 1,
-          "count": 55
-        },
-        {
-          "startLine": 297,
-          "startColumn": 4,
-          "endLine": 298,
-          "endColumn": 18,
-          "statements": 2,
-          "count": 39
-        },
-        {
-          "startLine": 299,
-          "startColumn": 5,
-          "endLine": 300,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 301,
-          "startColumn": 4,
-          "endLine": 301,
-          "endColumn": 27,
-          "statements": 1,
-          "count": 39
-        },
-        {
-          "startLine": 302,
-          "startColumn": 5,
-          "endLine": 303,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 37
-        },
-        {
-          "startLine": 305,
-          "startColumn": 3,
-          "endLine": 305,
-          "endColumn": 13,
-          "statements": 1,
-          "count": 55
-        },
-        {
-          "startLine": 307,
-          "startColumn": 3,
-          "endLine": 308,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 309,
-          "startColumn": 2,
-          "endLine": 311,
-          "endColumn": 29,
-          "statements": 3,
-          "count": 4
-        },
-        {
-          "startLine": 312,
-          "startColumn": 3,
-          "endLine": 313,
-          "endColumn": 17,
-          "statements": 2,
-          "count": 37
-        },
-        {
-          "startLine": 314,
-          "startColumn": 4,
-          "endLine": 315,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 316,
-          "startColumn": 3,
-          "endLine": 316,
-          "endColumn": 43,
-          "statements": 1,
-          "count": 37
-        },
-        {
-          "startLine": 318,
-          "startColumn": 2,
-          "endLine": 318,
-          "endColumn": 83,
-          "statements": 1,
-          "count": 4
-        },
-        {
-          "startLine": 322,
-          "startColumn": 2,
-          "endLine": 324,
-          "endColumn": 66,
-          "statements": 3,
-          "count": 0
-        },
-        {
-          "startLine": 325,
-          "startColumn": 3,
-          "endLine": 326,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 327,
-          "startColumn": 2,
-          "endLine": 327,
-          "endColumn": 46,
-          "statements": 1,
-          "count": 0
-        }
-      ]
-    },
-    {
-      "path": "tools/requirements-site/evidence.go",
-      "sha256": "d74948d58c0a6fb86e4bf61ea2906402266b7afa9e9d212c7338129ae66e7d17",
-      "source": "package main\n\nimport (\n\t\"bufio\"\n\t\"crypto/sha256\"\n\t\"encoding/hex\"\n\t\"encoding/json\"\n\t\"errors\"\n\t\"fmt\"\n\t\"go/ast\"\n\t\"go/parser\"\n\t\"go/token\"\n\t\"io\"\n\t\"os\"\n\t\"path/filepath\"\n\t\"regexp\"\n\t\"sort\"\n\t\"strconv\"\n\t\"strings\"\n)\n\nconst repository = \"https://github.com/newdarwindev/firm-payments\"\nconst module = \"github.com/newdarwindev/firm-payments\"\n\nvar shaPattern = regexp.MustCompile(`^[a-f0-9]{40}$`)\n\ntype artifact struct {\n\tKind, Name, URL, Directory string\n\tID                         int64\n}\ntype workflow struct {\n\tName, URL, SHA, Conclusion string\n\tID                         int64\n}\ntype evidence struct {\n\tMode, SHA, VerifiedAt string\n\tService, Conversation workflow\n\tArtifacts             []artifact\n}\ntype result struct {\n\tSuite, Name, Package, Asserts, Status, SourceURL, ArtifactURL, Anchor string\n\tSeconds                                                               float64\n}\ntype inputData struct {\n\tEvidence  evidence\n\tResults   []result\n\tCoverage  float64\n\tArtifacts map[string]artifact\n\tChecks    map[string]check\n}\ntype check struct{ ID, Title, Status, Detail, RunURL, ArtifactURL string }\n\nfunc readJSON(path string, value any) error {\n\tb, err := os.ReadFile(path)\n\tif err != nil {\n\t\treturn err\n\t}\n\treturn json.Unmarshal(b, value)\n}\nfunc fileHash(path string) (string, error) {\n\tf, err := os.Open(path)\n\tif err != nil {\n\t\treturn \"\", err\n\t}\n\tdefer func() { _ = f.Close() }()\n\th := sha256.New()\n\tif _, err := io.Copy(h, f); err != nil {\n\t\treturn \"\", err\n\t}\n\treturn hex.EncodeToString(h.Sum(nil)), nil\n}\nfunc verifyChecksums(root string) error {\n\tb, err := os.ReadFile(filepath.Join(root, \"SHA256SUMS\"))\n\tif err != nil {\n\t\treturn err\n\t}\n\tlisted := map[string]bool{}\n\tfor _, line := range strings.Split(strings.TrimSpace(string(b)), \"\\n\") {\n\t\tif len(line) < 67 {\n\t\t\treturn errors.New(\"invalid checksum manifest\")\n\t\t}\n\t\twant, name := line[:64], strings.TrimPrefix(line[66:], \"./\")\n\t\tif _, err := hex.DecodeString(want); err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif !filepath.IsLocal(name) || listed[name] || strings.Contains(name, \"\\\\\") {\n\t\t\treturn errors.New(\"unsafe or duplicate artifact path\")\n\t\t}\n\t\tinfo, err := os.Lstat(filepath.Join(root, name))\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif !info.Mode().IsRegular() {\n\t\t\treturn errors.New(\"artifact links are forbidden\")\n\t\t}\n\t\tgot, err := fileHash(filepath.Join(root, name))\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif got != want {\n\t\t\treturn fmt.Errorf(\"checksum mismatch: %s\", name)\n\t\t}\n\t\tlisted[name] = true\n\t}\n\tif len(listed) == 0 {\n\t\treturn errors.New(\"empty checksum manifest\")\n\t}\n\treturn filepath.WalkDir(root, func(path string, d os.DirEntry, err error) error {\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif d.IsDir() {\n\t\t\treturn nil\n\t\t}\n\t\trel, err := filepath.Rel(root, path)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif rel != \"SHA256SUMS\" && !listed[filepath.ToSlash(rel)] {\n\t\t\treturn fmt.Errorf(\"unlisted artifact file: %s\", rel)\n\t\t}\n\t\treturn nil\n\t})\n}\nfunc loadInputs(root, input, revision string) (inputData, error) {\n\tdata, err := loadProvenance(root, input, revision)\n\tif err != nil {\n\t\treturn data, err\n\t}\n\tfor _, load := range []func() error{\n\t\tfunc() error { return loadFunctional(root, input, revision, &data) },\n\t\tfunc() error { return loadCoverage(input, &data) },\n\t\tfunc() error { return loadChecks(input, &data) },\n\t} {\n\t\tif err := load(); err != nil {\n\t\t\treturn data, err\n\t\t}\n\t}\n\treturn data, nil\n}\nfunc loadProvenance(root, input, revision string) (inputData, error) {\n\tvar data inputData\n\tif err := readJSON(filepath.Join(input, \"evidence.json\"), &data.Evidence); err != nil {\n\t\treturn data, err\n\t}\n\te := data.Evidence\n\tif !shaPattern.MatchString(revision) || e.SHA != revision || (e.Mode != \"hosted\" && e.Mode != \"local\") {\n\t\treturn data, errors.New(\"evidence revision/mode mismatch\")\n\t}\n\tfor _, w := range []workflow{e.Service, e.Conversation} {\n\t\tif w.SHA != revision || w.Conclusion != \"success\" || w.ID <= 0 || !strings.HasPrefix(w.URL, repository+\"/actions/runs/\") {\n\t\t\treturn data, errors.New(\"both exact-revision workflows must have succeeded\")\n\t\t}\n\t}\n\tdata.Artifacts = map[string]artifact{}\n\tallowed := map[string]bool{\"service\": true, \"functional\": true, \"coverage\": true, \"conversation\": true}\n\tfor _, a := range e.Artifacts {\n\t\tif !allowed[a.Kind] || data.Artifacts[a.Kind].Kind != \"\" || !filepath.IsLocal(a.Directory) || a.ID <= 0 || !strings.HasPrefix(a.URL, repository+\"/actions/runs/\") {\n\t\t\treturn data, errors.New(\"invalid artifact provenance\")\n\t\t}\n\t\tif err := verifyChecksums(filepath.Join(input, a.Directory)); err != nil {\n\t\t\treturn data, fmt.Errorf(\"%s: %w\", a.Kind, err)\n\t\t}\n\t\tprefix := map[string]string{\"service\": \"service-checks\", \"functional\": \"functional-tests\", \"coverage\": \"test-coverage\", \"conversation\": \"conversation-docs\"}[a.Kind]\n\t\trunID := e.Service.ID\n\t\tif a.Kind == \"conversation\" {\n\t\t\trunID = e.Conversation.ID\n\t\t}\n\t\texpectedURL := fmt.Sprintf(\"%s/actions/runs/%d/artifacts/%d\", repository, runID, a.ID)\n\t\tif a.Name != prefix+\"-\"+revision || a.URL != expectedURL {\n\t\t\treturn data, errors.New(\"artifact name or run does not match source revision\")\n\t\t}\n\t\tdata.Artifacts[a.Kind] = a\n\t}\n\tif len(data.Artifacts) != 4 {\n\t\treturn data, errors.New(\"all four evidence artifacts are required\")\n\t}\n\treturn data, nil\n}\n\nfunc loadFunctional(root, input, revision string, data *inputData) error {\n\tvar functional struct {\n\t\tRevision      string `json:\"revision\"`\n\t\tPassed, Total int\n\t\tPackagePassed bool `json:\"package_passed\"`\n\t\tCases         []struct {\n\t\t\tName, Asserts, Status string\n\t\t\tSeconds               float64\n\t\t}\n\t}\n\tif err := readJSON(filepath.Join(input, data.Artifacts[\"functional\"].Directory, \"results.json\"), &functional); err != nil {\n\t\treturn err\n\t}\n\tvar catalogue []struct{ Name, Asserts string }\n\tif err := readJSON(filepath.Join(root, \"testdata/functional-cases.json\"), &catalogue); err != nil {\n\t\treturn err\n\t}\n\tif functional.Revision != revision || !functional.PackagePassed || functional.Passed != len(catalogue) || functional.Total != len(catalogue) || len(functional.Cases) != len(catalogue) {\n\t\treturn errors.New(\"functional result set incomplete or stale\")\n\t}\n\tfor i, c := range functional.Cases {\n\t\tif c.Name != catalogue[i].Name || c.Asserts != catalogue[i].Asserts || c.Status != \"pass\" {\n\t\t\treturn errors.New(\"functional catalogue/results mismatch\")\n\t\t}\n\t\tline, err := sourceLine(root, \"tests/functional/payments_test.go\", c.Name)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tdata.Results = append(data.Results, result{Suite: \"functional\", Name: c.Name, Asserts: c.Asserts, Status: c.Status, Seconds: c.Seconds, SourceURL: sourceURL(revision, \"tests/functional/payments_test.go\", line), ArtifactURL: data.Artifacts[\"functional\"].URL, Anchor: anchor(\"functional-\" + c.Name)})\n\t}\n\tfor _, item := range []struct{ suite, kind, file string }{{\"unit\", \"service\", \"unit-tests.jsonl\"}, {\"exporter\", \"conversation\", \"exporter-tests.jsonl\"}} {\n\t\ta := data.Artifacts[item.kind]\n\t\trecords, err := readEvents(filepath.Join(input, a.Directory, item.file), item.suite, root, revision, a.URL)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tdata.Results = append(data.Results, records...)\n\t}\n\treturn nil\n}\n\nfunc loadCoverage(input string, data *inputData) error {\n\tvar coverage []struct {\n\t\tName                string\n\t\tStatements, Covered int64\n\t\tPercent             float64\n\t}\n\tif err := readJSON(filepath.Join(input, data.Artifacts[\"coverage\"].Directory, \"summary.json\"), &coverage); err != nil {\n\t\treturn err\n\t}\n\tfound := false\n\tfor _, c := range coverage {\n\t\tif c.Name == \"application-union\" {\n\t\t\tif c.Statements <= 0 || c.Covered < 0 || c.Covered > c.Statements {\n\t\t\t\treturn errors.New(\"invalid coverage counters\")\n\t\t\t}\n\t\t\tdata.Coverage = 100 * float64(c.Covered) / float64(c.Statements)\n\t\t\tif delta := data.Coverage - c.Percent; delta > 0.00001 || delta < -0.00001 {\n\t\t\t\treturn errors.New(\"coverage percentage does not match counters\")\n\t\t\t}\n\t\t\tfound = true\n\t\t}\n\t}\n\tif !found {\n\t\treturn errors.New(\"application coverage is missing\")\n\t}\n\treturn nil\n}\n\nfunc loadChecks(input string, data *inputData) error {\n\te := data.Evidence\n\tdata.Checks = map[string]check{}\n\trequire := func(kind, path, contains string) error {\n\t\tb, err := os.ReadFile(filepath.Join(input, data.Artifacts[kind].Directory, path))\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif contains != \"\" && !strings.Contains(string(b), contains) {\n\t\t\treturn fmt.Errorf(\"missing verification marker: %s\", path)\n\t\t}\n\t\tif len(b) == 0 {\n\t\t\treturn fmt.Errorf(\"empty evidence file: %s\", path)\n\t\t}\n\t\treturn nil\n\t}\n\tfor _, entry := range []struct{ id, title, kind, path, marker, detail string }{\n\t\t{\"database\", \"PostgreSQL schema, constraints and original seed\", \"service\", \"database.log\", \"Original sample committed\", \"Schema/constraint SQL completed before the process acceptance sample.\"},\n\t\t{\"containers\", \"Container build and sample acceptance\", \"service\", \"container-status.txt\", \"acceptance passed\", \"Both images built and the original sample produced the expected balances and rows.\"},\n\t\t{\"readme\", \"README and contract validation\", \"service\", \"openapi.json\", \"\\\"errors\\\": 0\", \"Successful Service CI ran Markdown, shell, workflow and OpenAPI checks. Editorial quality remains a human judgment.\"},\n\t\t{\"security\", \"Go dependency vulnerability checks\", \"service\", \"vulnerabilities.log\", \"No vulnerabilities found.\", \"The recorded Go scan reported no applicable vulnerabilities; this is not a production security certification.\"},\n\t\t{\"conversation\", \"Original conversation preservation and dark PDF\", \"conversation\", \"conversation.tex\", \"use theme=ChatGPT-classical-dark\", \"Exporter cases, archive checksums and the successful PDF workflow verify the preserved snapshot.\"},\n\t} {\n\t\tif err := require(entry.kind, entry.path, entry.marker); err != nil {\n\t\t\treturn err\n\t\t}\n\t\trun := e.Service.URL\n\t\tif entry.kind == \"conversation\" {\n\t\t\trun = e.Conversation.URL\n\t\t}\n\t\tdata.Checks[entry.id] = check{entry.id, entry.title, \"pass\", entry.detail, run, data.Artifacts[entry.kind].URL}\n\t}\n\tfor _, service := range []string{\"payments-api\", \"ledger-service\"} {\n\t\tfor _, arch := range []string{\"amd64\", \"arm64\"} {\n\t\t\tif err := require(\"service\", \"bin/\"+service+\"-linux-\"+arch, \"\"); err != nil {\n\t\t\t\treturn err\n\t\t\t}\n\t\t}\n\t}\n\tdata.Checks[\"distribution\"] = check{\"distribution\", \"Go service distribution builds\", \"pass\", \"Both services were built for Linux amd64 and arm64.\", e.Service.URL, data.Artifacts[\"service\"].URL}\n\treturn nil\n}\n\ntype goEvent struct {\n\tAction, Package, Test, Output string\n\tElapsed                       float64\n}\n\nfunc readEvents(path, suite, root, revision, artifactURL string) ([]result, error) {\n\tfile, err := os.Open(path)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer func() { _ = file.Close() }()\n\tscanner := bufio.NewScanner(file)\n\tscanner.Buffer(make([]byte, 4096), 8<<20)\n\trecords := map[string]result{}\n\tcomplete := map[string]bool{}\n\tfor scanner.Scan() {\n\t\tvar e goEvent\n\t\tif err := json.Unmarshal(scanner.Bytes(), &e); err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\tif e.Action == \"fail\" || (e.Test != \"\" && e.Action == \"skip\") {\n\t\t\treturn nil, errors.New(\"failed or skipped evidence test\")\n\t\t}\n\t\tif e.Test == \"\" && e.Action == \"pass\" {\n\t\t\tcomplete[e.Package] = true\n\t\t}\n\t\tif e.Test != \"\" && e.Action == \"pass\" {\n\t\t\tkey := e.Package + \"::\" + e.Test\n\t\t\tif _, exists := records[key]; exists {\n\t\t\t\treturn nil, errors.New(\"duplicate result event\")\n\t\t\t}\n\t\t\trecords[key] = result{Suite: suite, Name: e.Test, Package: e.Package, Status: \"pass\", Seconds: e.Elapsed, ArtifactURL: artifactURL, Anchor: anchor(suite + \"-\" + key)}\n\t\t}\n\t}\n\tif err := scanner.Err(); err != nil {\n\t\treturn nil, err\n\t}\n\tif len(records) == 0 {\n\t\treturn nil, errors.New(\"empty test result stream\")\n\t}\n\tkeys := make([]string, 0, len(records))\n\tfor key := range records {\n\t\tkeys = append(keys, key)\n\t}\n\tsort.Strings(keys)\n\tout := []result{}\n\tfor _, key := range keys {\n\t\tr := records[key]\n\t\tif !complete[r.Package] {\n\t\t\treturn nil, errors.New(\"test package has no successful completion\")\n\t\t}\n\t\tdir := strings.TrimPrefix(r.Package, module+\"/\")\n\t\tif dir == r.Package || !filepath.IsLocal(dir) {\n\t\t\treturn nil, errors.New(\"unexpected test package\")\n\t\t}\n\t\tfiles, err := filepath.Glob(filepath.Join(root, dir, \"*_test.go\"))\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\tsymbol := strings.Split(r.Name, \"/\")[0]\n\t\tfor _, file := range files {\n\t\t\trelative, err := filepath.Rel(root, file)\n\t\t\tif err != nil {\n\t\t\t\treturn nil, err\n\t\t\t}\n\t\t\tline, err := sourceLine(root, relative, symbol)\n\t\t\tif err == nil {\n\t\t\t\tr.SourceURL = sourceURL(revision, filepath.ToSlash(relative), line)\n\t\t\t\tbreak\n\t\t\t}\n\t\t}\n\t\tif r.SourceURL == \"\" {\n\t\t\treturn nil, fmt.Errorf(\"test source not found: %s\", key)\n\t\t}\n\t\tout = append(out, r)\n\t}\n\treturn out, nil\n}\nfunc anchor(s string) string {\n\tvar b strings.Builder\n\tfor _, r := range strings.ToLower(s) {\n\t\tif (r >= 'a' && r <= 'z') || (r >= '0' && r <= '9') {\n\t\t\tb.WriteRune(r)\n\t\t} else {\n\t\t\tb.WriteByte('-')\n\t\t}\n\t}\n\treturn strings.Trim(b.String(), \"-\")\n}\nfunc sourceURL(revision, path string, line int) string {\n\treturn repository + \"/blob/\" + revision + \"/\" + filepath.ToSlash(path) + \"#L\" + strconv.Itoa(line)\n}\nfunc sourceLine(root, path, symbol string) (int, error) {\n\tif !filepath.IsLocal(path) {\n\t\treturn 0, errors.New(\"source path escapes checkout\")\n\t}\n\tb, err := os.ReadFile(filepath.Join(root, path))\n\tif err != nil {\n\t\treturn 0, err\n\t}\n\tif symbol == \"\" {\n\t\treturn 1, nil\n\t}\n\tif strings.HasPrefix(symbol, \"text:\") {\n\t\tfor i, line := range strings.Split(string(b), \"\\n\") {\n\t\t\tif strings.Contains(line, strings.TrimPrefix(symbol, \"text:\")) {\n\t\t\t\treturn i + 1, nil\n\t\t\t}\n\t\t}\n\t\treturn 0, errors.New(\"text reference not found\")\n\t}\n\tif strings.HasSuffix(path, \".go\") {\n\t\tfset := token.NewFileSet()\n\t\tfile, err := parser.ParseFile(fset, path, b, 0)\n\t\tif err != nil {\n\t\t\treturn 0, err\n\t\t}\n\t\tline := 0\n\t\tast.Inspect(file, func(node ast.Node) bool {\n\t\t\tswitch n := node.(type) {\n\t\t\tcase *ast.FuncDecl:\n\t\t\t\tif n.Name.Name == symbol {\n\t\t\t\t\tline = fset.Position(n.Pos()).Line\n\t\t\t\t}\n\t\t\tcase *ast.KeyValueExpr:\n\t\t\t\tif key, ok := n.Key.(*ast.BasicLit); ok && key.Kind == token.STRING {\n\t\t\t\t\tvalue, err := strconv.Unquote(key.Value)\n\t\t\t\t\tif err == nil && value == symbol {\n\t\t\t\t\t\tline = fset.Position(key.Pos()).Line\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t\treturn true\n\t\t})\n\t\tif line > 0 {\n\t\t\treturn line, nil\n\t\t}\n\t}\n\treturn 0, fmt.Errorf(\"source symbol not found: %s / %s\", path, symbol)\n}\n",
-      "blocks": [
-        {
-          "startLine": 54,
-          "startColumn": 2,
-          "endLine": 55,
-          "endColumn": 16,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 56,
-          "startColumn": 3,
-          "endLine": 57,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 58,
-          "startColumn": 2,
-          "endLine": 58,
-          "endColumn": 33,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 61,
-          "startColumn": 2,
-          "endLine": 62,
-          "endColumn": 16,
-          "statements": 2,
-          "count": 55
-        },
-        {
-          "startLine": 63,
-          "startColumn": 3,
-          "endLine": 64,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 65,
-          "startColumn": 2,
-          "endLine": 65,
-          "endColumn": 15,
-          "statements": 1,
-          "count": 55
-        },
-        {
-          "startLine": 65,
-          "startColumn": 17,
-          "endLine": 65,
-          "endColumn": 32,
-          "statements": 1,
-          "count": 55
-        },
-        {
-          "startLine": 66,
-          "startColumn": 2,
-          "endLine": 67,
-          "endColumn": 41,
-          "statements": 2,
-          "count": 55
-        },
-        {
-          "startLine": 68,
-          "startColumn": 3,
-          "endLine": 69,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 70,
-          "startColumn": 2,
-          "endLine": 70,
-          "endColumn": 44,
-          "statements": 1,
-          "count": 55
-        },
-        {
-          "startLine": 73,
-          "startColumn": 2,
-          "endLine": 74,
-          "endColumn": 16,
-          "statements": 2,
-          "count": 2
-        },
-        {
-          "startLine": 75,
-          "startColumn": 3,
-          "endLine": 76,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 77,
-          "startColumn": 2,
-          "endLine": 78,
-          "endColumn": 73,
-          "statements": 2,
-          "count": 2
-        },
-        {
-          "startLine": 79,
-          "startColumn": 3,
-          "endLine": 79,
-          "endColumn": 21,
-          "statements": 1,
-          "count": 18
-        },
-        {
-          "startLine": 80,
-          "startColumn": 4,
-          "endLine": 81,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 82,
-          "startColumn": 3,
-          "endLine": 83,
-          "endColumn": 51,
-          "statements": 2,
-          "count": 18
-        },
-        {
-          "startLine": 84,
-          "startColumn": 4,
-          "endLine": 85,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 86,
-          "startColumn": 3,
-          "endLine": 86,
-          "endColumn": 78,
-          "statements": 1,
-          "count": 18
-        },
-        {
-          "startLine": 87,
-          "startColumn": 4,
-          "endLine": 88,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 89,
-          "startColumn": 3,
-          "endLine": 90,
-          "endColumn": 17,
-          "statements": 2,
-          "count": 18
-        },
-        {
-          "startLine": 91,
-          "startColumn": 4,
-          "endLine": 92,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 93,
-          "startColumn": 3,
-          "endLine": 93,
-          "endColumn": 31,
-          "statements": 1,
-          "count": 18
-        },
-        {
-          "startLine": 94,
-          "startColumn": 4,
-          "endLine": 95,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 96,
-          "startColumn": 3,
-          "endLine": 97,
-          "endColumn": 17,
-          "statements": 2,
-          "count": 18
-        },
-        {
-          "startLine": 98,
-          "startColumn": 4,
-          "endLine": 99,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 100,
-          "startColumn": 3,
-          "endLine": 100,
-          "endColumn": 18,
-          "statements": 1,
-          "count": 18
-        },
-        {
-          "startLine": 101,
-          "startColumn": 4,
-          "endLine": 102,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 103,
-          "startColumn": 3,
-          "endLine": 103,
-          "endColumn": 22,
-          "statements": 1,
-          "count": 18
-        },
-        {
-          "startLine": 105,
-          "startColumn": 2,
-          "endLine": 105,
-          "endColumn": 22,
-          "statements": 1,
-          "count": 2
-        },
-        {
-          "startLine": 106,
-          "startColumn": 3,
-          "endLine": 107,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 108,
-          "startColumn": 2,
-          "endLine": 108,
           "endColumn": 82,
-          "statements": 1,
-          "count": 2
-        },
-        {
-          "startLine": 109,
-          "startColumn": 3,
-          "endLine": 109,
-          "endColumn": 17,
-          "statements": 1,
-          "count": 28
-        },
-        {
-          "startLine": 110,
-          "startColumn": 4,
-          "endLine": 111,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 112,
-          "startColumn": 3,
-          "endLine": 112,
-          "endColumn": 16,
-          "statements": 1,
-          "count": 28
-        },
-        {
-          "startLine": 113,
-          "startColumn": 4,
-          "endLine": 114,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 8
-        },
-        {
-          "startLine": 115,
-          "startColumn": 3,
-          "endLine": 116,
-          "endColumn": 17,
-          "statements": 2,
-          "count": 20
-        },
-        {
-          "startLine": 117,
-          "startColumn": 4,
-          "endLine": 118,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 119,
-          "startColumn": 3,
-          "endLine": 119,
-          "endColumn": 60,
-          "statements": 1,
-          "count": 20
-        },
-        {
-          "startLine": 120,
-          "startColumn": 4,
-          "endLine": 121,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 122,
-          "startColumn": 3,
-          "endLine": 122,
-          "endColumn": 13,
-          "statements": 1,
-          "count": 20
-        },
-        {
-          "startLine": 126,
-          "startColumn": 2,
-          "endLine": 127,
-          "endColumn": 16,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 128,
-          "startColumn": 3,
-          "endLine": 129,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 130,
-          "startColumn": 2,
-          "endLine": 131,
-          "endColumn": 16,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 131,
-          "startColumn": 18,
-          "endLine": 131,
-          "endColumn": 71,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 132,
-          "startColumn": 18,
-          "endLine": 132,
-          "endColumn": 53,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 133,
-          "startColumn": 18,
-          "endLine": 133,
-          "endColumn": 51,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 135,
-          "startColumn": 3,
-          "endLine": 135,
-          "endColumn": 32,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 136,
-          "startColumn": 4,
-          "endLine": 137,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 139,
-          "startColumn": 2,
-          "endLine": 139,
-          "endColumn": 18,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 142,
-          "startColumn": 2,
-          "endLine": 143,
-          "endColumn": 88,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 144,
-          "startColumn": 3,
-          "endLine": 145,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 146,
-          "startColumn": 2,
-          "endLine": 147,
-          "endColumn": 105,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 148,
-          "startColumn": 3,
-          "endLine": 149,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 150,
-          "startColumn": 2,
-          "endLine": 150,
-          "endColumn": 58,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 151,
-          "startColumn": 3,
-          "endLine": 151,
-          "endColumn": 124,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 152,
-          "startColumn": 4,
-          "endLine": 153,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 155,
-          "startColumn": 2,
-          "endLine": 157,
-          "endColumn": 32,
-          "statements": 3,
-          "count": 0
-        },
-        {
-          "startLine": 158,
-          "startColumn": 3,
-          "endLine": 158,
-          "endColumn": 165,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 159,
-          "startColumn": 4,
-          "endLine": 160,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 161,
-          "startColumn": 3,
-          "endLine": 161,
-          "endColumn": 76,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 162,
-          "startColumn": 4,
-          "endLine": 163,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 164,
-          "startColumn": 3,
-          "endLine": 166,
-          "endColumn": 31,
-          "statements": 3,
-          "count": 0
-        },
-        {
-          "startLine": 167,
-          "startColumn": 4,
-          "endLine": 168,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 169,
-          "startColumn": 3,
-          "endLine": 170,
-          "endColumn": 60,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 171,
-          "startColumn": 4,
-          "endLine": 172,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 173,
-          "startColumn": 3,
-          "endLine": 173,
-          "endColumn": 29,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 175,
-          "startColumn": 2,
-          "endLine": 175,
-          "endColumn": 30,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 176,
-          "startColumn": 3,
-          "endLine": 177,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 178,
-          "startColumn": 2,
-          "endLine": 178,
-          "endColumn": 18,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 182,
-          "startColumn": 2,
-          "endLine": 189,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 191,
-          "startColumn": 2,
-          "endLine": 191,
-          "endColumn": 124,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 192,
-          "startColumn": 3,
-          "endLine": 193,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 194,
-          "startColumn": 2,
-          "endLine": 195,
-          "endColumn": 100,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 196,
-          "startColumn": 3,
-          "endLine": 197,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 198,
-          "startColumn": 2,
-          "endLine": 198,
-          "endColumn": 186,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 199,
-          "startColumn": 3,
-          "endLine": 200,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 201,
-          "startColumn": 2,
-          "endLine": 201,
-          "endColumn": 37,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 202,
-          "startColumn": 3,
-          "endLine": 202,
-          "endColumn": 93,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 203,
-          "startColumn": 4,
-          "endLine": 204,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 205,
-          "startColumn": 3,
-          "endLine": 206,
-          "endColumn": 17,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 207,
-          "startColumn": 4,
-          "endLine": 208,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 209,
-          "startColumn": 3,
-          "endLine": 209,
-          "endColumn": 301,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 211,
-          "startColumn": 2,
-          "endLine": 211,
-          "endColumn": 155,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 212,
-          "startColumn": 3,
-          "endLine": 214,
-          "endColumn": 17,
-          "statements": 3,
-          "count": 0
-        },
-        {
-          "startLine": 215,
-          "startColumn": 4,
-          "endLine": 216,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 217,
-          "startColumn": 3,
-          "endLine": 217,
-          "endColumn": 50,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 219,
-          "startColumn": 2,
-          "endLine": 219,
-          "endColumn": 12,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 223,
-          "startColumn": 2,
-          "endLine": 227,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 228,
-          "startColumn": 2,
-          "endLine": 228,
-          "endColumn": 120,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 229,
-          "startColumn": 3,
-          "endLine": 230,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 231,
-          "startColumn": 2,
-          "endLine": 232,
-          "endColumn": 29,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 233,
-          "startColumn": 3,
-          "endLine": 233,
-          "endColumn": 36,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 234,
-          "startColumn": 4,
-          "endLine": 234,
-          "endColumn": 70,
           "statements": 1,
           "count": 0
         },
         {
           "startLine": 235,
-          "startColumn": 5,
+          "startColumn": 3,
           "endLine": 236,
           "endColumn": 1,
           "statements": 1,
@@ -1919,87 +1383,95 @@
         },
         {
           "startLine": 237,
-          "startColumn": 4,
-          "endLine": 238,
-          "endColumn": 79,
-          "statements": 2,
+          "startColumn": 2,
+          "endLine": 237,
+          "endColumn": 48,
+          "statements": 1,
           "count": 0
         },
         {
-          "startLine": 239,
-          "startColumn": 5,
-          "endLine": 240,
+          "startLine": 238,
+          "startColumn": 3,
+          "endLine": 239,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 241,
-          "startColumn": 4,
-          "endLine": 241,
-          "endColumn": 16,
+          "startLine": 240,
+          "startColumn": 2,
+          "endLine": 240,
+          "endColumn": 24,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 243,
+          "startColumn": 2,
+          "endLine": 243,
+          "endColumn": 25,
           "statements": 1,
           "count": 0
         },
         {
           "startLine": 244,
-          "startColumn": 2,
-          "endLine": 244,
-          "endColumn": 12,
-          "statements": 1,
+          "startColumn": 3,
+          "endLine": 246,
+          "endColumn": 17,
+          "statements": 3,
           "count": 0
         },
         {
-          "startLine": 245,
-          "startColumn": 3,
-          "endLine": 246,
+          "startLine": 247,
+          "startColumn": 4,
+          "endLine": 248,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 247,
-          "startColumn": 2,
-          "endLine": 247,
-          "endColumn": 12,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 251,
-          "startColumn": 2,
-          "endLine": 253,
-          "endColumn": 53,
+          "startLine": 249,
+          "startColumn": 3,
+          "endLine": 251,
+          "endColumn": 31,
           "statements": 3,
           "count": 0
         },
         {
-          "startLine": 254,
-          "startColumn": 3,
-          "endLine": 255,
-          "endColumn": 17,
+          "startLine": 252,
+          "startColumn": 4,
+          "endLine": 253,
+          "endColumn": 38,
           "statements": 2,
           "count": 0
         },
         {
-          "startLine": 256,
-          "startColumn": 4,
-          "endLine": 257,
+          "startLine": 254,
+          "startColumn": 5,
+          "endLine": 254,
+          "endColumn": 57,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 255,
+          "startColumn": 6,
+          "endLine": 256,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
           "startLine": 258,
-          "startColumn": 3,
+          "startColumn": 4,
           "endLine": 258,
-          "endColumn": 63,
+          "endColumn": 52,
           "statements": 1,
           "count": 0
         },
         {
           "startLine": 259,
-          "startColumn": 4,
+          "startColumn": 5,
           "endLine": 260,
           "endColumn": 1,
           "statements": 1,
@@ -2007,47 +1479,63 @@
         },
         {
           "startLine": 261,
-          "startColumn": 3,
+          "startColumn": 4,
           "endLine": 261,
-          "endColumn": 18,
+          "endColumn": 45,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 262,
-          "startColumn": 4,
+          "startLine": 263,
+          "startColumn": 3,
           "endLine": 263,
-          "endColumn": 1,
+          "endColumn": 36,
           "statements": 1,
           "count": 0
         },
         {
           "startLine": 264,
-          "startColumn": 3,
-          "endLine": 264,
-          "endColumn": 13,
-          "statements": 1,
+          "startColumn": 4,
+          "endLine": 265,
+          "endColumn": 18,
+          "statements": 2,
           "count": 0
         },
         {
           "startLine": 266,
-          "startColumn": 2,
-          "endLine": 272,
+          "startColumn": 5,
+          "endLine": 267,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 273,
-          "startColumn": 3,
-          "endLine": 273,
-          "endColumn": 71,
+          "startLine": 268,
+          "startColumn": 4,
+          "endLine": 268,
+          "endColumn": 140,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 274,
+          "startLine": 270,
+          "startColumn": 3,
+          "endLine": 271,
+          "endColumn": 36,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 272,
           "startColumn": 4,
+          "endLine": 273,
+          "endColumn": 11,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 274,
+          "startColumn": 5,
           "endLine": 275,
           "endColumn": 1,
           "statements": 1,
@@ -2055,210 +1543,210 @@
         },
         {
           "startLine": 276,
-          "startColumn": 3,
-          "endLine": 277,
-          "endColumn": 35,
-          "statements": 2,
+          "startColumn": 4,
+          "endLine": 276,
+          "endColumn": 76,
+          "statements": 1,
           "count": 0
         },
         {
           "startLine": 278,
-          "startColumn": 4,
-          "endLine": 279,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 280,
           "startColumn": 3,
-          "endLine": 280,
-          "endColumn": 114,
+          "endLine": 278,
+          "endColumn": 31,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 282,
-          "startColumn": 2,
+          "startLine": 279,
+          "startColumn": 4,
+          "endLine": 280,
+          "endColumn": 33,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 281,
+          "startColumn": 5,
           "endLine": 282,
-          "endColumn": 69,
+          "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
           "startLine": 283,
-          "startColumn": 3,
-          "endLine": 283,
-          "endColumn": 51,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 284,
           "startColumn": 4,
-          "endLine": 284,
-          "endColumn": 80,
+          "endLine": 283,
+          "endColumn": 40,
           "statements": 1,
           "count": 0
         },
         {
           "startLine": 285,
-          "startColumn": 5,
-          "endLine": 286,
-          "endColumn": 1,
+          "startColumn": 3,
+          "endLine": 285,
+          "endColumn": 32,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 289,
+          "startLine": 287,
           "startColumn": 2,
-          "endLine": 290,
+          "endLine": 287,
           "endColumn": 12,
-          "statements": 2,
+          "statements": 1,
           "count": 0
         },
         {
-          "startLine": 299,
+          "startLine": 290,
           "startColumn": 2,
-          "endLine": 300,
+          "endLine": 291,
           "endColumn": 16,
           "statements": 2,
           "count": 0
         },
         {
-          "startLine": 301,
+          "startLine": 292,
           "startColumn": 3,
-          "endLine": 302,
+          "endLine": 293,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 303,
+          "startLine": 294,
           "startColumn": 2,
-          "endLine": 303,
-          "endColumn": 15,
+          "endLine": 294,
+          "endColumn": 51,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 303,
-          "startColumn": 17,
-          "endLine": 303,
-          "endColumn": 35,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 304,
+          "startLine": 297,
           "startColumn": 2,
-          "endLine": 308,
-          "endColumn": 21,
-          "statements": 5,
-          "count": 0
-        },
-        {
-          "startLine": 309,
-          "startColumn": 3,
-          "endLine": 310,
-          "endColumn": 61,
+          "endLine": 298,
+          "endColumn": 85,
           "statements": 2,
+          "count": 4
+        },
+        {
+          "startLine": 299,
+          "startColumn": 3,
+          "endLine": 299,
+          "endColumn": 17,
+          "statements": 1,
+          "count": 59
+        },
+        {
+          "startLine": 300,
+          "startColumn": 4,
+          "endLine": 301,
+          "endColumn": 1,
+          "statements": 1,
           "count": 0
+        },
+        {
+          "startLine": 302,
+          "startColumn": 3,
+          "endLine": 302,
+          "endColumn": 17,
+          "statements": 1,
+          "count": 59
+        },
+        {
+          "startLine": 303,
+          "startColumn": 4,
+          "endLine": 304,
+          "endColumn": 18,
+          "statements": 2,
+          "count": 43
+        },
+        {
+          "startLine": 305,
+          "startColumn": 5,
+          "endLine": 306,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 307,
+          "startColumn": 4,
+          "endLine": 307,
+          "endColumn": 27,
+          "statements": 1,
+          "count": 43
+        },
+        {
+          "startLine": 308,
+          "startColumn": 5,
+          "endLine": 309,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 41
         },
         {
           "startLine": 311,
-          "startColumn": 4,
-          "endLine": 312,
-          "endColumn": 1,
+          "startColumn": 3,
+          "endLine": 311,
+          "endColumn": 13,
           "statements": 1,
-          "count": 0
+          "count": 59
         },
         {
           "startLine": 313,
           "startColumn": 3,
-          "endLine": 313,
-          "endColumn": 65,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 314,
-          "startColumn": 4,
-          "endLine": 315,
+          "endLine": 314,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 316,
-          "startColumn": 3,
-          "endLine": 316,
-          "endColumn": 41,
-          "statements": 1,
-          "count": 0
+          "startLine": 315,
+          "startColumn": 2,
+          "endLine": 317,
+          "endColumn": 29,
+          "statements": 3,
+          "count": 4
         },
         {
-          "startLine": 317,
-          "startColumn": 4,
-          "endLine": 318,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 319,
+          "startLine": 318,
           "startColumn": 3,
           "endLine": 319,
-          "endColumn": 41,
-          "statements": 1,
-          "count": 0
+          "endColumn": 17,
+          "statements": 2,
+          "count": 41
         },
         {
           "startLine": 320,
           "startColumn": 4,
           "endLine": 321,
-          "endColumn": 41,
-          "statements": 2,
+          "endColumn": 1,
+          "statements": 1,
           "count": 0
         },
         {
           "startLine": 322,
-          "startColumn": 5,
-          "endLine": 323,
-          "endColumn": 1,
+          "startColumn": 3,
+          "endLine": 322,
+          "endColumn": 43,
           "statements": 1,
-          "count": 0
+          "count": 41
         },
         {
           "startLine": 324,
-          "startColumn": 4,
-          "endLine": 324,
-          "endColumn": 170,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 327,
           "startColumn": 2,
-          "endLine": 327,
-          "endColumn": 38,
+          "endLine": 324,
+          "endColumn": 83,
           "statements": 1,
-          "count": 0
+          "count": 4
         },
         {
           "startLine": 328,
-          "startColumn": 3,
-          "endLine": 329,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 330,
           "startColumn": 2,
           "endLine": 330,
-          "endColumn": 23,
-          "statements": 1,
+          "endColumn": 66,
+          "statements": 3,
           "count": 0
         },
         {
@@ -2272,391 +1760,1510 @@
         {
           "startLine": 333,
           "startColumn": 2,
-          "endLine": 334,
-          "endColumn": 27,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 335,
-          "startColumn": 3,
-          "endLine": 336,
-          "endColumn": 1,
+          "endLine": 333,
+          "endColumn": 46,
           "statements": 1,
           "count": 0
-        },
+        }
+      ]
+    },
+    {
+      "path": "tools/requirements-site/evidence.go",
+      "sha256": "fdcd288cccac2139dc428cfff85a7a124d644d070428975d6663181f7b68c00f",
+      "source": "package main\n\nimport (\n\t\"bufio\"\n\t\"crypto/sha256\"\n\t\"encoding/hex\"\n\t\"encoding/json\"\n\t\"errors\"\n\t\"fmt\"\n\t\"go/ast\"\n\t\"go/parser\"\n\t\"go/token\"\n\t\"io\"\n\t\"os\"\n\t\"path/filepath\"\n\t\"regexp\"\n\t\"sort\"\n\t\"strconv\"\n\t\"strings\"\n)\n\nconst repository = \"https://github.com/newdarwindev/firm-payments\"\nconst module = \"github.com/newdarwindev/firm-payments\"\n\nvar shaPattern = regexp.MustCompile(`^[a-f0-9]{40}$`)\n\ntype artifact struct {\n\tKind, Name, URL, Directory string\n\tID                         int64\n}\ntype workflow struct {\n\tName, URL, SHA, Conclusion string\n\tID                         int64\n}\ntype evidence struct {\n\tMode, SHA, VerifiedAt string\n\tService, Conversation workflow\n\tArtifacts             []artifact\n}\ntype result struct {\n\tSuite, Name, Package, Asserts, Status, SourceURL, ArtifactURL, Anchor string\n\tAssertions                                                            []assertionSource\n\tSeconds                                                               float64\n}\ntype inputData struct {\n\tEvidence  evidence\n\tResults   []result\n\tCoverage  float64\n\tArtifacts map[string]artifact\n\tChecks    map[string]check\n}\ntype check struct{ ID, Title, Status, Detail, RunURL, ArtifactURL string }\n\nfunc readJSON(path string, value any) error {\n\tb, err := os.ReadFile(path)\n\tif err != nil {\n\t\treturn err\n\t}\n\treturn json.Unmarshal(b, value)\n}\nfunc fileHash(path string) (string, error) {\n\tf, err := os.Open(path)\n\tif err != nil {\n\t\treturn \"\", err\n\t}\n\tdefer func() { _ = f.Close() }()\n\th := sha256.New()\n\tif _, err := io.Copy(h, f); err != nil {\n\t\treturn \"\", err\n\t}\n\treturn hex.EncodeToString(h.Sum(nil)), nil\n}\nfunc verifyChecksums(root string) error {\n\tb, err := os.ReadFile(filepath.Join(root, \"SHA256SUMS\"))\n\tif err != nil {\n\t\treturn err\n\t}\n\tlisted := map[string]bool{}\n\tfor _, line := range strings.Split(strings.TrimSpace(string(b)), \"\\n\") {\n\t\tif len(line) < 67 {\n\t\t\treturn errors.New(\"invalid checksum manifest\")\n\t\t}\n\t\twant, name := line[:64], strings.TrimPrefix(line[66:], \"./\")\n\t\tif _, err := hex.DecodeString(want); err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif !filepath.IsLocal(name) || listed[name] || strings.Contains(name, \"\\\\\") {\n\t\t\treturn errors.New(\"unsafe or duplicate artifact path\")\n\t\t}\n\t\tinfo, err := os.Lstat(filepath.Join(root, name))\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif !info.Mode().IsRegular() {\n\t\t\treturn errors.New(\"artifact links are forbidden\")\n\t\t}\n\t\tgot, err := fileHash(filepath.Join(root, name))\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif got != want {\n\t\t\treturn fmt.Errorf(\"checksum mismatch: %s\", name)\n\t\t}\n\t\tlisted[name] = true\n\t}\n\tif len(listed) == 0 {\n\t\treturn errors.New(\"empty checksum manifest\")\n\t}\n\treturn filepath.WalkDir(root, func(path string, d os.DirEntry, err error) error {\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif d.IsDir() {\n\t\t\treturn nil\n\t\t}\n\t\trel, err := filepath.Rel(root, path)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif rel != \"SHA256SUMS\" && !listed[filepath.ToSlash(rel)] {\n\t\t\treturn fmt.Errorf(\"unlisted artifact file: %s\", rel)\n\t\t}\n\t\treturn nil\n\t})\n}\nfunc loadInputs(root, input, revision string) (inputData, error) {\n\tdata, err := loadProvenance(root, input, revision)\n\tif err != nil {\n\t\treturn data, err\n\t}\n\tfor _, load := range []func() error{\n\t\tfunc() error { return loadFunctional(root, input, revision, &data) },\n\t\tfunc() error { return loadCoverage(input, &data) },\n\t\tfunc() error { return loadChecks(input, &data) },\n\t} {\n\t\tif err := load(); err != nil {\n\t\t\treturn data, err\n\t\t}\n\t}\n\treturn data, nil\n}\nfunc loadProvenance(root, input, revision string) (inputData, error) {\n\tvar data inputData\n\tif err := readJSON(filepath.Join(input, \"evidence.json\"), &data.Evidence); err != nil {\n\t\treturn data, err\n\t}\n\te := data.Evidence\n\tif !shaPattern.MatchString(revision) || e.SHA != revision || (e.Mode != \"hosted\" && e.Mode != \"local\") {\n\t\treturn data, errors.New(\"evidence revision/mode mismatch\")\n\t}\n\tfor _, w := range []workflow{e.Service, e.Conversation} {\n\t\tif w.SHA != revision || w.Conclusion != \"success\" || w.ID <= 0 || !strings.HasPrefix(w.URL, repository+\"/actions/runs/\") {\n\t\t\treturn data, errors.New(\"both exact-revision workflows must have succeeded\")\n\t\t}\n\t}\n\tdata.Artifacts = map[string]artifact{}\n\tallowed := map[string]bool{\"service\": true, \"functional\": true, \"coverage\": true, \"conversation\": true}\n\tfor _, a := range e.Artifacts {\n\t\tif !allowed[a.Kind] || data.Artifacts[a.Kind].Kind != \"\" || !filepath.IsLocal(a.Directory) || a.ID <= 0 || !strings.HasPrefix(a.URL, repository+\"/actions/runs/\") {\n\t\t\treturn data, errors.New(\"invalid artifact provenance\")\n\t\t}\n\t\tif err := verifyChecksums(filepath.Join(input, a.Directory)); err != nil {\n\t\t\treturn data, fmt.Errorf(\"%s: %w\", a.Kind, err)\n\t\t}\n\t\tprefix := map[string]string{\"service\": \"service-checks\", \"functional\": \"functional-tests\", \"coverage\": \"test-coverage\", \"conversation\": \"conversation-docs\"}[a.Kind]\n\t\trunID := e.Service.ID\n\t\tif a.Kind == \"conversation\" {\n\t\t\trunID = e.Conversation.ID\n\t\t}\n\t\texpectedURL := fmt.Sprintf(\"%s/actions/runs/%d/artifacts/%d\", repository, runID, a.ID)\n\t\tif a.Name != prefix+\"-\"+revision || a.URL != expectedURL {\n\t\t\treturn data, errors.New(\"artifact name or run does not match source revision\")\n\t\t}\n\t\tdata.Artifacts[a.Kind] = a\n\t}\n\tif len(data.Artifacts) != 4 {\n\t\treturn data, errors.New(\"all four evidence artifacts are required\")\n\t}\n\treturn data, nil\n}\n\nfunc loadFunctional(root, input, revision string, data *inputData) error {\n\tvar functional struct {\n\t\tRevision      string `json:\"revision\"`\n\t\tPassed, Total int\n\t\tPackagePassed bool `json:\"package_passed\"`\n\t\tCases         []struct {\n\t\t\tName, Asserts, Status string\n\t\t\tSeconds               float64\n\t\t}\n\t}\n\tif err := readJSON(filepath.Join(input, data.Artifacts[\"functional\"].Directory, \"results.json\"), &functional); err != nil {\n\t\treturn err\n\t}\n\tvar catalogue []struct{ Name, Asserts string }\n\tif err := readJSON(filepath.Join(root, \"testdata/functional-cases.json\"), &catalogue); err != nil {\n\t\treturn err\n\t}\n\tif functional.Revision != revision || !functional.PackagePassed || functional.Passed != len(catalogue) || functional.Total != len(catalogue) || len(functional.Cases) != len(catalogue) {\n\t\treturn errors.New(\"functional result set incomplete or stale\")\n\t}\n\tfor i, c := range functional.Cases {\n\t\tif c.Name != catalogue[i].Name || c.Asserts != catalogue[i].Asserts || c.Status != \"pass\" {\n\t\t\treturn errors.New(\"functional catalogue/results mismatch\")\n\t\t}\n\t\tline, err := sourceLine(root, \"tests/functional/payments_test.go\", c.Name)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tdata.Results = append(data.Results, result{Suite: \"functional\", Name: c.Name, Asserts: c.Asserts, Status: c.Status, Seconds: c.Seconds, SourceURL: sourceURL(revision, \"tests/functional/payments_test.go\", line), ArtifactURL: data.Artifacts[\"functional\"].URL, Anchor: anchor(\"functional-\" + c.Name)})\n\t}\n\tfor _, item := range []struct{ suite, kind, file string }{{\"unit\", \"service\", \"unit-tests.jsonl\"}, {\"exporter\", \"conversation\", \"exporter-tests.jsonl\"}} {\n\t\ta := data.Artifacts[item.kind]\n\t\trecords, err := readEvents(filepath.Join(input, a.Directory, item.file), item.suite, root, revision, a.URL)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tdata.Results = append(data.Results, records...)\n\t}\n\treturn nil\n}\n\nfunc loadCoverage(input string, data *inputData) error {\n\tvar coverage []struct {\n\t\tName                string\n\t\tStatements, Covered int64\n\t\tPercent             float64\n\t}\n\tif err := readJSON(filepath.Join(input, data.Artifacts[\"coverage\"].Directory, \"summary.json\"), &coverage); err != nil {\n\t\treturn err\n\t}\n\tfound := false\n\tfor _, c := range coverage {\n\t\tif c.Name == \"application-union\" {\n\t\t\tif c.Statements <= 0 || c.Covered < 0 || c.Covered > c.Statements {\n\t\t\t\treturn errors.New(\"invalid coverage counters\")\n\t\t\t}\n\t\t\tdata.Coverage = 100 * float64(c.Covered) / float64(c.Statements)\n\t\t\tif delta := data.Coverage - c.Percent; delta > 0.00001 || delta < -0.00001 {\n\t\t\t\treturn errors.New(\"coverage percentage does not match counters\")\n\t\t\t}\n\t\t\tfound = true\n\t\t}\n\t}\n\tif !found {\n\t\treturn errors.New(\"application coverage is missing\")\n\t}\n\treturn nil\n}\n\nfunc loadChecks(input string, data *inputData) error {\n\te := data.Evidence\n\tdata.Checks = map[string]check{}\n\trequire := func(kind, path, contains string) error {\n\t\tb, err := os.ReadFile(filepath.Join(input, data.Artifacts[kind].Directory, path))\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif contains != \"\" && !strings.Contains(string(b), contains) {\n\t\t\treturn fmt.Errorf(\"missing verification marker: %s\", path)\n\t\t}\n\t\tif len(b) == 0 {\n\t\t\treturn fmt.Errorf(\"empty evidence file: %s\", path)\n\t\t}\n\t\treturn nil\n\t}\n\tfor _, entry := range []struct{ id, title, kind, path, marker, detail string }{\n\t\t{\"database\", \"PostgreSQL schema, constraints and original seed\", \"service\", \"database.log\", \"Original sample committed\", \"Schema/constraint SQL completed before the process acceptance sample.\"},\n\t\t{\"containers\", \"Container build and sample acceptance\", \"service\", \"container-status.txt\", \"acceptance passed\", \"Both images built and the original sample produced the expected balances and rows.\"},\n\t\t{\"readme\", \"README and contract validation\", \"service\", \"openapi.json\", \"\\\"errors\\\": 0\", \"Successful Service CI ran Markdown, shell, workflow and OpenAPI checks. Editorial quality remains a human judgment.\"},\n\t\t{\"security\", \"Go dependency vulnerability checks\", \"service\", \"vulnerabilities.log\", \"No vulnerabilities found.\", \"The recorded Go scan reported no applicable vulnerabilities; this is not a production security certification.\"},\n\t\t{\"conversation\", \"Original conversation preservation and dark PDF\", \"conversation\", \"conversation.tex\", \"use theme=ChatGPT-classical-dark\", \"Exporter cases, archive checksums and the successful PDF workflow verify the preserved snapshot.\"},\n\t} {\n\t\tif err := require(entry.kind, entry.path, entry.marker); err != nil {\n\t\t\treturn err\n\t\t}\n\t\trun := e.Service.URL\n\t\tif entry.kind == \"conversation\" {\n\t\t\trun = e.Conversation.URL\n\t\t}\n\t\tdata.Checks[entry.id] = check{entry.id, entry.title, \"pass\", entry.detail, run, data.Artifacts[entry.kind].URL}\n\t}\n\tfor _, service := range []string{\"payments-api\", \"ledger-service\"} {\n\t\tfor _, arch := range []string{\"amd64\", \"arm64\"} {\n\t\t\tif err := require(\"service\", \"bin/\"+service+\"-linux-\"+arch, \"\"); err != nil {\n\t\t\t\treturn err\n\t\t\t}\n\t\t}\n\t}\n\tdata.Checks[\"distribution\"] = check{\"distribution\", \"Go service distribution builds\", \"pass\", \"Both services were built for Linux amd64 and arm64.\", e.Service.URL, data.Artifacts[\"service\"].URL}\n\treturn nil\n}\n\ntype goEvent struct {\n\tAction, Package, Test, Output string\n\tElapsed                       float64\n}\n\nfunc readEvents(path, suite, root, revision, artifactURL string) ([]result, error) {\n\tfile, err := os.Open(path)\n\tif err != nil {\n\t\treturn nil, err\n\t}\n\tdefer func() { _ = file.Close() }()\n\tscanner := bufio.NewScanner(file)\n\tscanner.Buffer(make([]byte, 4096), 8<<20)\n\trecords := map[string]result{}\n\tcomplete := map[string]bool{}\n\tfor scanner.Scan() {\n\t\tvar e goEvent\n\t\tif err := json.Unmarshal(scanner.Bytes(), &e); err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\tif e.Action == \"fail\" || (e.Test != \"\" && e.Action == \"skip\") {\n\t\t\treturn nil, errors.New(\"failed or skipped evidence test\")\n\t\t}\n\t\tif e.Test == \"\" && e.Action == \"pass\" {\n\t\t\tcomplete[e.Package] = true\n\t\t}\n\t\tif e.Test != \"\" && e.Action == \"pass\" {\n\t\t\tkey := e.Package + \"::\" + e.Test\n\t\t\tif _, exists := records[key]; exists {\n\t\t\t\treturn nil, errors.New(\"duplicate result event\")\n\t\t\t}\n\t\t\trecords[key] = result{Suite: suite, Name: e.Test, Package: e.Package, Status: \"pass\", Seconds: e.Elapsed, ArtifactURL: artifactURL, Anchor: anchor(suite + \"-\" + key)}\n\t\t}\n\t}\n\tif err := scanner.Err(); err != nil {\n\t\treturn nil, err\n\t}\n\tif len(records) == 0 {\n\t\treturn nil, errors.New(\"empty test result stream\")\n\t}\n\tkeys := make([]string, 0, len(records))\n\tfor key := range records {\n\t\tkeys = append(keys, key)\n\t}\n\tsort.Strings(keys)\n\tout := []result{}\n\tfor _, key := range keys {\n\t\tr := records[key]\n\t\tif !complete[r.Package] {\n\t\t\treturn nil, errors.New(\"test package has no successful completion\")\n\t\t}\n\t\tdir := strings.TrimPrefix(r.Package, module+\"/\")\n\t\tif dir == r.Package || !filepath.IsLocal(dir) {\n\t\t\treturn nil, errors.New(\"unexpected test package\")\n\t\t}\n\t\tfiles, err := filepath.Glob(filepath.Join(root, dir, \"*_test.go\"))\n\t\tif err != nil {\n\t\t\treturn nil, err\n\t\t}\n\t\tsymbol := strings.Split(r.Name, \"/\")[0]\n\t\tfor _, file := range files {\n\t\t\trelative, err := filepath.Rel(root, file)\n\t\t\tif err != nil {\n\t\t\t\treturn nil, err\n\t\t\t}\n\t\t\tline, err := sourceLine(root, relative, symbol)\n\t\t\tif err == nil {\n\t\t\t\tr.SourceURL = sourceURL(revision, filepath.ToSlash(relative), line)\n\t\t\t\tbreak\n\t\t\t}\n\t\t}\n\t\tif r.SourceURL == \"\" {\n\t\t\treturn nil, fmt.Errorf(\"test source not found: %s\", key)\n\t\t}\n\t\tout = append(out, r)\n\t}\n\treturn out, nil\n}\nfunc anchor(s string) string {\n\tvar b strings.Builder\n\tfor _, r := range strings.ToLower(s) {\n\t\tif (r >= 'a' && r <= 'z') || (r >= '0' && r <= '9') {\n\t\t\tb.WriteRune(r)\n\t\t} else {\n\t\t\tb.WriteByte('-')\n\t\t}\n\t}\n\treturn strings.Trim(b.String(), \"-\")\n}\nfunc sourceURL(revision, path string, line int) string {\n\treturn repository + \"/blob/\" + revision + \"/\" + filepath.ToSlash(path) + \"#L\" + strconv.Itoa(line)\n}\nfunc sourceLine(root, path, symbol string) (int, error) {\n\tif !filepath.IsLocal(path) {\n\t\treturn 0, errors.New(\"source path escapes checkout\")\n\t}\n\tb, err := os.ReadFile(filepath.Join(root, path))\n\tif err != nil {\n\t\treturn 0, err\n\t}\n\tif symbol == \"\" {\n\t\treturn 1, nil\n\t}\n\tif strings.HasPrefix(symbol, \"text:\") {\n\t\tfor i, line := range strings.Split(string(b), \"\\n\") {\n\t\t\tif strings.Contains(line, strings.TrimPrefix(symbol, \"text:\")) {\n\t\t\t\treturn i + 1, nil\n\t\t\t}\n\t\t}\n\t\treturn 0, errors.New(\"text reference not found\")\n\t}\n\tif strings.HasSuffix(path, \".go\") {\n\t\tfset := token.NewFileSet()\n\t\tfile, err := parser.ParseFile(fset, path, b, 0)\n\t\tif err != nil {\n\t\t\treturn 0, err\n\t\t}\n\t\tline := 0\n\t\tast.Inspect(file, func(node ast.Node) bool {\n\t\t\tswitch n := node.(type) {\n\t\t\tcase *ast.FuncDecl:\n\t\t\t\tif n.Name.Name == symbol {\n\t\t\t\t\tline = fset.Position(n.Pos()).Line\n\t\t\t\t}\n\t\t\tcase *ast.KeyValueExpr:\n\t\t\t\tif key, ok := n.Key.(*ast.BasicLit); ok && key.Kind == token.STRING {\n\t\t\t\t\tvalue, err := strconv.Unquote(key.Value)\n\t\t\t\t\tif err == nil && value == symbol {\n\t\t\t\t\t\tline = fset.Position(key.Pos()).Line\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t\treturn true\n\t\t})\n\t\tif line > 0 {\n\t\t\treturn line, nil\n\t\t}\n\t}\n\treturn 0, fmt.Errorf(\"source symbol not found: %s / %s\", path, symbol)\n}\n",
+      "blocks": [
         {
-          "startLine": 337,
+          "startLine": 55,
           "startColumn": 2,
-          "endLine": 339,
-          "endColumn": 27,
-          "statements": 3,
-          "count": 0
-        },
-        {
-          "startLine": 340,
-          "startColumn": 3,
-          "endLine": 341,
-          "endColumn": 27,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 342,
-          "startColumn": 4,
-          "endLine": 343,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 344,
-          "startColumn": 3,
-          "endLine": 345,
-          "endColumn": 49,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 346,
-          "startColumn": 4,
-          "endLine": 347,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 348,
-          "startColumn": 3,
-          "endLine": 349,
-          "endColumn": 17,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 350,
-          "startColumn": 4,
-          "endLine": 351,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 352,
-          "startColumn": 3,
-          "endLine": 353,
-          "endColumn": 30,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 354,
-          "startColumn": 4,
-          "endLine": 355,
-          "endColumn": 18,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 356,
-          "startColumn": 5,
-          "endLine": 357,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 358,
-          "startColumn": 4,
-          "endLine": 359,
-          "endColumn": 18,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 360,
-          "startColumn": 5,
-          "endLine": 361,
-          "endColumn": 10,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 364,
-          "startColumn": 3,
-          "endLine": 364,
-          "endColumn": 24,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 365,
-          "startColumn": 4,
-          "endLine": 366,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 367,
-          "startColumn": 3,
-          "endLine": 367,
-          "endColumn": 23,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 369,
-          "startColumn": 2,
-          "endLine": 369,
-          "endColumn": 17,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 372,
-          "startColumn": 2,
-          "endLine": 373,
-          "endColumn": 39,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 374,
-          "startColumn": 3,
-          "endLine": 374,
-          "endColumn": 55,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 375,
-          "startColumn": 4,
-          "endLine": 376,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 377,
-          "startColumn": 4,
-          "endLine": 378,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 380,
-          "startColumn": 2,
-          "endLine": 380,
-          "endColumn": 38,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 383,
-          "startColumn": 2,
-          "endLine": 384,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 386,
-          "startColumn": 2,
-          "endLine": 386,
-          "endColumn": 29,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 387,
-          "startColumn": 3,
-          "endLine": 388,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 389,
-          "startColumn": 2,
-          "endLine": 390,
+          "endLine": 56,
           "endColumn": 16,
           "statements": 2,
           "count": 0
         },
         {
-          "startLine": 391,
+          "startLine": 57,
           "startColumn": 3,
-          "endLine": 392,
+          "endLine": 58,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 393,
+          "startLine": 59,
           "startColumn": 2,
-          "endLine": 393,
+          "endLine": 59,
+          "endColumn": 33,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 62,
+          "startColumn": 2,
+          "endLine": 63,
+          "endColumn": 16,
+          "statements": 2,
+          "count": 61
+        },
+        {
+          "startLine": 64,
+          "startColumn": 3,
+          "endLine": 65,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 66,
+          "startColumn": 2,
+          "endLine": 66,
+          "endColumn": 15,
+          "statements": 1,
+          "count": 61
+        },
+        {
+          "startLine": 66,
+          "startColumn": 17,
+          "endLine": 66,
+          "endColumn": 32,
+          "statements": 1,
+          "count": 61
+        },
+        {
+          "startLine": 67,
+          "startColumn": 2,
+          "endLine": 68,
+          "endColumn": 41,
+          "statements": 2,
+          "count": 61
+        },
+        {
+          "startLine": 69,
+          "startColumn": 3,
+          "endLine": 70,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 71,
+          "startColumn": 2,
+          "endLine": 71,
+          "endColumn": 44,
+          "statements": 1,
+          "count": 61
+        },
+        {
+          "startLine": 74,
+          "startColumn": 2,
+          "endLine": 75,
+          "endColumn": 16,
+          "statements": 2,
+          "count": 2
+        },
+        {
+          "startLine": 76,
+          "startColumn": 3,
+          "endLine": 77,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 78,
+          "startColumn": 2,
+          "endLine": 79,
+          "endColumn": 73,
+          "statements": 2,
+          "count": 2
+        },
+        {
+          "startLine": 80,
+          "startColumn": 3,
+          "endLine": 80,
+          "endColumn": 21,
+          "statements": 1,
+          "count": 20
+        },
+        {
+          "startLine": 81,
+          "startColumn": 4,
+          "endLine": 82,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 83,
+          "startColumn": 3,
+          "endLine": 84,
+          "endColumn": 51,
+          "statements": 2,
+          "count": 20
+        },
+        {
+          "startLine": 85,
+          "startColumn": 4,
+          "endLine": 86,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 87,
+          "startColumn": 3,
+          "endLine": 87,
+          "endColumn": 78,
+          "statements": 1,
+          "count": 20
+        },
+        {
+          "startLine": 88,
+          "startColumn": 4,
+          "endLine": 89,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 90,
+          "startColumn": 3,
+          "endLine": 91,
+          "endColumn": 17,
+          "statements": 2,
+          "count": 20
+        },
+        {
+          "startLine": 92,
+          "startColumn": 4,
+          "endLine": 93,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 94,
+          "startColumn": 3,
+          "endLine": 94,
+          "endColumn": 31,
+          "statements": 1,
+          "count": 20
+        },
+        {
+          "startLine": 95,
+          "startColumn": 4,
+          "endLine": 96,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 97,
+          "startColumn": 3,
+          "endLine": 98,
+          "endColumn": 17,
+          "statements": 2,
+          "count": 20
+        },
+        {
+          "startLine": 99,
+          "startColumn": 4,
+          "endLine": 100,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 101,
+          "startColumn": 3,
+          "endLine": 101,
           "endColumn": 18,
           "statements": 1,
-          "count": 0
+          "count": 20
         },
         {
-          "startLine": 394,
-          "startColumn": 3,
-          "endLine": 395,
-          "endColumn": 1,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 396,
-          "startColumn": 2,
-          "endLine": 396,
-          "endColumn": 40,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 397,
-          "startColumn": 3,
-          "endLine": 397,
-          "endColumn": 55,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 398,
+          "startLine": 102,
           "startColumn": 4,
-          "endLine": 398,
-          "endColumn": 67,
-          "statements": 1,
-          "count": 0
-        },
-        {
-          "startLine": 399,
-          "startColumn": 5,
-          "endLine": 400,
+          "endLine": 103,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 402,
+          "startLine": 104,
           "startColumn": 3,
-          "endLine": 402,
+          "endLine": 104,
+          "endColumn": 22,
+          "statements": 1,
+          "count": 20
+        },
+        {
+          "startLine": 106,
+          "startColumn": 2,
+          "endLine": 106,
+          "endColumn": 22,
+          "statements": 1,
+          "count": 2
+        },
+        {
+          "startLine": 107,
+          "startColumn": 3,
+          "endLine": 108,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 109,
+          "startColumn": 2,
+          "endLine": 109,
+          "endColumn": 82,
+          "statements": 1,
+          "count": 2
+        },
+        {
+          "startLine": 110,
+          "startColumn": 3,
+          "endLine": 110,
+          "endColumn": 17,
+          "statements": 1,
+          "count": 30
+        },
+        {
+          "startLine": 111,
+          "startColumn": 4,
+          "endLine": 112,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 113,
+          "startColumn": 3,
+          "endLine": 113,
+          "endColumn": 16,
+          "statements": 1,
+          "count": 30
+        },
+        {
+          "startLine": 114,
+          "startColumn": 4,
+          "endLine": 115,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 8
+        },
+        {
+          "startLine": 116,
+          "startColumn": 3,
+          "endLine": 117,
+          "endColumn": 17,
+          "statements": 2,
+          "count": 22
+        },
+        {
+          "startLine": 118,
+          "startColumn": 4,
+          "endLine": 119,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 120,
+          "startColumn": 3,
+          "endLine": 120,
+          "endColumn": 60,
+          "statements": 1,
+          "count": 22
+        },
+        {
+          "startLine": 121,
+          "startColumn": 4,
+          "endLine": 122,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 123,
+          "startColumn": 3,
+          "endLine": 123,
+          "endColumn": 13,
+          "statements": 1,
+          "count": 22
+        },
+        {
+          "startLine": 127,
+          "startColumn": 2,
+          "endLine": 128,
+          "endColumn": 16,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 129,
+          "startColumn": 3,
+          "endLine": 130,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 131,
+          "startColumn": 2,
+          "endLine": 132,
+          "endColumn": 16,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 132,
+          "startColumn": 18,
+          "endLine": 132,
+          "endColumn": 71,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 133,
+          "startColumn": 18,
+          "endLine": 133,
+          "endColumn": 53,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 134,
+          "startColumn": 18,
+          "endLine": 134,
           "endColumn": 51,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 404,
-          "startColumn": 2,
-          "endLine": 404,
-          "endColumn": 36,
+          "startLine": 136,
+          "startColumn": 3,
+          "endLine": 136,
+          "endColumn": 32,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 405,
-          "startColumn": 3,
-          "endLine": 407,
-          "endColumn": 17,
-          "statements": 3,
-          "count": 0
-        },
-        {
-          "startLine": 408,
+          "startLine": 137,
           "startColumn": 4,
-          "endLine": 409,
+          "endLine": 138,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 410,
-          "startColumn": 3,
-          "endLine": 411,
-          "endColumn": 46,
-          "statements": 2,
-          "count": 0
-        },
-        {
-          "startLine": 412,
-          "startColumn": 4,
-          "endLine": 412,
-          "endColumn": 28,
+          "startLine": 140,
+          "startColumn": 2,
+          "endLine": 140,
+          "endColumn": 18,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 414,
-          "startColumn": 5,
-          "endLine": 414,
+          "startLine": 143,
+          "startColumn": 2,
+          "endLine": 144,
+          "endColumn": 88,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 145,
+          "startColumn": 3,
+          "endLine": 146,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 147,
+          "startColumn": 2,
+          "endLine": 148,
+          "endColumn": 105,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 149,
+          "startColumn": 3,
+          "endLine": 150,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 151,
+          "startColumn": 2,
+          "endLine": 151,
+          "endColumn": 58,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 152,
+          "startColumn": 3,
+          "endLine": 152,
+          "endColumn": 124,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 153,
+          "startColumn": 4,
+          "endLine": 154,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 156,
+          "startColumn": 2,
+          "endLine": 158,
+          "endColumn": 32,
+          "statements": 3,
+          "count": 0
+        },
+        {
+          "startLine": 159,
+          "startColumn": 3,
+          "endLine": 159,
+          "endColumn": 165,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 160,
+          "startColumn": 4,
+          "endLine": 161,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 162,
+          "startColumn": 3,
+          "endLine": 162,
+          "endColumn": 76,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 163,
+          "startColumn": 4,
+          "endLine": 164,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 165,
+          "startColumn": 3,
+          "endLine": 167,
+          "endColumn": 31,
+          "statements": 3,
+          "count": 0
+        },
+        {
+          "startLine": 168,
+          "startColumn": 4,
+          "endLine": 169,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 170,
+          "startColumn": 3,
+          "endLine": 171,
+          "endColumn": 60,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 172,
+          "startColumn": 4,
+          "endLine": 173,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 174,
+          "startColumn": 3,
+          "endLine": 174,
+          "endColumn": 29,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 176,
+          "startColumn": 2,
+          "endLine": 176,
           "endColumn": 30,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 415,
-          "startColumn": 6,
-          "endLine": 416,
+          "startLine": 177,
+          "startColumn": 3,
+          "endLine": 178,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 418,
-          "startColumn": 5,
-          "endLine": 418,
-          "endColumn": 73,
+          "startLine": 179,
+          "startColumn": 2,
+          "endLine": 179,
+          "endColumn": 18,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 419,
-          "startColumn": 6,
-          "endLine": 420,
-          "endColumn": 39,
+          "startLine": 183,
+          "startColumn": 2,
+          "endLine": 190,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 192,
+          "startColumn": 2,
+          "endLine": 192,
+          "endColumn": 124,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 193,
+          "startColumn": 3,
+          "endLine": 194,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 195,
+          "startColumn": 2,
+          "endLine": 196,
+          "endColumn": 100,
           "statements": 2,
           "count": 0
         },
         {
-          "startLine": 421,
-          "startColumn": 7,
-          "endLine": 422,
+          "startLine": 197,
+          "startColumn": 3,
+          "endLine": 198,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 425,
+          "startLine": 199,
+          "startColumn": 2,
+          "endLine": 199,
+          "endColumn": 186,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 200,
+          "startColumn": 3,
+          "endLine": 201,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 202,
+          "startColumn": 2,
+          "endLine": 202,
+          "endColumn": 37,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 203,
+          "startColumn": 3,
+          "endLine": 203,
+          "endColumn": 93,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 204,
           "startColumn": 4,
-          "endLine": 425,
+          "endLine": 205,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 206,
+          "startColumn": 3,
+          "endLine": 207,
+          "endColumn": 17,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 208,
+          "startColumn": 4,
+          "endLine": 209,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 210,
+          "startColumn": 3,
+          "endLine": 210,
+          "endColumn": 301,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 212,
+          "startColumn": 2,
+          "endLine": 212,
+          "endColumn": 155,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 213,
+          "startColumn": 3,
+          "endLine": 215,
+          "endColumn": 17,
+          "statements": 3,
+          "count": 0
+        },
+        {
+          "startLine": 216,
+          "startColumn": 4,
+          "endLine": 217,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 218,
+          "startColumn": 3,
+          "endLine": 218,
+          "endColumn": 50,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 220,
+          "startColumn": 2,
+          "endLine": 220,
+          "endColumn": 12,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 224,
+          "startColumn": 2,
+          "endLine": 228,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 229,
+          "startColumn": 2,
+          "endLine": 229,
+          "endColumn": 120,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 230,
+          "startColumn": 3,
+          "endLine": 231,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 232,
+          "startColumn": 2,
+          "endLine": 233,
+          "endColumn": 29,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 234,
+          "startColumn": 3,
+          "endLine": 234,
+          "endColumn": 36,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 235,
+          "startColumn": 4,
+          "endLine": 235,
+          "endColumn": 70,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 236,
+          "startColumn": 5,
+          "endLine": 237,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 238,
+          "startColumn": 4,
+          "endLine": 239,
+          "endColumn": 79,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 240,
+          "startColumn": 5,
+          "endLine": 241,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 242,
+          "startColumn": 4,
+          "endLine": 242,
+          "endColumn": 16,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 245,
+          "startColumn": 2,
+          "endLine": 245,
+          "endColumn": 12,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 246,
+          "startColumn": 3,
+          "endLine": 247,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 248,
+          "startColumn": 2,
+          "endLine": 248,
+          "endColumn": 12,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 252,
+          "startColumn": 2,
+          "endLine": 254,
+          "endColumn": 53,
+          "statements": 3,
+          "count": 0
+        },
+        {
+          "startLine": 255,
+          "startColumn": 3,
+          "endLine": 256,
+          "endColumn": 17,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 257,
+          "startColumn": 4,
+          "endLine": 258,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 259,
+          "startColumn": 3,
+          "endLine": 259,
+          "endColumn": 63,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 260,
+          "startColumn": 4,
+          "endLine": 261,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 262,
+          "startColumn": 3,
+          "endLine": 262,
+          "endColumn": 18,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 263,
+          "startColumn": 4,
+          "endLine": 264,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 265,
+          "startColumn": 3,
+          "endLine": 265,
+          "endColumn": 13,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 267,
+          "startColumn": 2,
+          "endLine": 273,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 274,
+          "startColumn": 3,
+          "endLine": 274,
+          "endColumn": 71,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 275,
+          "startColumn": 4,
+          "endLine": 276,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 277,
+          "startColumn": 3,
+          "endLine": 278,
+          "endColumn": 35,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 279,
+          "startColumn": 4,
+          "endLine": 280,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 281,
+          "startColumn": 3,
+          "endLine": 281,
+          "endColumn": 114,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 283,
+          "startColumn": 2,
+          "endLine": 283,
+          "endColumn": 69,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 284,
+          "startColumn": 3,
+          "endLine": 284,
+          "endColumn": 51,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 285,
+          "startColumn": 4,
+          "endLine": 285,
+          "endColumn": 80,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 286,
+          "startColumn": 5,
+          "endLine": 287,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 290,
+          "startColumn": 2,
+          "endLine": 291,
+          "endColumn": 12,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 300,
+          "startColumn": 2,
+          "endLine": 301,
+          "endColumn": 16,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 302,
+          "startColumn": 3,
+          "endLine": 303,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 304,
+          "startColumn": 2,
+          "endLine": 304,
           "endColumn": 15,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 427,
+          "startLine": 304,
+          "startColumn": 17,
+          "endLine": 304,
+          "endColumn": 35,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 305,
+          "startColumn": 2,
+          "endLine": 309,
+          "endColumn": 21,
+          "statements": 5,
+          "count": 0
+        },
+        {
+          "startLine": 310,
           "startColumn": 3,
-          "endLine": 427,
+          "endLine": 311,
+          "endColumn": 61,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 312,
+          "startColumn": 4,
+          "endLine": 313,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 314,
+          "startColumn": 3,
+          "endLine": 314,
+          "endColumn": 65,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 315,
+          "startColumn": 4,
+          "endLine": 316,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 317,
+          "startColumn": 3,
+          "endLine": 317,
+          "endColumn": 41,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 318,
+          "startColumn": 4,
+          "endLine": 319,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 320,
+          "startColumn": 3,
+          "endLine": 320,
+          "endColumn": 41,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 321,
+          "startColumn": 4,
+          "endLine": 322,
+          "endColumn": 41,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 323,
+          "startColumn": 5,
+          "endLine": 324,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 325,
+          "startColumn": 4,
+          "endLine": 325,
+          "endColumn": 170,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 328,
+          "startColumn": 2,
+          "endLine": 328,
+          "endColumn": 38,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 329,
+          "startColumn": 3,
+          "endLine": 330,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 331,
+          "startColumn": 2,
+          "endLine": 331,
+          "endColumn": 23,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 332,
+          "startColumn": 3,
+          "endLine": 333,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 334,
+          "startColumn": 2,
+          "endLine": 335,
+          "endColumn": 27,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 336,
+          "startColumn": 3,
+          "endLine": 337,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 338,
+          "startColumn": 2,
+          "endLine": 340,
+          "endColumn": 27,
+          "statements": 3,
+          "count": 0
+        },
+        {
+          "startLine": 341,
+          "startColumn": 3,
+          "endLine": 342,
+          "endColumn": 27,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 343,
+          "startColumn": 4,
+          "endLine": 344,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 345,
+          "startColumn": 3,
+          "endLine": 346,
+          "endColumn": 49,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 347,
+          "startColumn": 4,
+          "endLine": 348,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 349,
+          "startColumn": 3,
+          "endLine": 350,
+          "endColumn": 17,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 351,
+          "startColumn": 4,
+          "endLine": 352,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 353,
+          "startColumn": 3,
+          "endLine": 354,
+          "endColumn": 30,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 355,
+          "startColumn": 4,
+          "endLine": 356,
+          "endColumn": 18,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 357,
+          "startColumn": 5,
+          "endLine": 358,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 359,
+          "startColumn": 4,
+          "endLine": 360,
+          "endColumn": 18,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 361,
+          "startColumn": 5,
+          "endLine": 362,
+          "endColumn": 10,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 365,
+          "startColumn": 3,
+          "endLine": 365,
+          "endColumn": 24,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 366,
+          "startColumn": 4,
+          "endLine": 367,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 368,
+          "startColumn": 3,
+          "endLine": 368,
+          "endColumn": 23,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 370,
+          "startColumn": 2,
+          "endLine": 370,
+          "endColumn": 17,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 373,
+          "startColumn": 2,
+          "endLine": 374,
+          "endColumn": 39,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 375,
+          "startColumn": 3,
+          "endLine": 375,
+          "endColumn": 55,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 376,
+          "startColumn": 4,
+          "endLine": 377,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 378,
+          "startColumn": 4,
+          "endLine": 379,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 381,
+          "startColumn": 2,
+          "endLine": 381,
+          "endColumn": 38,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 384,
+          "startColumn": 2,
+          "endLine": 385,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 387,
+          "startColumn": 2,
+          "endLine": 387,
+          "endColumn": 29,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 388,
+          "startColumn": 3,
+          "endLine": 389,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 390,
+          "startColumn": 2,
+          "endLine": 391,
+          "endColumn": 16,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 392,
+          "startColumn": 3,
+          "endLine": 393,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 394,
+          "startColumn": 2,
+          "endLine": 394,
+          "endColumn": 18,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 395,
+          "startColumn": 3,
+          "endLine": 396,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 397,
+          "startColumn": 2,
+          "endLine": 397,
+          "endColumn": 40,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 398,
+          "startColumn": 3,
+          "endLine": 398,
+          "endColumn": 55,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 399,
+          "startColumn": 4,
+          "endLine": 399,
+          "endColumn": 67,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 400,
+          "startColumn": 5,
+          "endLine": 401,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 403,
+          "startColumn": 3,
+          "endLine": 403,
+          "endColumn": 51,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 405,
+          "startColumn": 2,
+          "endLine": 405,
+          "endColumn": 36,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 406,
+          "startColumn": 3,
+          "endLine": 408,
+          "endColumn": 17,
+          "statements": 3,
+          "count": 0
+        },
+        {
+          "startLine": 409,
+          "startColumn": 4,
+          "endLine": 410,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 411,
+          "startColumn": 3,
+          "endLine": 412,
+          "endColumn": 46,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 413,
+          "startColumn": 4,
+          "endLine": 413,
+          "endColumn": 28,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 415,
+          "startColumn": 5,
+          "endLine": 415,
+          "endColumn": 30,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 416,
+          "startColumn": 6,
+          "endLine": 417,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 419,
+          "startColumn": 5,
+          "endLine": 419,
+          "endColumn": 73,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 420,
+          "startColumn": 6,
+          "endLine": 421,
+          "endColumn": 39,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 422,
+          "startColumn": 7,
+          "endLine": 423,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 426,
+          "startColumn": 4,
+          "endLine": 426,
           "endColumn": 15,
           "statements": 1,
           "count": 0
         },
         {
           "startLine": 428,
+          "startColumn": 3,
+          "endLine": 428,
+          "endColumn": 15,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 429,
           "startColumn": 4,
-          "endLine": 429,
+          "endLine": 430,
           "endColumn": 1,
           "statements": 1,
           "count": 0
         },
         {
-          "startLine": 431,
+          "startLine": 432,
           "startColumn": 2,
-          "endLine": 431,
+          "endLine": 432,
           "endColumn": 72,
           "statements": 1,
           "count": 0
@@ -2760,8 +3367,8 @@
     },
     {
       "path": "tools/requirements-site/verify.go",
-      "sha256": "9856c7983ec7f3372d1f8343ef0d0e7c52caf4a797d60601a7211cd13cbf1a57",
-      "source": "package main\n\nimport (\n\t\"errors\"\n\t\"fmt\"\n\t\"io\"\n\t\"net/url\"\n\t\"os\"\n\t\"path/filepath\"\n\t\"regexp\"\n\t\"strings\"\n\n\t\"golang.org/x/net/html\"\n)\n\nvar publicFiles = map[string]bool{\"index.html\": true, \"results/index.html\": true, \"build/index.html\": true, \"assets/style.css\": true, \"assets/site.js\": true, \"assignment.md\": true, \"verification.json\": true, \"results/results.json\": true, \".nojekyll\": true, \"SHA256SUMS\": true}\n\n// Extra files are accepted only from the generated UI/case inventory, with a narrow path/type boundary.\nfunc allowedPublicFiles(root string) (map[string]bool, error) {\n\tallowed := map[string]bool{}\n\tfor path := range publicFiles {\n\t\tallowed[path] = true\n\t}\n\tvar extension struct {\n\t\tSourceSHA string\n\t\tCaseCount int\n\t\tFiles     []string\n\t}\n\tpath := filepath.Join(root, \"extensions.json\")\n\tif _, err := os.Stat(path); os.IsNotExist(err) {\n\t\treturn allowed, nil\n\t}\n\tif err := readJSON(path, &extension); err != nil {\n\t\treturn nil, err\n\t}\n\tif !shaPattern.MatchString(extension.SourceSHA) || extension.CaseCount <= 0 || len(extension.Files) == 0 {\n\t\treturn nil, errors.New(\"invalid extension provenance\")\n\t}\n\tvar verification struct{ SourceSHA string }\n\tif err := readJSON(filepath.Join(root, \"verification.json\"), &verification); err != nil {\n\t\treturn nil, err\n\t}\n\tif verification.SourceSHA != extension.SourceSHA {\n\t\treturn nil, errors.New(\"extension revision mismatch\")\n\t}\n\tpattern := regexp.MustCompile(`^(cases/(functional|unit|exporter)-[a-f0-9]{16}/(index\\.html|data\\.json|coverage\\.(out|html)|terminal\\.(gif|txt)|poster\\.png)|(viewer|storybook|storybook-checks)/[A-Za-z0-9_@./+-]+\\.(html|js|mjs|css|json|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|txt|xml|map))$`)\n\tfor _, file := range extension.Files {\n\t\tif !filepath.IsLocal(file) || strings.Contains(file, \"..\") || !pattern.MatchString(file) || allowed[file] {\n\t\t\treturn nil, fmt.Errorf(\"unsafe/duplicate extension file: %s\", file)\n\t\t}\n\t\tallowed[file] = true\n\t}\n\tallowed[\"extensions.json\"] = true\n\treturn allowed, nil\n}\n\ntype pageInfo struct {\n\tIDs                                     map[string]bool\n\tLinks                                   []string\n\tHasMain, HasTitle, HasViewport, HasLang bool\n}\n\nfunc inspectHTML(input io.Reader) (pageInfo, error) {\n\troot, err := html.Parse(input)\n\tif err != nil {\n\t\treturn pageInfo{}, err\n\t}\n\tp := pageInfo{IDs: map[string]bool{}}\n\tvar visit func(*html.Node) error\n\tvisit = func(n *html.Node) error {\n\t\tif n.Type == html.ElementNode {\n\t\t\tif n.Data == \"main\" {\n\t\t\t\tp.HasMain = true\n\t\t\t}\n\t\t\tif n.Data == \"title\" && n.FirstChild != nil {\n\t\t\t\tp.HasTitle = true\n\t\t\t}\n\t\t\tfor _, a := range n.Attr {\n\t\t\t\tswitch a.Key {\n\t\t\t\tcase \"id\":\n\t\t\t\t\tif p.IDs[a.Val] {\n\t\t\t\t\t\treturn errors.New(\"duplicate HTML anchor\")\n\t\t\t\t\t}\n\t\t\t\t\tp.IDs[a.Val] = true\n\t\t\t\tcase \"href\", \"src\":\n\t\t\t\t\tp.Links = append(p.Links, a.Val)\n\t\t\t\tcase \"lang\":\n\t\t\t\t\tif n.Data == \"html\" && a.Val == \"en\" {\n\t\t\t\t\t\tp.HasLang = true\n\t\t\t\t\t}\n\t\t\t\tcase \"name\":\n\t\t\t\t\tif n.Data == \"meta\" && a.Val == \"viewport\" {\n\t\t\t\t\t\tp.HasViewport = true\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tfor child := n.FirstChild; child != nil; child = child.NextSibling {\n\t\t\tif err := visit(child); err != nil {\n\t\t\t\treturn err\n\t\t\t}\n\t\t}\n\t\treturn nil\n\t}\n\treturn p, visit(root)\n}\nfunc verifySite(root string) error {\n\tallowed, err := allowedPublicFiles(root)\n\tif err != nil {\n\t\treturn err\n\t}\n\tif err := filepath.WalkDir(root, func(path string, d os.DirEntry, err error) error {\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif d.IsDir() {\n\t\t\treturn nil\n\t\t}\n\t\trelative, err := filepath.Rel(root, path)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif !allowed[filepath.ToSlash(relative)] {\n\t\t\treturn fmt.Errorf(\"file outside public allowlist: %s\", relative)\n\t\t}\n\t\tinfo, err := d.Info()\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif !info.Mode().IsRegular() {\n\t\t\treturn errors.New(\"public file is not regular\")\n\t\t}\n\t\treturn nil\n\t}); err != nil {\n\t\treturn err\n\t}\n\tif err := verifyChecksums(root); err != nil {\n\t\treturn err\n\t}\n\tpages := map[string]pageInfo{}\n\tfor file := range allowed {\n\t\tpath := filepath.Join(root, file)\n\t\tif _, err := os.Stat(path); err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif !strings.HasSuffix(file, \".html\") || strings.HasPrefix(file, \"storybook/\") || strings.HasPrefix(file, \"storybook-checks/\") || strings.HasSuffix(file, \"/coverage.html\") {\n\t\t\tcontinue\n\t\t}\n\t\tdata, err := os.Open(path)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tp, parseErr := inspectHTML(data)\n\t\tcloseErr := data.Close()\n\t\tif err := errors.Join(parseErr, closeErr); err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif !p.HasMain || !p.HasTitle || !p.HasViewport || !p.HasLang {\n\t\t\treturn errors.New(\"page accessibility metadata missing\")\n\t\t}\n\t\tpages[file] = p\n\t}\n\treturn verifyPageLinks(pages, allowed)\n}\nfunc verifyPageLinks(pages map[string]pageInfo, allowed map[string]bool) error {\n\tfor file, p := range pages {\n\t\tfor _, href := range p.Links {\n\t\t\ttarget, err := url.Parse(href)\n\t\t\tif err != nil {\n\t\t\t\treturn err\n\t\t\t}\n\t\t\tif target.IsAbs() {\n\t\t\t\tif target.Scheme != \"https\" || target.Host != \"github.com\" || !strings.HasPrefix(target.Path, \"/newdarwindev/firm-payments/\") {\n\t\t\t\t\treturn fmt.Errorf(\"unexpected external destination: %s\", target.Host)\n\t\t\t\t}\n\t\t\t\tcontinue\n\t\t\t}\n\t\t\tif target.Host != \"\" || strings.HasPrefix(target.Path, \"/\") {\n\t\t\t\treturn errors.New(\"site links must be base-path safe\")\n\t\t\t}\n\t\t\tlocal := filepath.Clean(filepath.Join(filepath.Dir(file), filepath.FromSlash(target.Path)))\n\t\t\tif target.Path == \"\" {\n\t\t\t\tlocal = file\n\t\t\t} else if strings.HasSuffix(target.Path, \"/\") || local == \".\" {\n\t\t\t\tlocal = filepath.Join(local, \"index.html\")\n\t\t\t}\n\t\t\tif !filepath.IsLocal(local) {\n\t\t\t\treturn errors.New(\"link escapes public root\")\n\t\t\t}\n\t\t\tlocal = filepath.ToSlash(local)\n\t\t\tif !allowed[local] {\n\t\t\t\treturn fmt.Errorf(\"broken internal file link: %s -> %s\", file, local)\n\t\t\t}\n\t\t\tif target.Fragment != \"\" && !pages[local].IDs[target.Fragment] {\n\t\t\t\treturn fmt.Errorf(\"broken internal anchor: %s -> %s#%s\", file, local, target.Fragment)\n\t\t\t}\n\t\t}\n\t}\n\treturn nil\n}\n",
+      "sha256": "81efc745808b05275c4a9bb8e987f66cde52cfd4cb89087fa2674bbd09d60065",
+      "source": "package main\n\nimport (\n\t\"errors\"\n\t\"fmt\"\n\t\"io\"\n\t\"net/url\"\n\t\"os\"\n\t\"path/filepath\"\n\t\"regexp\"\n\t\"strings\"\n\n\t\"golang.org/x/net/html\"\n)\n\nvar publicFiles = map[string]bool{\"index.html\": true, \"results/index.html\": true, \"build/index.html\": true, \"assets/style.css\": true, \"assets/site.js\": true, \"assignment.md\": true, \"requirements.json\": true, \"verification.json\": true, \"results/results.json\": true, \".nojekyll\": true, \"SHA256SUMS\": true}\n\n// Extra files are accepted only from the generated UI/case inventory, with a narrow path/type boundary.\nfunc allowedPublicFiles(root string) (map[string]bool, error) {\n\tallowed := map[string]bool{}\n\tfor path := range publicFiles {\n\t\tallowed[path] = true\n\t}\n\tvar extension struct {\n\t\tSourceSHA string\n\t\tCaseCount int\n\t\tFiles     []string\n\t}\n\tpath := filepath.Join(root, \"extensions.json\")\n\tif _, err := os.Stat(path); os.IsNotExist(err) {\n\t\treturn allowed, nil\n\t}\n\tif err := readJSON(path, &extension); err != nil {\n\t\treturn nil, err\n\t}\n\tif !shaPattern.MatchString(extension.SourceSHA) || extension.CaseCount <= 0 || len(extension.Files) == 0 {\n\t\treturn nil, errors.New(\"invalid extension provenance\")\n\t}\n\tvar verification struct{ SourceSHA string }\n\tif err := readJSON(filepath.Join(root, \"verification.json\"), &verification); err != nil {\n\t\treturn nil, err\n\t}\n\tif verification.SourceSHA != extension.SourceSHA {\n\t\treturn nil, errors.New(\"extension revision mismatch\")\n\t}\n\tpattern := regexp.MustCompile(`^(cases/(functional|unit|exporter)-[a-f0-9]{16}/(index\\.html|data\\.json|coverage\\.(out|html)|terminal\\.(gif|txt)|poster\\.png)|(viewer|storybook|storybook-checks)/[A-Za-z0-9_@./+-]+\\.(html|js|mjs|css|json|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|txt|xml|map))$`)\n\tfor _, file := range extension.Files {\n\t\tif !filepath.IsLocal(file) || strings.Contains(file, \"..\") || !pattern.MatchString(file) || allowed[file] {\n\t\t\treturn nil, fmt.Errorf(\"unsafe/duplicate extension file: %s\", file)\n\t\t}\n\t\tallowed[file] = true\n\t}\n\tallowed[\"extensions.json\"] = true\n\treturn allowed, nil\n}\n\ntype pageInfo struct {\n\tIDs                                     map[string]bool\n\tLinks                                   []string\n\tHasMain, HasTitle, HasViewport, HasLang bool\n}\n\nfunc inspectHTML(input io.Reader) (pageInfo, error) {\n\troot, err := html.Parse(input)\n\tif err != nil {\n\t\treturn pageInfo{}, err\n\t}\n\tp := pageInfo{IDs: map[string]bool{}}\n\tvar visit func(*html.Node) error\n\tvisit = func(n *html.Node) error {\n\t\tif n.Type == html.ElementNode {\n\t\t\tif n.Data == \"main\" {\n\t\t\t\tp.HasMain = true\n\t\t\t}\n\t\t\tif n.Data == \"title\" && n.FirstChild != nil {\n\t\t\t\tp.HasTitle = true\n\t\t\t}\n\t\t\tfor _, a := range n.Attr {\n\t\t\t\tswitch a.Key {\n\t\t\t\tcase \"id\":\n\t\t\t\t\tif p.IDs[a.Val] {\n\t\t\t\t\t\treturn errors.New(\"duplicate HTML anchor\")\n\t\t\t\t\t}\n\t\t\t\t\tp.IDs[a.Val] = true\n\t\t\t\tcase \"href\", \"src\":\n\t\t\t\t\tp.Links = append(p.Links, a.Val)\n\t\t\t\tcase \"lang\":\n\t\t\t\t\tif n.Data == \"html\" && a.Val == \"en\" {\n\t\t\t\t\t\tp.HasLang = true\n\t\t\t\t\t}\n\t\t\t\tcase \"name\":\n\t\t\t\t\tif n.Data == \"meta\" && a.Val == \"viewport\" {\n\t\t\t\t\t\tp.HasViewport = true\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t\tfor child := n.FirstChild; child != nil; child = child.NextSibling {\n\t\t\tif err := visit(child); err != nil {\n\t\t\t\treturn err\n\t\t\t}\n\t\t}\n\t\treturn nil\n\t}\n\treturn p, visit(root)\n}\nfunc verifySite(root string) error {\n\tallowed, err := allowedPublicFiles(root)\n\tif err != nil {\n\t\treturn err\n\t}\n\tif err := filepath.WalkDir(root, func(path string, d os.DirEntry, err error) error {\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif d.IsDir() {\n\t\t\treturn nil\n\t\t}\n\t\trelative, err := filepath.Rel(root, path)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif !allowed[filepath.ToSlash(relative)] {\n\t\t\treturn fmt.Errorf(\"file outside public allowlist: %s\", relative)\n\t\t}\n\t\tinfo, err := d.Info()\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif !info.Mode().IsRegular() {\n\t\t\treturn errors.New(\"public file is not regular\")\n\t\t}\n\t\treturn nil\n\t}); err != nil {\n\t\treturn err\n\t}\n\tif err := verifyChecksums(root); err != nil {\n\t\treturn err\n\t}\n\tpages := map[string]pageInfo{}\n\tfor file := range allowed {\n\t\tpath := filepath.Join(root, file)\n\t\tif _, err := os.Stat(path); err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif !strings.HasSuffix(file, \".html\") || strings.HasPrefix(file, \"storybook/\") || strings.HasPrefix(file, \"storybook-checks/\") || strings.HasSuffix(file, \"/coverage.html\") {\n\t\t\tcontinue\n\t\t}\n\t\tdata, err := os.Open(path)\n\t\tif err != nil {\n\t\t\treturn err\n\t\t}\n\t\tp, parseErr := inspectHTML(data)\n\t\tcloseErr := data.Close()\n\t\tif err := errors.Join(parseErr, closeErr); err != nil {\n\t\t\treturn err\n\t\t}\n\t\tif !p.HasMain || !p.HasTitle || !p.HasViewport || !p.HasLang {\n\t\t\treturn errors.New(\"page accessibility metadata missing\")\n\t\t}\n\t\tpages[file] = p\n\t}\n\treturn verifyPageLinks(pages, allowed)\n}\nfunc verifyPageLinks(pages map[string]pageInfo, allowed map[string]bool) error {\n\tfor file, p := range pages {\n\t\tfor _, href := range p.Links {\n\t\t\ttarget, err := url.Parse(href)\n\t\t\tif err != nil {\n\t\t\t\treturn err\n\t\t\t}\n\t\t\tif target.IsAbs() {\n\t\t\t\tif target.Scheme != \"https\" || target.Host != \"github.com\" || !strings.HasPrefix(target.Path, \"/newdarwindev/firm-payments/\") {\n\t\t\t\t\treturn fmt.Errorf(\"unexpected external destination: %s\", target.Host)\n\t\t\t\t}\n\t\t\t\tcontinue\n\t\t\t}\n\t\t\tif target.Host != \"\" || strings.HasPrefix(target.Path, \"/\") {\n\t\t\t\treturn errors.New(\"site links must be base-path safe\")\n\t\t\t}\n\t\t\tlocal := filepath.Clean(filepath.Join(filepath.Dir(file), filepath.FromSlash(target.Path)))\n\t\t\tif target.Path == \"\" {\n\t\t\t\tlocal = file\n\t\t\t} else if strings.HasSuffix(target.Path, \"/\") || local == \".\" {\n\t\t\t\tlocal = filepath.Join(local, \"index.html\")\n\t\t\t}\n\t\t\tif !filepath.IsLocal(local) {\n\t\t\t\treturn errors.New(\"link escapes public root\")\n\t\t\t}\n\t\t\tlocal = filepath.ToSlash(local)\n\t\t\tif !allowed[local] {\n\t\t\t\treturn fmt.Errorf(\"broken internal file link: %s -> %s\", file, local)\n\t\t\t}\n\t\t\tif target.Fragment != \"\" && !pages[local].IDs[target.Fragment] {\n\t\t\t\treturn fmt.Errorf(\"broken internal anchor: %s -> %s#%s\", file, local, target.Fragment)\n\t\t\t}\n\t\t}\n\t}\n\treturn nil\n}\n",
       "blocks": [
         {
           "startLine": 20,
@@ -2777,7 +3384,7 @@
           "endLine": 23,
           "endColumn": 1,
           "statements": 1,
-          "count": 30
+          "count": 33
         },
         {
           "startLine": 24,
@@ -3121,7 +3728,7 @@
           "endLine": 113,
           "endColumn": 17,
           "statements": 1,
-          "count": 38
+          "count": 40
         },
         {
           "startLine": 114,
@@ -3137,7 +3744,7 @@
           "endLine": 116,
           "endColumn": 16,
           "statements": 1,
-          "count": 38
+          "count": 40
         },
         {
           "startLine": 117,
@@ -3153,7 +3760,7 @@
           "endLine": 120,
           "endColumn": 17,
           "statements": 2,
-          "count": 27
+          "count": 29
         },
         {
           "startLine": 121,
@@ -3169,7 +3776,7 @@
           "endLine": 123,
           "endColumn": 43,
           "statements": 1,
-          "count": 27
+          "count": 29
         },
         {
           "startLine": 124,
@@ -3185,7 +3792,7 @@
           "endLine": 127,
           "endColumn": 17,
           "statements": 2,
-          "count": 26
+          "count": 28
         },
         {
           "startLine": 128,
@@ -3201,7 +3808,7 @@
           "endLine": 130,
           "endColumn": 31,
           "statements": 1,
-          "count": 26
+          "count": 28
         },
         {
           "startLine": 131,
@@ -3217,7 +3824,7 @@
           "endLine": 133,
           "endColumn": 13,
           "statements": 1,
-          "count": 26
+          "count": 28
         },
         {
           "startLine": 135,
@@ -3257,7 +3864,7 @@
           "endLine": 143,
           "endColumn": 42,
           "statements": 2,
-          "count": 20
+          "count": 22
         },
         {
           "startLine": 144,
@@ -3273,7 +3880,7 @@
           "endLine": 146,
           "endColumn": 174,
           "statements": 1,
-          "count": 20
+          "count": 22
         },
         {
           "startLine": 147,
@@ -3281,7 +3888,7 @@
           "endLine": 147,
           "endColumn": 12,
           "statements": 1,
-          "count": 14
+          "count": 16
         },
         {
           "startLine": 149,
@@ -3361,7 +3968,7 @@
           "endLine": 167,
           "endColumn": 32,
           "statements": 1,
-          "count": 5
+          "count": 4
         },
         {
           "startLine": 168,
@@ -3369,7 +3976,7 @@
           "endLine": 169,
           "endColumn": 18,
           "statements": 2,
-          "count": 5
+          "count": 4
         },
         {
           "startLine": 170,
@@ -3385,7 +3992,7 @@
           "endLine": 172,
           "endColumn": 22,
           "statements": 1,
-          "count": 5
+          "count": 4
         },
         {
           "startLine": 173,
@@ -3417,7 +4024,7 @@
           "endLine": 178,
           "endColumn": 64,
           "statements": 1,
-          "count": 5
+          "count": 4
         },
         {
           "startLine": 179,
@@ -3433,7 +4040,7 @@
           "endLine": 182,
           "endColumn": 25,
           "statements": 2,
-          "count": 5
+          "count": 4
         },
         {
           "startLine": 183,
@@ -3441,7 +4048,7 @@
           "endLine": 184,
           "endColumn": 1,
           "statements": 1,
-          "count": 4
+          "count": 3
         },
         {
           "startLine": 184,
@@ -3465,7 +4072,7 @@
           "endLine": 187,
           "endColumn": 32,
           "statements": 1,
-          "count": 5
+          "count": 4
         },
         {
           "startLine": 188,
@@ -3481,7 +4088,7 @@
           "endLine": 191,
           "endColumn": 23,
           "statements": 2,
-          "count": 5
+          "count": 4
         },
         {
           "startLine": 192,
@@ -3497,7 +4104,7 @@
           "endLine": 194,
           "endColumn": 67,
           "statements": 1,
-          "count": 5
+          "count": 4
         },
         {
           "startLine": 195,
@@ -3518,6 +4125,47 @@
       ]
     }
   ],
-  "profileSHA256": "e2c8a2b4ee6dc2b369e1330cc1dd3db9af12983d2e4291e579736373590cc347",
-  "gifSHA256": "ab1cb771a8fb654509446d9f675df28366510601b179f716038294781d0030ea"
+  "assertions": [
+    {
+      "path": "tools/requirements-site/main_test.go",
+      "label": "Selected test / case body · TestSiteInternalLinksAndPublicAllowlistFailClosed",
+      "source": "func TestSiteInternalLinksAndPublicAllowlistFailClosed(t *testing.T) {\n\troot := skeleton(t)\n\tif err := verifySite(root); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tp := filepath.Join(root, \"index.html\")\n\tdata, err := os.ReadFile(p)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tput(t, p, strings.Replace(string(data), `href=\"#main\"`, `href=\"results/#missing\"`, 1))\n\tif err := writeSiteChecksums(root); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif err := verifySite(root); err == nil {\n\t\tt.Fatal(\"broken result anchor accepted\")\n\t}\n\troot = skeleton(t)\n\tput(t, filepath.Join(root, \"conversation.pdf\"), \"private conversation\")\n\tif err := writeSiteChecksums(root); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif err := verifySite(root); err == nil {\n\t\tt.Fatal(\"private file accepted for publication\")\n\t}\n}",
+      "sha256": "57fde1740c2094407e5cf0ebfd91a508b4ce4fe9c0f7307f098615dfe9ec0a0f",
+      "startLine": 138,
+      "endLine": 163,
+      "assertLines": [
+        141,
+        146,
+        150,
+        153,
+        158,
+        161
+      ]
+    },
+    {
+      "path": "tools/requirements-site/main_test.go",
+      "label": "Referenced test helper (static call graph) · put",
+      "source": "func put(t *testing.T, path, text string) {\n\tt.Helper()\n\tif err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif err := os.WriteFile(path, []byte(text), 0o600); err != nil {\n\t\tt.Fatal(err)\n\t}\n}",
+      "sha256": "57fde1740c2094407e5cf0ebfd91a508b4ce4fe9c0f7307f098615dfe9ec0a0f",
+      "startLine": 19,
+      "endLine": 27,
+      "assertLines": [
+        22,
+        25
+      ]
+    },
+    {
+      "path": "tools/requirements-site/main_test.go",
+      "label": "Referenced test helper (static call graph) · skeleton",
+      "source": "func skeleton(t *testing.T) string {\n\tt.Helper()\n\troot := t.TempDir()\n\tfor path := range publicFiles {\n\t\tif path == \"SHA256SUMS\" {\n\t\t\tcontinue\n\t\t}\n\t\ttext := \"{}\"\n\t\tif strings.HasSuffix(path, \".html\") {\n\t\t\ttext = `<!doctype html><html lang=\"en\"><head><title>Evidence</title><meta name=\"viewport\" content=\"width=device-width\"></head><body><main id=\"main\"><a href=\"#main\">Anchor</a></main></body></html>`\n\t\t}\n\t\tput(t, filepath.Join(root, path), text)\n\t}\n\tif err := writeSiteChecksums(root); err != nil {\n\t\tt.Fatal(err)\n\t}\n\treturn root\n}",
+      "sha256": "57fde1740c2094407e5cf0ebfd91a508b4ce4fe9c0f7307f098615dfe9ec0a0f",
+      "startLine": 120,
+      "endLine": 137,
+      "assertLines": [
+        134
+      ]
+    }
+  ],
+  "profileSHA256": "a0a88925bc8fdab6872998b2d0e46fa40c1e0897abd7d08e66bb229dc837db9e",
+  "gifSHA256": "0a21805907fb11b487f97f7b57cf6850d66ca29e29990a527c6d4dfdf30ce771"
 }

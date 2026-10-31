@@ -59,15 +59,15 @@
 				
 				<option value="file1">github.com/newdarwindev/firm-payments/cmd/payments-api/main.go (66.7%)</option>
 				
-				<option value="file2">github.com/newdarwindev/firm-payments/internal/contracts/errors.go (0.0%)</option>
+				<option value="file2">github.com/newdarwindev/firm-payments/internal/contracts/errors.go (25.0%)</option>
 				
 				<option value="file3">github.com/newdarwindev/firm-payments/internal/contracts/validate.go (72.4%)</option>
 				
-				<option value="file4">github.com/newdarwindev/firm-payments/internal/httpapi/handler.go (56.3%)</option>
+				<option value="file4">github.com/newdarwindev/firm-payments/internal/httpapi/handler.go (54.9%)</option>
 				
 				<option value="file5">github.com/newdarwindev/firm-payments/internal/ledger/service.go (76.4%)</option>
 				
-				<option value="file6">github.com/newdarwindev/firm-payments/internal/ledgerclient/client.go (32.6%)</option>
+				<option value="file6">github.com/newdarwindev/firm-payments/internal/ledgerclient/client.go (45.7%)</option>
 				
 				<option value="file7">github.com/newdarwindev/firm-payments/internal/money/money.go (54.5%)</option>
 				
@@ -205,9 +205,9 @@ type ErrorDetail struct {
 }
 
 func ErrorForCode(code string) error {
-        <span class="cov0" title="0">switch code </span>{
+        <span class="cov8" title="1">switch code </span>{
         case "timeout":
-                <span class="cov0" title="0">return context.DeadlineExceeded</span>
+                <span class="cov8" title="1">return context.DeadlineExceeded</span>
         case "invalid_request":
                 <span class="cov0" title="0">return ErrInvalidRequest</span>
         case "unknown_firm":
@@ -387,9 +387,9 @@ func respondError(ctx context.Context, w http.ResponseWriter, err error) {
         <span class="cov4" title="2">status, code, message := http.StatusInternalServerError, "internal_error", "payment could not be completed"
         switch </span>{
         case errors.Is(err, context.DeadlineExceeded):
-                <span class="cov1" title="1">status, code, message = 504, "timeout", "payment outcome may be uncertain; do not retry automatically"</span>
+                <span class="cov4" title="2">status, code, message = 504, "timeout", "payment outcome may be uncertain; do not retry automatically"</span>
         case errors.Is(err, context.Canceled):
-                <span class="cov1" title="1">status, code, message = 503, "unavailable", "request was cancelled; payment outcome may be uncertain"</span>
+                <span class="cov0" title="0">status, code, message = 503, "unavailable", "request was cancelled; payment outcome may be uncertain"</span>
         case errors.Is(err, contracts.ErrInvalidRequest):
                 <span class="cov0" title="0">status, code, message = 422, "invalid_request", contracts.ErrInvalidRequest.Error()</span>
         case errors.Is(err, contracts.ErrUnknownFirm):
@@ -606,22 +606,22 @@ func (c *Client) Execute(ctx context.Context, payment contracts.BulkRequest) err
         <span class="cov10" title="2">req.Header.Set("Content-Type", "application/json")
         res, err := c.http.Do(req)
         if err != nil </span>{
-                <span class="cov1" title="1">return fmt.Errorf("%w: %w", contracts.ErrUnavailable, err)
+                <span class="cov0" title="0">return fmt.Errorf("%w: %w", contracts.ErrUnavailable, err)
 </span>        }
-        <span class="cov1" title="1">defer func() </span>{ <span class="cov1" title="1">_ = res.Body.Close() }</span>()
-        <span class="cov1" title="1">if res.StatusCode == http.StatusCreated </span>{
+        <span class="cov10" title="2">defer func() </span>{ <span class="cov10" title="2">_ = res.Body.Close() }</span>()
+        <span class="cov10" title="2">if res.StatusCode == http.StatusCreated </span>{
                 <span class="cov1" title="1">return nil
 </span>        }
         // A valid error body cannot override the transport outcome (for example,
         // a proxy returning a 500 with a stale insufficient-funds body).
-        <span class="cov0" title="0">if res.StatusCode != 422 &amp;&amp; res.StatusCode != 500 &amp;&amp; res.StatusCode != 503 &amp;&amp; res.StatusCode != 504 </span>{
+        <span class="cov1" title="1">if res.StatusCode != 422 &amp;&amp; res.StatusCode != 500 &amp;&amp; res.StatusCode != 503 &amp;&amp; res.StatusCode != 504 </span>{
                 <span class="cov0" title="0">return fmt.Errorf("%w: unexpected ledger status %d", contracts.ErrUnavailable, res.StatusCode)
 </span>        }
-        <span class="cov0" title="0">var failure contracts.ErrorResponse
+        <span class="cov1" title="1">var failure contracts.ErrorResponse
         if err := json.NewDecoder(io.LimitReader(res.Body, 64&lt;&lt;10)).Decode(&amp;failure); err != nil </span>{
                 <span class="cov0" title="0">return fmt.Errorf("%w: invalid ledger response", contracts.ErrUnavailable)
 </span>        }
-        <span class="cov0" title="0">err = contracts.ErrorForCode(failure.Error.Code)
+        <span class="cov1" title="1">err = contracts.ErrorForCode(failure.Error.Code)
         switch res.StatusCode </span>{
         case 422:
                 <span class="cov0" title="0">if !errors.Is(err, contracts.ErrInvalidRequest) &amp;&amp; !errors.Is(err, contracts.ErrUnknownFirm) &amp;&amp; !errors.Is(err, contracts.ErrInsufficientFunds) &amp;&amp; !errors.Is(err, contracts.ErrBalanceOverflow) </span>{
@@ -636,11 +636,11 @@ func (c *Client) Execute(ctx context.Context, payment contracts.BulkRequest) err
                         <span class="cov0" title="0">return contracts.ErrUnavailable
 </span>                }
         case 504:
-                <span class="cov0" title="0">if !errors.Is(err, context.DeadlineExceeded) </span>{
+                <span class="cov1" title="1">if !errors.Is(err, context.DeadlineExceeded) </span>{
                         <span class="cov0" title="0">return contracts.ErrUnavailable
 </span>                }
         }
-        <span class="cov0" title="0">return err</span>
+        <span class="cov1" title="1">return err</span>
 }
 </pre>
 		

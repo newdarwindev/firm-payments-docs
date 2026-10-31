@@ -1,0 +1,136 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for RecordingPane.tsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="prettify.css" />
+    <link rel="stylesheet" href="base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="index.html">All files</a> RecordingPane.tsx</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>10/10</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>6/6</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>6/6</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>8/8</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line high'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">475x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1177x</span>
+<span class="cline-any cline-yes">7062x</span>
+<span class="cline-any cline-yes">1177x</span>
+<span class="cline-any cline-yes">342x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2359x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">144x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useState, type ReactNode } from 'react';
+import type { Evidence } from './TestEvidence';
+export function RecordingFrame({ children }: { children: ReactNode }) {
+  return &lt;section className="pane recording-pane" aria-label="Terminal recording"&gt;&lt;header className="pane-heading"&gt;&lt;span&gt;02 / RECORDED DEMO&lt;/span&gt;&lt;h2&gt;Actual test execution&lt;/h2&gt;&lt;/header&gt;{children}&lt;/section&gt;;
+}
+export function RecordingBody({ evidence, mediaBase }: { evidence: Evidence; mediaBase: string }) {
+  const [play, setPlay] = useState(false);
+  const asset = (path: string) =&gt; `${mediaBase}${path}?revision=${evidence.sha}`;
+  return &lt;&gt;&lt;h3&gt;{evidence.name}&lt;/h3&gt;&lt;p className="summary" role="status"&gt;{evidence.status.toUpperCase()} · {evidence.total ? `${evidence.covered} / ${evidence.total} Go statements covered (${(100 * evidence.covered / evidence.total).toFixed(2)}%)` : 'No instrumented Go statements in this test package'}&lt;/p&gt;
+    &lt;p className="scope"&gt;{evidence.scope}&lt;/p&gt;&lt;button onClick={() =&gt; setPlay(!play)}&gt;{play ? 'Pause terminal recording' : 'Play terminal recording'}&lt;/button&gt;
+    &lt;img className="recording" loading="lazy" width={1440} height={900} alt={`Terminal execution of ${evidence.name}`} src={asset(play ? 'terminal.gif' : 'poster.png')} /&gt;
+    &lt;nav aria-label="Downloads"&gt;&lt;a href={asset('terminal.gif')}&gt;Direct terminal GIF&lt;/a&gt;&lt;a href={asset('terminal.txt')}&gt;Terminal text&lt;/a&gt;&lt;a href={asset('coverage.out')}&gt;Raw coverage profile&lt;/a&gt;&lt;a href={asset('coverage.html')}&gt;Go coverage HTML&lt;/a&gt;&lt;a href={asset('data.json')}&gt;Evidence JSON&lt;/a&gt;&lt;/nav&gt;
+    &lt;details&gt;&lt;summary&gt;Executed command and test selection&lt;/summary&gt;&lt;pre&gt;{evidence.command.join(' ')}&lt;/pre&gt;&lt;p&gt;Prepared once for this package:&lt;/p&gt;&lt;pre&gt;{evidence.build.join(' ')}&lt;/pre&gt;&lt;p className="hash"&gt;Test executable SHA256: {evidence.binarySHA256}&lt;/p&gt;&lt;ul&gt;{evidence.executed.map((name) =&gt; &lt;li key={name}&gt;{name}&lt;/li&gt;)}&lt;/ul&gt;&lt;/details&gt;&lt;/&gt;;
+}
+export function RecordingPane({ evidence, mediaBase, children }: { evidence: Evidence; mediaBase: string; children?: ReactNode }) {
+  return &lt;RecordingFrame&gt;{children}&lt;RecordingBody key={evidence.id} evidence={evidence} mediaBase={mediaBase} /&gt;&lt;/RecordingFrame&gt;;
+}
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2026-10-31T17:01:36.263Z
+            </div>
+        <script src="prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="sorter.js"></script>
+        <script src="block-navigation.js"></script>
+    </body>
+</html>
+    

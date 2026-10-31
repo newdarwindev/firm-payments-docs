@@ -14,6 +14,6 @@ go tool test2json -t -p github.com/newdarwindev/firm-payments/tools/requirements
 --- PASS: TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns/unknown-mode (0.00s)
 --- PASS: TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns (0.00s)
 PASS
-coverage: 3.4% of statements
+coverage: 2.9% of statements
 
 Exit status: 0

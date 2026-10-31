@@ -2,7 +2,7 @@ go tool test2json -t -p github.com/newdarwindev/firm-payments/tests/functional /
 === RUN   TestFunctional
 === RUN   TestFunctional/ConcurrentOpposingTransfers
 --- PASS: TestFunctional/ConcurrentOpposingTransfers (0.10s)
---- PASS: TestFunctional (0.10s)
+--- PASS: TestFunctional (0.11s)
 PASS
 
 Exit status: 0

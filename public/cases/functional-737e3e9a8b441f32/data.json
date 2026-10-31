@@ -2,10 +2,10 @@
   "id": "functional-737e3e9a8b441f32",
   "suite": "functional",
   "name": "OriginalThreePaymentSample",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "201 with empty body; original three rows, amounts, recipients and descriptions; balances 3674875 / 170075 / 1405050 cents.",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L46",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tests/functional/payments_test.go#L46",
   "package": "",
   "command": [
     "go",
@@ -1680,6 +1680,87 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "tests/functional/payments_test.go",
+      "label": "Selected test / case body",
+      "source": "\t\t\"OriginalThreePaymentSample\": func(t *testing.T) {\n\t\t\texample(t, \"testdata/original/sample-request.json\", []int64{625000, 580050, 120075}, []int64{3674875, 170075, 1405050})\n\t\t},",
+      "sha256": "397e1cfe73a49fc3a8dd780ab0741806cc1c50cfd34e6884d9caf05e24cb6855",
+      "startLine": 46,
+      "endLine": 48,
+      "assertLines": []
+    },
+    {
+      "path": "tests/functional/payments_test.go",
+      "label": "Referenced test helper (static call graph) · example",
+      "source": "func example(t *testing.T, file string, cents, balances []int64) {\n\tt.Helper()\n\tdata, err := os.ReadFile(filepath.Join(suite.root, file))\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tvar b batch\n\tif err := json.Unmarshal(data, &b); err != nil {\n\t\tt.Fatal(err)\n\t}\n\texpect(t, call(t, 0, string(data)), 201, \"\")\n\tvar rows []record\n\tfor i, p := range b.Payments {\n\t\tid := 2\n\t\tif p.Payee == nair {\n\t\t\tid = 3\n\t\t}\n\t\trows = append(rows, record{1, id, cents[i], p.Description})\n\t}\n\tcheckState(t, balances, rows)\n}",
+      "sha256": "397e1cfe73a49fc3a8dd780ab0741806cc1c50cfd34e6884d9caf05e24cb6855",
+      "startLine": 457,
+      "endLine": 477,
+      "assertLines": [
+        461,
+        465
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · call",
+      "source": "func call(t *testing.T, index int, body string) response {\n\tt.Helper()\n\tres, err := request(t.Context(), \"http://\"+suite.apis[index].addr, http.MethodPost, \"/payments/bulk\", \"application/json\", body)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\treturn res\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 357,
+      "endLine": 364,
+      "assertLines": [
+        361
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · checkState",
+      "source": "func checkState(t *testing.T, balances []int64, payments []record) {\n\tt.Helper()\n\twant := state{Balances: balances, Payments: payments}\n\tif payments == nil {\n\t\twant.Payments = []record{}\n\t}\n\tif got := snapshot(t); !reflect.DeepEqual(got, want) {\n\t\tt.Fatalf(\"state %+v; want %+v\", got, want)\n\t}\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 312,
+      "endLine": 321,
+      "assertLines": [
+        319
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · expect",
+      "source": "func expect(t *testing.T, got response, status int, code string) {\n\tt.Helper()\n\tif got.Status != status || got.Code != code || (status == 201 && got.Body != \"\") {\n\t\tt.Fatalf(\"response %+v; want %d/%s\", got, status, code)\n\t}\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 374,
+      "endLine": 379,
+      "assertLines": [
+        377
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · request",
+      "source": "func request(ctx context.Context, base, method, path, media, body string) (response, error) {\n\treq, err := http.NewRequestWithContext(ctx, method, base+path, strings.NewReader(body))\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tif media != \"\" {\n\t\treq.Header.Set(\"Content-Type\", media)\n\t}\n\tres, err := suite.client.Do(req)\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tdefer func() { _ = res.Body.Close() }()\n\tdata, err := io.ReadAll(io.LimitReader(res.Body, 2<<20))\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tvar failure struct {\n\t\tError struct {\n\t\t\tCode string `json:\"code\"`\n\t\t}\n\t}\n\tif res.StatusCode != 201 && res.StatusCode != 404 && res.StatusCode != 405 {\n\t\tif err := json.Unmarshal(data, &failure); err != nil {\n\t\t\treturn response{}, err\n\t\t}\n\t}\n\treturn response{res.StatusCode, string(data), failure.Error.Code}, nil\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 328,
+      "endLine": 356,
+      "assertLines": []
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · snapshot",
+      "source": "func snapshot(t *testing.T) state {\n\tt.Helper()\n\tctx, cancel := context.WithTimeout(t.Context(), 5*time.Second)\n\tdefer cancel()\n\ts := state{Balances: []int64{}, Payments: []record{}}\n\trows, err := suite.db.Query(ctx, \"SELECT balance_cents FROM firms ORDER BY id\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tfor rows.Next() {\n\t\tvar cents int64\n\t\tif err := rows.Scan(&cents); err != nil {\n\t\t\trows.Close()\n\t\t\tt.Fatal(err)\n\t\t}\n\t\ts.Balances = append(s.Balances, cents)\n\t}\n\trows.Close()\n\tif err := rows.Err(); err != nil {\n\t\tt.Fatal(err)\n\t}\n\trows, err = suite.db.Query(ctx, \"SELECT payer_firm_id,payee_firm_id,amount_cents,description FROM payments ORDER BY id\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tdefer rows.Close()\n\tfor rows.Next() {\n\t\tvar r record\n\t\tif err := rows.Scan(&r.Payer, &r.Payee, &r.Cents, &r.Description); err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t\ts.Payments = append(s.Payments, r)\n\t}\n\tif err := rows.Err(); err != nil {\n\t\tt.Fatal(err)\n\t}\n\treturn s\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 274,
+      "endLine": 311,
+      "assertLines": [
+        281,
+        287,
+        293,
+        297,
+        303,
+        308
+      ]
+    }
+  ],
   "profileSHA256": "56c8828962bdfe81ae36f8a8c74e191fa84d3a55f29876ab31f4c94dd851addb",
-  "gifSHA256": "a8554e085e4046a4ec6a88a14720d626d38ef7d141240c4de5e3115124005e22"
+  "gifSHA256": "45895ecf5952babc5a6b817c9773aa2b1184568d0c3e5479ac4dbb71cce82880"
 }

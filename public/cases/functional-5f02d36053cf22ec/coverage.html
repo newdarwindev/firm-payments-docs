@@ -517,9 +517,9 @@ func (s *Service) Execute(ctx context.Context, req contracts.BulkRequest) error 
                 <span class="cov0" title="0">return contracts.ErrInsufficientFunds
 </span>        }
         <span class="cov7" title="10">for _, f := range locked </span>{
-                <span class="cov9" title="19">balance := f.balance
+                <span class="cov9" title="18">balance := f.balance
                 if f.uuid == batch.PayerUUID </span>{
-                        <span class="cov7" title="9">balance -= batch.Total
+                        <span class="cov7" title="8">balance -= batch.Total
 </span>                } else {
                         <span class="cov7" title="10">credit := batch.Credits[f.uuid]
                         if balance &gt; money.MaxCents-credit </span>{
@@ -527,11 +527,11 @@ func (s *Service) Execute(ctx context.Context, req contracts.BulkRequest) error 
 </span>                        }
                         <span class="cov5" title="5">balance += credit</span>
                 }
-                <span class="cov8" title="14">result, err := tx.Exec(ctx, `UPDATE firms SET balance_cents=$1 WHERE id=$2`, balance, f.id)
+                <span class="cov8" title="13">result, err := tx.Exec(ctx, `UPDATE firms SET balance_cents=$1 WHERE id=$2`, balance, f.id)
                 if err != nil </span>{
                         <span class="cov0" title="0">return fmt.Errorf("update balance: %w", err)
 </span>                }
-                <span class="cov8" title="14">if result.RowsAffected() != 1 </span>{
+                <span class="cov8" title="13">if result.RowsAffected() != 1 </span>{
                         <span class="cov0" title="0">return fmt.Errorf("%w: locked firm disappeared", contracts.ErrInternal)
 </span>                }
         }

@@ -2,10 +2,10 @@
   "id": "exporter-bd668c5cefe03d9b",
   "suite": "exporter",
   "name": "TestPDFLogFailsClosed/vertical_overflow",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/docs/internal/dialog/dialog_test.go#L121",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/internal/dialog/dialog_test.go#L121",
   "package": "github.com/newdarwindev/firm-payments/docs/internal/dialog",
   "command": [
     "go",
@@ -1162,6 +1162,32 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "docs/internal/dialog/dialog_test.go",
+      "label": "Selected test / case body · TestPDFLogFailsClosed",
+      "source": "func TestPDFLogFailsClosed(t *testing.T) {\n\tfor _, tc := range []struct {\n\t\tname, text string\n\t\tok         bool\n\t}{\n\t\t{\"complete\", \"Output written on conversation.pdf (20 pages).\", true},\n\t\t{\"empty\", \"\", false},\n\t\t{\"missing glyph\", \"Missing character: glyph\\nOutput written on conversation.pdf\", false},\n\t\t{\"horizontal overflow\", \"Overfull \\\\hbox (2pt)\\nOutput written on conversation.pdf\", false},\n\t\t{\"vertical overflow\", \"Overfull \\\\vbox (2pt)\\nOutput written on conversation.pdf\", false},\n\t} {\n\t\tt.Run(tc.name, func(t *testing.T) {\n\t\t\tname := filepath.Join(t.TempDir(), \"compiler.log\")\n\t\t\tmustWrite(t, name, []byte(tc.text))\n\t\t\terr := CheckPDFLog(name)\n\t\t\tif (err == nil) != tc.ok {\n\t\t\t\tt.Fatalf(\"expected pass=%v, error=%v\", tc.ok, err)\n\t\t\t}\n\t\t})\n\t}\n\tif err := CheckPDFLog(filepath.Join(t.TempDir(), \"missing.log\")); err == nil {\n\t\tt.Fatal(\"unreadable log accepted\")\n\t}\n}",
+      "sha256": "8fce3ec2806da434eae76fbb01e54e60c2ae68a061a5a99259d067e61b4cf7e3",
+      "startLine": 121,
+      "endLine": 144,
+      "assertLines": [
+        137,
+        142
+      ]
+    },
+    {
+      "path": "docs/internal/dialog/dialog_test.go",
+      "label": "Referenced test helper (static call graph) · mustWrite",
+      "source": "func mustWrite(t *testing.T, name string, b []byte) {\n\tt.Helper()\n\tif err := os.MkdirAll(filepath.Dir(name), 0o755); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif err := os.WriteFile(name, b, 0o600); err != nil {\n\t\tt.Fatal(err)\n\t}\n}",
+      "sha256": "8fce3ec2806da434eae76fbb01e54e60c2ae68a061a5a99259d067e61b4cf7e3",
+      "startLine": 84,
+      "endLine": 92,
+      "assertLines": [
+        87,
+        90
+      ]
+    }
+  ],
   "profileSHA256": "64557c4e67635c7363606d58822e95e4136dce13e6cf31a7d82efa4cdf2a497e",
-  "gifSHA256": "62f4b8e39be5f8a489ff0d16892ebdc784a5be50842c2ab15abdd3579eae1f03"
+  "gifSHA256": "2943bf2288a79c56eabe8bcea01a39ad3ddb5be2de52d676efc11c2a86a571fa"
 }

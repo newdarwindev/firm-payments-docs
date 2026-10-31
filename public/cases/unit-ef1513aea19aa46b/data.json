@@ -2,10 +2,10 @@
   "id": "unit-ef1513aea19aa46b",
   "suite": "unit",
   "name": "TestFailureMappingAndReadiness",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/httpapi/handler_test.go#L57",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/httpapi/handler_test.go#L57",
   "package": "github.com/newdarwindev/firm-payments/internal/httpapi",
   "command": [
     "go",
@@ -433,6 +433,21 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "internal/httpapi/handler_test.go",
+      "label": "Selected test / case body · TestFailureMappingAndReadiness",
+      "source": "func TestFailureMappingAndReadiness(t *testing.T) {\n\tfor _, tc := range []struct {\n\t\terr    error\n\t\tstatus int\n\t\tcode   string\n\t}{{contracts.ErrInsufficientFunds, 422, \"insufficient_funds\"}, {contracts.ErrUnknownFirm, 422, \"unknown_firm\"}, {contracts.ErrBalanceOverflow, 422, \"balance_overflow\"}, {contracts.ErrUnavailable, 503, \"unavailable\"}, {context.DeadlineExceeded, 504, \"timeout\"}, {context.Canceled, 503, \"unavailable\"}, {errors.New(\"private SQL details\"), 500, \"internal_error\"}} {\n\t\tp := &processor{err: tc.err}\n\t\th := httpapi.Handler(\"test\", \"/payments/bulk\", p, func(context.Context) error { return contracts.ErrUnavailable })\n\t\tw := httptest.NewRecorder()\n\t\th.ServeHTTP(w, httptest.NewRequestWithContext(t.Context(), http.MethodPost, \"/payments/bulk\", strings.NewReader(valid)))\n\t\tvar body contracts.ErrorResponse\n\t\tif err := json.Unmarshal(w.Body.Bytes(), &body); err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t\tif w.Code != tc.status || body.Error.Code != tc.code || strings.Contains(w.Body.String(), \"private SQL\") {\n\t\t\tt.Fatalf(\"wrong failure: %d %s\", w.Code, w.Body.String())\n\t\t}\n\t\tfor _, check := range []struct {\n\t\t\tmethod, path string\n\t\t\tstatus       int\n\t\t}{{\"GET\", \"/healthz\", 200}, {\"GET\", \"/readyz\", 503}, {\"GET\", \"/payments/bulk\", 405}, {\"POST\", \"/unknown\", 404}} {\n\t\t\tr := httptest.NewRecorder()\n\t\t\th.ServeHTTP(r, httptest.NewRequestWithContext(t.Context(), check.method, check.path, nil))\n\t\t\tif r.Code != check.status {\n\t\t\t\tt.Errorf(\"%s: %d\", check.path, r.Code)\n\t\t\t}\n\t\t}\n\t}\n}",
+      "sha256": "1d122a90fd1976493a1993fe43ac4f9f20e63af91453b2831974136c90ae6ef6",
+      "startLine": 57,
+      "endLine": 85,
+      "assertLines": [
+        69,
+        72,
+        81
+      ]
+    }
+  ],
   "profileSHA256": "4d0cda288a17be73e1f2fa5e1c1ce1866f6d97f453ae7730ed08fe65311aafe0",
-  "gifSHA256": "1b277feb9ffac019d99234cd313276c2a6f70893262ab4d00788211f1a7a5edb"
+  "gifSHA256": "25263e820b998bbbd59925c52ee12a17a1f4f0f16fef035376c214e8f6364ca8"
 }

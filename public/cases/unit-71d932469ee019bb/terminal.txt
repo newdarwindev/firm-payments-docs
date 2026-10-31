@@ -4,6 +4,6 @@ go tool test2json -t -p github.com/newdarwindev/firm-payments/tools/requirements
 --- PASS: TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns/missing-artifacts (0.00s)
 --- PASS: TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns (0.00s)
 PASS
-coverage: 3.1% of statements
+coverage: 2.6% of statements
 
 Exit status: 0

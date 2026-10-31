@@ -1,7 +1,7 @@
 go tool test2json -t -p github.com/newdarwindev/firm-payments/tests /home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/59830ebc3a418411.test -test.v=test2json -test.count=1 -test.timeout=180s -test.run=^TestPrePushRejectsUnverifiedTree$/^missing$ -test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/unit-2ca7beabc7c217e4/coverage.out
 === RUN   TestPrePushRejectsUnverifiedTree
 === RUN   TestPrePushRejectsUnverifiedTree/missing
---- PASS: TestPrePushRejectsUnverifiedTree/missing (0.00s)
+--- PASS: TestPrePushRejectsUnverifiedTree/missing (0.01s)
 --- PASS: TestPrePushRejectsUnverifiedTree (0.01s)
 PASS
 coverage: [no statements]

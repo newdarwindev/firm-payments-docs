@@ -4,6 +4,6 @@ go tool test2json -t -p github.com/newdarwindev/firm-payments/tools/requirements
 --- PASS: TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns/cancelled-conversation (0.00s)
 --- PASS: TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns (0.00s)
 PASS
-coverage: 2.4% of statements
+coverage: 2.0% of statements
 
 Exit status: 0

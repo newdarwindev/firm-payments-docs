@@ -2,10 +2,10 @@
   "id": "exporter-4c9c8477e9416bf6",
   "suite": "exporter",
   "name": "TestRecoverInterruptedManifestWrite",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/docs/internal/dialog/dialog_test.go#L94",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/internal/dialog/dialog_test.go#L94",
   "package": "github.com/newdarwindev/firm-payments/docs/internal/dialog",
   "command": [
     "go",
@@ -1161,6 +1161,44 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "docs/internal/dialog/dialog_test.go",
+      "label": "Selected test / case body · TestRecoverInterruptedManifestWrite",
+      "source": "func TestRecoverInterruptedManifestWrite(t *testing.T) {\n\trepo := t.TempDir()\n\tsource := filepath.Join(repo, \"session.jsonl\")\n\toriginal := sourceRecord(\"user\", \"unchanged original text\")\n\tmustWrite(t, source, original)\n\tmustWrite(t, filepath.Join(repo, \".local\", \"conversation-sources\"), []byte(source+\"\\n\"))\n\tif err := Sync(repo); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tdir := filepath.Join(repo, \"docs\", \"conversations\")\n\t// Simulate a crash after the raw file is durable but before its manifest is saved.\n\tmustWrite(t, filepath.Join(dir, \"manifest.json\"), []byte(`{\"schema\":1,\"files\":[]}`))\n\tif err := Sync(repo); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif _, err := Verify(dir); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tactual, err := os.ReadFile(filepath.Join(dir, \"raw\", \"session.jsonl\"))\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif !bytes.Equal(actual, original) {\n\t\tt.Fatal(\"recovery changed original dialogue bytes\")\n\t}\n}",
+      "sha256": "8fce3ec2806da434eae76fbb01e54e60c2ae68a061a5a99259d067e61b4cf7e3",
+      "startLine": 94,
+      "endLine": 119,
+      "assertLines": [
+        101,
+        107,
+        110,
+        114,
+        117
+      ]
+    },
+    {
+      "path": "docs/internal/dialog/dialog_test.go",
+      "label": "Referenced test helper (static call graph) · mustWrite",
+      "source": "func mustWrite(t *testing.T, name string, b []byte) {\n\tt.Helper()\n\tif err := os.MkdirAll(filepath.Dir(name), 0o755); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif err := os.WriteFile(name, b, 0o600); err != nil {\n\t\tt.Fatal(err)\n\t}\n}",
+      "sha256": "8fce3ec2806da434eae76fbb01e54e60c2ae68a061a5a99259d067e61b4cf7e3",
+      "startLine": 84,
+      "endLine": 92,
+      "assertLines": [
+        87,
+        90
+      ]
+    },
+    {
+      "path": "docs/internal/dialog/dialog_test.go",
+      "label": "Referenced test helper (static call graph) · sourceRecord",
+      "source": "func sourceRecord(role, text string) []byte {\n\tb, _ := json.Marshal(map[string]any{\"type\": \"response_item\", \"payload\": map[string]any{\"type\": \"message\", \"role\": role, \"content\": []map[string]string{{\"type\": \"input_text\", \"text\": text}}}})\n\treturn append(b, '\\n')\n}",
+      "sha256": "8fce3ec2806da434eae76fbb01e54e60c2ae68a061a5a99259d067e61b4cf7e3",
+      "startLine": 12,
+      "endLine": 15,
+      "assertLines": []
+    }
+  ],
   "profileSHA256": "70a9553bb8366954304bc8e71b3f4ac35ad1a87b692725642a34038297be0594",
-  "gifSHA256": "9ec986b3c84661a3b828199526ae66faf2ea571a6bbb8ceccf14250c39b1d7bd"
+  "gifSHA256": "b576b5d9032c46ffce52a816f78d2e67af0225630dc6b31208b2456493713015"
 }

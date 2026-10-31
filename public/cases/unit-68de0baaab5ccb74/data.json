@@ -2,10 +2,10 @@
   "id": "unit-68de0baaab5ccb74",
   "suite": "unit",
   "name": "TestOriginalFixtureIntegrity",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/fixtures_test.go#L41",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tests/fixtures_test.go#L41",
   "package": "github.com/newdarwindev/firm-payments/tests",
   "command": [
     "go",
@@ -41,6 +41,22 @@
   "total": 0,
   "covered": 0,
   "files": [],
+  "assertions": [
+    {
+      "path": "tests/fixtures_test.go",
+      "label": "Selected test / case body · TestOriginalFixtureIntegrity",
+      "source": "func TestOriginalFixtureIntegrity(t *testing.T) {\n\tmanifest, err := os.ReadFile(\"../testdata/original/SHA256SUMS\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tfor _, line := range strings.Split(strings.TrimSpace(string(manifest)), \"\\n\") {\n\t\tfields := strings.Fields(line)\n\t\tif len(fields) != 2 {\n\t\t\tt.Fatal(\"invalid fixture manifest\")\n\t\t}\n\t\tb, err := os.ReadFile(\"../testdata/original/\" + fields[1])\n\t\tif err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t\tif fmt.Sprintf(\"%x\", sha256.Sum256(b)) != fields[0] {\n\t\t\tt.Errorf(\"original fixture changed: %s\", fields[1])\n\t\t}\n\t}\n}",
+      "sha256": "6e3eb42b8f0cbc3821627bdb4ec415ea861cf5dcc4a9d1df2762cc9822348819",
+      "startLine": 41,
+      "endLine": 59,
+      "assertLines": [
+        44,
+        49,
+        53,
+        56
+      ]
+    }
+  ],
   "profileSHA256": "15e39ee7d1ea1e23c2caa82c7fa07907bc8ae826847b1499a894308734780a89",
-  "gifSHA256": "0f86f6b609f114d117866ba10a19ebfc215f93b9e501b68c1a22a31912d77e66"
+  "gifSHA256": "01c68546d8871cf33b68a2206d42313e850b3b7f3a3b6460559e11678277400e"
 }

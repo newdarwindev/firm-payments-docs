@@ -2,10 +2,10 @@
   "id": "functional-5f02d36053cf22ec",
   "suite": "functional",
   "name": "ConcurrentRecipientCapacity",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "Competing credits stop exactly at recipient capacity; rejected batches debit neither payer; rows reconcile.",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L394",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tests/functional/payments_test.go#L394",
   "package": "",
   "command": [
     "go",
@@ -1054,7 +1054,7 @@
           "endLine": 77,
           "endColumn": 32,
           "statements": 2,
-          "count": 19
+          "count": 18
         },
         {
           "startLine": 78,
@@ -1062,7 +1062,7 @@
           "endLine": 79,
           "endColumn": 1,
           "statements": 1,
-          "count": 9
+          "count": 8
         },
         {
           "startLine": 80,
@@ -1094,7 +1094,7 @@
           "endLine": 87,
           "endColumn": 17,
           "statements": 2,
-          "count": 14
+          "count": 13
         },
         {
           "startLine": 88,
@@ -1110,7 +1110,7 @@
           "endLine": 90,
           "endColumn": 33,
           "statements": 1,
-          "count": 14
+          "count": 13
         },
         {
           "startLine": 91,
@@ -1680,6 +1680,132 @@
       ]
     }
   ],
-  "profileSHA256": "42c86e95efb69009a811dd53a50132c6e6aaaa5cf37d667e5200630900819de7",
-  "gifSHA256": "39d08428f9e2d0f166ac5d8ec32f59092174d6efcedfa268b3020e0327b4074d"
+  "assertions": [
+    {
+      "path": "tests/functional/payments_test.go",
+      "label": "Selected test / case body",
+      "source": "\t\t\"ConcurrentRecipientCapacity\": func(t *testing.T) {\n\t\t\texecSQL(t, \"UPDATE firms SET balance_cents=2147483642 WHERE id=2\")\n\t\t\tbefore := snapshot(t)\n\t\t\toutcomes(t, concurrent(t, 10, func(i int) batch {\n\t\t\t\tb := transfer(\"0.01\")\n\t\t\t\tif i%2 == 1 {\n\t\t\t\t\tb.Payer = nair\n\t\t\t\t}\n\t\t\t\treturn b\n\t\t\t}), 5, \"balance_overflow\")\n\t\t\ts := snapshot(t)\n\t\t\tif s.Balances[1] != maxCents {\n\t\t\t\tt.Fatal(s)\n\t\t\t}\n\t\t\tconserved(t, before, 5)\n\t\t\tcheckTransfers(t, before)\n\t\t},",
+      "sha256": "397e1cfe73a49fc3a8dd780ab0741806cc1c50cfd34e6884d9caf05e24cb6855",
+      "startLine": 394,
+      "endLine": 410,
+      "assertLines": [
+        406
+      ]
+    },
+    {
+      "path": "tests/functional/payments_test.go",
+      "label": "Referenced test helper (static call graph) · checkTransfers",
+      "source": "func checkTransfers(t *testing.T, before state) {\n\tt.Helper()\n\tafter := snapshot(t)\n\twant := append([]int64{}, before.Balances...)\n\tfor _, p := range after.Payments {\n\t\tif p.Cents != 1 || p.Description != \"transfer\" {\n\t\t\tt.Fatal(p)\n\t\t}\n\t\twant[p.Payer-1] -= p.Cents\n\t\twant[p.Payee-1] += p.Cents\n\t}\n\tif !reflect.DeepEqual(want, after.Balances) {\n\t\tt.Fatalf(\"rows do not reconcile balances: %+v\", after)\n\t}\n}",
+      "sha256": "397e1cfe73a49fc3a8dd780ab0741806cc1c50cfd34e6884d9caf05e24cb6855",
+      "startLine": 478,
+      "endLine": 492,
+      "assertLines": [
+        484,
+        490
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · concurrent",
+      "source": "func concurrent(t *testing.T, n int, makeBatch func(int) batch) []response {\n\tt.Helper()\n\tctx, cancel := context.WithTimeout(t.Context(), 15*time.Second)\n\tdefer cancel()\n\tstart := make(chan struct{})\n\tresults := make([]response, n)\n\tfailures := make([]error, n)\n\tbodies := make([]string, n)\n\tfor i := range n {\n\t\tbodies[i] = encode(t, makeBatch(i))\n\t}\n\tvar wg sync.WaitGroup\n\tfor i := range n {\n\t\twg.Go(func() {\n\t\t\t<-start\n\t\t\tresults[i], failures[i] = request(ctx, \"http://\"+suite.apis[i%2].addr, http.MethodPost, \"/payments/bulk\", \"application/json\", bodies[i])\n\t\t})\n\t}\n\tclose(start)\n\twg.Wait()\n\tfor _, err := range failures {\n\t\tif err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t}\n\treturn results\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 394,
+      "endLine": 420,
+      "assertLines": [
+        416
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · conserved",
+      "source": "func conserved(t *testing.T, before state, count int) {\n\tt.Helper()\n\tafter := snapshot(t)\n\tsum := func(a []int64) int64 {\n\t\tvar n int64\n\t\tfor _, v := range a {\n\t\t\tif v < 0 || v > maxCents {\n\t\t\t\tt.Fatal(\"balance outside INTEGER range\")\n\t\t\t}\n\t\t\tn += v\n\t\t}\n\t\treturn n\n\t}\n\tif sum(before.Balances) != sum(after.Balances) || len(after.Payments) != count {\n\t\tt.Fatalf(\"conservation or row count failed: %+v\", after)\n\t}\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 436,
+      "endLine": 452,
+      "assertLines": [
+        443,
+        450
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · execSQL",
+      "source": "func execSQL(t *testing.T, sql string) {\n\tt.Helper()\n\tctx, cancel := context.WithTimeout(t.Context(), 5*time.Second)\n\tdefer cancel()\n\tif _, err := suite.db.Exec(ctx, sql); err != nil {\n\t\tt.Fatal(err)\n\t}\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 266,
+      "endLine": 273,
+      "assertLines": [
+        271
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · outcomes",
+      "source": "func outcomes(t *testing.T, results []response, success int, code string) {\n\tt.Helper()\n\taccepted := 0\n\tfor _, r := range results {\n\t\tif r.Status == 201 {\n\t\t\texpect(t, r, 201, \"\")\n\t\t\taccepted++\n\t\t} else {\n\t\t\texpect(t, r, 422, code)\n\t\t}\n\t}\n\tif accepted != success {\n\t\tt.Fatalf(\"accepted %d; want %d\", accepted, success)\n\t}\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 421,
+      "endLine": 435,
+      "assertLines": [
+        433
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · snapshot",
+      "source": "func snapshot(t *testing.T) state {\n\tt.Helper()\n\tctx, cancel := context.WithTimeout(t.Context(), 5*time.Second)\n\tdefer cancel()\n\ts := state{Balances: []int64{}, Payments: []record{}}\n\trows, err := suite.db.Query(ctx, \"SELECT balance_cents FROM firms ORDER BY id\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tfor rows.Next() {\n\t\tvar cents int64\n\t\tif err := rows.Scan(&cents); err != nil {\n\t\t\trows.Close()\n\t\t\tt.Fatal(err)\n\t\t}\n\t\ts.Balances = append(s.Balances, cents)\n\t}\n\trows.Close()\n\tif err := rows.Err(); err != nil {\n\t\tt.Fatal(err)\n\t}\n\trows, err = suite.db.Query(ctx, \"SELECT payer_firm_id,payee_firm_id,amount_cents,description FROM payments ORDER BY id\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tdefer rows.Close()\n\tfor rows.Next() {\n\t\tvar r record\n\t\tif err := rows.Scan(&r.Payer, &r.Payee, &r.Cents, &r.Description); err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t\ts.Payments = append(s.Payments, r)\n\t}\n\tif err := rows.Err(); err != nil {\n\t\tt.Fatal(err)\n\t}\n\treturn s\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 274,
+      "endLine": 311,
+      "assertLines": [
+        281,
+        287,
+        293,
+        297,
+        303,
+        308
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · transfer",
+      "source": "func transfer(amount string) batch { return batch{payer, []entry{{amount, lopez, \"transfer\"}}} }",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 373,
+      "endLine": 373,
+      "assertLines": []
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · encode",
+      "source": "func encode(t *testing.T, b batch) string {\n\tt.Helper()\n\tdata, err := json.Marshal(b)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\treturn string(data)\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 365,
+      "endLine": 372,
+      "assertLines": [
+        369
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · request",
+      "source": "func request(ctx context.Context, base, method, path, media, body string) (response, error) {\n\treq, err := http.NewRequestWithContext(ctx, method, base+path, strings.NewReader(body))\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tif media != \"\" {\n\t\treq.Header.Set(\"Content-Type\", media)\n\t}\n\tres, err := suite.client.Do(req)\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tdefer func() { _ = res.Body.Close() }()\n\tdata, err := io.ReadAll(io.LimitReader(res.Body, 2<<20))\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tvar failure struct {\n\t\tError struct {\n\t\t\tCode string `json:\"code\"`\n\t\t}\n\t}\n\tif res.StatusCode != 201 && res.StatusCode != 404 && res.StatusCode != 405 {\n\t\tif err := json.Unmarshal(data, &failure); err != nil {\n\t\t\treturn response{}, err\n\t\t}\n\t}\n\treturn response{res.StatusCode, string(data), failure.Error.Code}, nil\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 328,
+      "endLine": 356,
+      "assertLines": []
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · expect",
+      "source": "func expect(t *testing.T, got response, status int, code string) {\n\tt.Helper()\n\tif got.Status != status || got.Code != code || (status == 201 && got.Body != \"\") {\n\t\tt.Fatalf(\"response %+v; want %d/%s\", got, status, code)\n\t}\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 374,
+      "endLine": 379,
+      "assertLines": [
+        377
+      ]
+    }
+  ],
+  "profileSHA256": "2edac302ee0d500e589e5cbee8cbda12a0ca3b9c05f578dabcfe1e028e9a38f2",
+  "gifSHA256": "e95554605fd0f4178fc3c0a4e1923be5aee6da6266b2731fb6fd55c2cd5a1977"
 }

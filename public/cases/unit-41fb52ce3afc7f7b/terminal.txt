@@ -2,7 +2,7 @@ go tool test2json -t -p github.com/newdarwindev/firm-payments/internal/httpapi /
 === RUN   TestRequestBoundary
 === RUN   TestRequestBoundary/too_large
 --- PASS: TestRequestBoundary/too_large (0.00s)
---- PASS: TestRequestBoundary (0.01s)
+--- PASS: TestRequestBoundary (0.00s)
 PASS
 coverage: 35.2% of statements
 

@@ -2,10 +2,10 @@
   "id": "unit-ec27ec9256382ff4",
   "suite": "unit",
   "name": "TestOriginalExamplesRemainDistinct",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/fixtures_test.go#L14",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tests/fixtures_test.go#L14",
   "package": "github.com/newdarwindev/firm-payments/tests",
   "command": [
     "go",
@@ -41,6 +41,22 @@
   "total": 0,
   "covered": 0,
   "files": [],
+  "assertions": [
+    {
+      "path": "tests/fixtures_test.go",
+      "label": "Selected test / case body · TestOriginalExamplesRemainDistinct",
+      "source": "func TestOriginalExamplesRemainDistinct(t *testing.T) {\n\tfor _, tc := range []struct {\n\t\tfile    string\n\t\tamounts []string\n\t}{\n\t\t{\"../testdata/original/sample-request.json\", []string{\"6250\", \"5800.5\", \"1200.75\"}},\n\t\t{\"../testdata/derived/request-format.json\", []string{\"1200.75\", \"300\"}},\n\t} {\n\t\tb, err := os.ReadFile(tc.file)\n\t\tif err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t\tvar req contracts.BulkRequest\n\t\tif err := json.Unmarshal(b, &req); err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t\tif req.PayerFirmUUID != \"3f1c9a2e-7b4d-4c1e-9a55-2d8e6f0b7c41\" || len(req.Payments) != len(tc.amounts) {\n\t\t\tt.Fatalf(\"changed original sample: %s\", tc.file)\n\t\t}\n\t\tfor i, amount := range tc.amounts {\n\t\t\tif req.Payments[i].Amount != amount {\n\t\t\t\tt.Errorf(\"%s payment %d changed: %q\", tc.file, i, req.Payments[i].Amount)\n\t\t\t}\n\t\t}\n\t}\n}",
+      "sha256": "6e3eb42b8f0cbc3821627bdb4ec415ea861cf5dcc4a9d1df2762cc9822348819",
+      "startLine": 14,
+      "endLine": 39,
+      "assertLines": [
+        24,
+        28,
+        31,
+        35
+      ]
+    }
+  ],
   "profileSHA256": "15e39ee7d1ea1e23c2caa82c7fa07907bc8ae826847b1499a894308734780a89",
-  "gifSHA256": "49e791e67eff4b85169fba1fe6dc4a5a0e277ba6f790049fef3d9487d492fa08"
+  "gifSHA256": "e92949d4cf120cbca541a853650c6c998fc0785bb41468b83a805b81d2243cf6"
 }

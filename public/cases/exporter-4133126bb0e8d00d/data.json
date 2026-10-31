@@ -2,10 +2,10 @@
   "id": "exporter-4133126bb0e8d00d",
   "suite": "exporter",
   "name": "TestBackupBuildAndTamperDetection",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/docs/internal/dialog/dialog_test.go#L33",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/internal/dialog/dialog_test.go#L33",
   "package": "github.com/newdarwindev/firm-payments/docs/internal/dialog",
   "command": [
     "go",
@@ -1161,6 +1161,50 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "docs/internal/dialog/dialog_test.go",
+      "label": "Selected test / case body · TestBackupBuildAndTamperDetection",
+      "source": "func TestBackupBuildAndTamperDetection(t *testing.T) {\n\trepo := t.TempDir()\n\tsource := filepath.Join(repo, \"session.jsonl\")\n\ttext := \"Raw {text} % _ & $ # \\\\end{Verbatim} \\\\input{secret}\\nUnicode Ω → —\"\n\tfirst := sourceRecord(\"user\", text)\n\tmustWrite(t, source, first)\n\tmustWrite(t, filepath.Join(repo, \".local\", \"conversation-sources\"), []byte(source+\"\\n\"))\n\tif err := Sync(repo); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tdir := filepath.Join(repo, \"docs\", \"conversations\")\n\tout := filepath.Join(repo, \"build\")\n\tif err := Build(dir, out); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tb, err := os.ReadFile(filepath.Join(out, \"messages\", \"000001.txt\"))\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif string(b) != text {\n\t\tt.Fatal(\"message text changed\")\n\t}\n\ttex, err := os.ReadFile(filepath.Join(out, \"conversation.tex\"))\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif strings.Contains(string(tex), \"input{secret}\") || !strings.Contains(string(tex), \"ChatGPT-classical-dark\") {\n\t\tt.Fatal(\"unsafe TeX or incorrect theme\")\n\t}\n\tsecond := append(append([]byte{}, first...), sourceRecord(\"assistant\", \"unmodified response\")...)\n\tmustWrite(t, source, second)\n\tif err := Sync(repo); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tm, err := Verify(dir)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif m.Files[0].Records != 2 {\n\t\tt.Fatal(\"new dialogue was not captured\")\n\t}\n\tmustWrite(t, source, sourceRecord(\"user\", \"rewritten history\"))\n\tif err := Sync(repo); err == nil {\n\t\tt.Fatal(\"overwrote earlier history\")\n\t}\n\tmustWrite(t, filepath.Join(dir, \"raw\", \"session.jsonl\"), []byte(\"corrupted\\n\"))\n\tif _, err := Verify(dir); err == nil {\n\t\tt.Fatal(\"accepted corrupt backup\")\n\t}\n}",
+      "sha256": "8fce3ec2806da434eae76fbb01e54e60c2ae68a061a5a99259d067e61b4cf7e3",
+      "startLine": 33,
+      "endLine": 82,
+      "assertLines": [
+        41,
+        46,
+        50,
+        53,
+        57,
+        60,
+        65,
+        69,
+        72,
+        76,
+        80
+      ]
+    },
+    {
+      "path": "docs/internal/dialog/dialog_test.go",
+      "label": "Referenced test helper (static call graph) · mustWrite",
+      "source": "func mustWrite(t *testing.T, name string, b []byte) {\n\tt.Helper()\n\tif err := os.MkdirAll(filepath.Dir(name), 0o755); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif err := os.WriteFile(name, b, 0o600); err != nil {\n\t\tt.Fatal(err)\n\t}\n}",
+      "sha256": "8fce3ec2806da434eae76fbb01e54e60c2ae68a061a5a99259d067e61b4cf7e3",
+      "startLine": 84,
+      "endLine": 92,
+      "assertLines": [
+        87,
+        90
+      ]
+    },
+    {
+      "path": "docs/internal/dialog/dialog_test.go",
+      "label": "Referenced test helper (static call graph) · sourceRecord",
+      "source": "func sourceRecord(role, text string) []byte {\n\tb, _ := json.Marshal(map[string]any{\"type\": \"response_item\", \"payload\": map[string]any{\"type\": \"message\", \"role\": role, \"content\": []map[string]string{{\"type\": \"input_text\", \"text\": text}}}})\n\treturn append(b, '\\n')\n}",
+      "sha256": "8fce3ec2806da434eae76fbb01e54e60c2ae68a061a5a99259d067e61b4cf7e3",
+      "startLine": 12,
+      "endLine": 15,
+      "assertLines": []
+    }
+  ],
   "profileSHA256": "c718ee6c69a9fb7d2cf5731f3fcce26171f98f26e6ae8427a2ac674bd4d2f7b7",
-  "gifSHA256": "4743a5b7403c4410d195d9c65bfd1ad95ad052cd624a42f8ca9c358f93ff2066"
+  "gifSHA256": "a9abccd88ed14c55b68fd33d0d3e69c16028d896fd93bc466db40e388cf5864e"
 }

@@ -2,6 +2,6 @@ go tool test2json -t -p github.com/newdarwindev/firm-payments/tools/requirements
 === RUN   TestSiteResultStreamRequiresPassingPackageAndNoSkippedTests
 --- PASS: TestSiteResultStreamRequiresPassingPackageAndNoSkippedTests (0.00s)
 PASS
-coverage: 12.9% of statements
+coverage: 10.7% of statements
 
 Exit status: 0

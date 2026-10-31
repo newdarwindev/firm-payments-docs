@@ -2,10 +2,10 @@
   "id": "functional-65e16743f7299b65",
   "suite": "functional",
   "name": "LedgerRedirectNotFollowed",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "Real Nginx canonical redirect produces 503; exactly one proxy request, no follow or retry, and no writes.",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L249",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tests/functional/payments_test.go#L249",
   "package": "",
   "command": [
     "go",
@@ -1680,6 +1680,138 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "tests/functional/payments_test.go",
+      "label": "Selected test / case body",
+      "source": "\t\t\"LedgerRedirectNotFollowed\": redirectFault,",
+      "sha256": "397e1cfe73a49fc3a8dd780ab0741806cc1c50cfd34e6884d9caf05e24cb6855",
+      "startLine": 249,
+      "endLine": 249,
+      "assertLines": []
+    },
+    {
+      "path": "tests/functional/failures_test.go",
+      "label": "Referenced test helper (static call graph) · redirectFault",
+      "source": "func redirectFault(t *testing.T) {\n\ttarget, calls := realProxy(t, true)\n\tbefore := snapshot(t)\n\tswapAPI(t, target)\n\texpect(t, call(t, 0, encode(t, transfer(\"1\"))), 503, \"unavailable\")\n\ttime.Sleep(50 * time.Millisecond)\n\tif calls() != 1 {\n\t\tt.Fatalf(\"unexpected proxy requests: %d\", calls())\n\t}\n\tunchanged(t, before)\n}",
+      "sha256": "63683800b2d302cde3ecf601cbf3ce921b8df22e1c5e7bed46f41edeeff484e3",
+      "startLine": 68,
+      "endLine": 78,
+      "assertLines": [
+        75
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · call",
+      "source": "func call(t *testing.T, index int, body string) response {\n\tt.Helper()\n\tres, err := request(t.Context(), \"http://\"+suite.apis[index].addr, http.MethodPost, \"/payments/bulk\", \"application/json\", body)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\treturn res\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 357,
+      "endLine": 364,
+      "assertLines": [
+        361
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · encode",
+      "source": "func encode(t *testing.T, b batch) string {\n\tt.Helper()\n\tdata, err := json.Marshal(b)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\treturn string(data)\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 365,
+      "endLine": 372,
+      "assertLines": [
+        369
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · expect",
+      "source": "func expect(t *testing.T, got response, status int, code string) {\n\tt.Helper()\n\tif got.Status != status || got.Code != code || (status == 201 && got.Body != \"\") {\n\t\tt.Fatalf(\"response %+v; want %d/%s\", got, status, code)\n\t}\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 374,
+      "endLine": 379,
+      "assertLines": [
+        377
+      ]
+    },
+    {
+      "path": "tests/functional/proxy_test.go",
+      "label": "Referenced test helper (static call graph) · realProxy",
+      "source": "func realProxy(t *testing.T, redirect bool) (string, func() int) {\n\tt.Helper()\n\tlistener, err := (&net.ListenConfig{}).Listen(t.Context(), \"tcp\", \"127.0.0.1:0\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\taddr := listener.Addr().String()\n\tif err := listener.Close(); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tdirectory := t.TempDir()\n\tlocation := \"location /internal/payments/bulk { limit_req zone=clients; proxy_pass http://\" + suite.ledgers[0].addr + \"; }\"\n\tif redirect {\n\t\tlocation = \"location /internal/payments/bulk/ { proxy_pass http://\" + suite.ledgers[0].addr + \"/internal/payments/bulk; }\"\n\t}\n\tconfig := fmt.Sprintf(`daemon off;\nmaster_process off;\npid %s/nginx.pid;\nerror_log %s/error.log;\nevents { worker_connections 64; }\nhttp {\n access_log %s/access.log;\n client_body_temp_path %s/body;\n proxy_temp_path %s/proxy;\n limit_req_zone $binary_remote_addr zone=clients:1m rate=1r/m;\n server { listen %s; %s }\n}\n`, directory, directory, directory, directory, directory, addr, location)\n\tpath := filepath.Join(directory, \"nginx.conf\")\n\tif err := os.WriteFile(path, []byte(config), 0o600); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tcmd := exec.CommandContext(context.Background(), \"nginx\", \"-p\", directory, \"-c\", path)\n\tif err := cmd.Start(); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tt.Cleanup(func() {\n\t\tif err := cmd.Process.Signal(syscall.SIGQUIT); err != nil {\n\t\t\tt.Error(err)\n\t\t}\n\t\tif err := cmd.Wait(); err != nil {\n\t\t\tt.Error(err)\n\t\t}\n\t})\n\tready := false\n\tfor deadline := time.Now().Add(5 * time.Second); time.Now().Before(deadline); {\n\t\tconnection, err := (&net.Dialer{Timeout: 100 * time.Millisecond}).DialContext(t.Context(), \"tcp\", addr)\n\t\tif err == nil {\n\t\t\t_ = connection.Close()\n\t\t\tready = true\n\t\t\tbreak\n\t\t}\n\t\ttime.Sleep(20 * time.Millisecond)\n\t}\n\tif !ready {\n\t\tt.Fatal(\"Nginx did not start\")\n\t}\n\treturn \"http://\" + addr, func() int {\n\t\tdata, err := os.ReadFile(filepath.Join(directory, \"access.log\"))\n\t\tif err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t\treturn strings.Count(string(data), `/internal/payments/bulk`)\n\t}\n}",
+      "sha256": "0064ba756de6f0a15685cf9dc45ffb280e1c5e1fc402df456064ed29186afb76",
+      "startLine": 19,
+      "endLine": 83,
+      "assertLines": [
+        23,
+        27,
+        49,
+        53,
+        57,
+        60,
+        74,
+        79
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · snapshot",
+      "source": "func snapshot(t *testing.T) state {\n\tt.Helper()\n\tctx, cancel := context.WithTimeout(t.Context(), 5*time.Second)\n\tdefer cancel()\n\ts := state{Balances: []int64{}, Payments: []record{}}\n\trows, err := suite.db.Query(ctx, \"SELECT balance_cents FROM firms ORDER BY id\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tfor rows.Next() {\n\t\tvar cents int64\n\t\tif err := rows.Scan(&cents); err != nil {\n\t\t\trows.Close()\n\t\t\tt.Fatal(err)\n\t\t}\n\t\ts.Balances = append(s.Balances, cents)\n\t}\n\trows.Close()\n\tif err := rows.Err(); err != nil {\n\t\tt.Fatal(err)\n\t}\n\trows, err = suite.db.Query(ctx, \"SELECT payer_firm_id,payee_firm_id,amount_cents,description FROM payments ORDER BY id\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tdefer rows.Close()\n\tfor rows.Next() {\n\t\tvar r record\n\t\tif err := rows.Scan(&r.Payer, &r.Payee, &r.Cents, &r.Description); err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t\ts.Payments = append(s.Payments, r)\n\t}\n\tif err := rows.Err(); err != nil {\n\t\tt.Fatal(err)\n\t}\n\treturn s\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 274,
+      "endLine": 311,
+      "assertLines": [
+        281,
+        287,
+        293,
+        297,
+        303,
+        308
+      ]
+    },
+    {
+      "path": "tests/functional/failures_test.go",
+      "label": "Referenced test helper (static call graph) · swapAPI",
+      "source": "func swapAPI(t *testing.T, target string) {\n\tsuite.client.CloseIdleConnections()\n\tt.Helper()\n\taddr := suite.apis[0].addr\n\tif err := suite.apis[0].stop(); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tvar err error\n\tsuite.apis[0], err = suite.start(\"payments-api\", 0, addr, target)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tt.Cleanup(func() {\n\t\tsuite.client.CloseIdleConnections()\n\t\tif err := suite.apis[0].stop(); err != nil {\n\t\t\tt.Error(err)\n\t\t}\n\t\tvar err error\n\t\tsuite.apis[0], err = suite.start(\"payments-api\", 0, addr, \"http://\"+suite.ledgers[0].addr)\n\t\tif err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t})\n}",
+      "sha256": "63683800b2d302cde3ecf601cbf3ce921b8df22e1c5e7bed46f41edeeff484e3",
+      "startLine": 44,
+      "endLine": 67,
+      "assertLines": [
+        49,
+        54,
+        59,
+        64
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · transfer",
+      "source": "func transfer(amount string) batch { return batch{payer, []entry{{amount, lopez, \"transfer\"}}} }",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 373,
+      "endLine": 373,
+      "assertLines": []
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · unchanged",
+      "source": "func unchanged(t *testing.T, before state) {\n\tt.Helper()\n\tif got := snapshot(t); !reflect.DeepEqual(got, before) {\n\t\tt.Fatalf(\"rejected request changed state: before %+v; after %+v\", before, got)\n\t}\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 322,
+      "endLine": 327,
+      "assertLines": [
+        325
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · request",
+      "source": "func request(ctx context.Context, base, method, path, media, body string) (response, error) {\n\treq, err := http.NewRequestWithContext(ctx, method, base+path, strings.NewReader(body))\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tif media != \"\" {\n\t\treq.Header.Set(\"Content-Type\", media)\n\t}\n\tres, err := suite.client.Do(req)\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tdefer func() { _ = res.Body.Close() }()\n\tdata, err := io.ReadAll(io.LimitReader(res.Body, 2<<20))\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tvar failure struct {\n\t\tError struct {\n\t\t\tCode string `json:\"code\"`\n\t\t}\n\t}\n\tif res.StatusCode != 201 && res.StatusCode != 404 && res.StatusCode != 405 {\n\t\tif err := json.Unmarshal(data, &failure); err != nil {\n\t\t\treturn response{}, err\n\t\t}\n\t}\n\treturn response{res.StatusCode, string(data), failure.Error.Code}, nil\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 328,
+      "endLine": 356,
+      "assertLines": []
+    }
+  ],
   "profileSHA256": "785b1c44ce1363bddcaa4f79b79f5a32d6a957449b7d3c82a3ec97c1945ae1bf",
-  "gifSHA256": "97d4d0b5160b20c7864f86aa2627e8383490fadade0ddc4bf21a883ed735068f"
+  "gifSHA256": "7102318a77e37692211cf6be19e4a47a434e9d0389f56e5ac6b5f2159a450c79"
 }

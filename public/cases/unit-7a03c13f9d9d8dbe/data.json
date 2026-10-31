@@ -2,10 +2,10 @@
   "id": "unit-7a03c13f9d9d8dbe",
   "suite": "unit",
   "name": "TestRequestBoundary/missing_description",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/httpapi/handler_test.go#L25",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/httpapi/handler_test.go#L25",
   "package": "github.com/newdarwindev/firm-payments/internal/httpapi",
   "command": [
     "go",
@@ -434,6 +434,20 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "internal/httpapi/handler_test.go",
+      "label": "Selected test / case body · TestRequestBoundary",
+      "source": "func TestRequestBoundary(t *testing.T) {\n\tfor _, tc := range []struct {\n\t\tname, body, media string\n\t\tstatus, calls     int\n\t}{\n\t\t{\"valid\", valid, \"application/json\", 201, 1},\n\t\t{\"malformed\", \"{\", \"application/json\", 400, 0},\n\t\t{\"unknown field\", strings.Replace(valid, `\"payments\":`, `\"extra\":1,\"payments\":`, 1), \"application/json\", 400, 0},\n\t\t{\"multiple documents\", valid + valid, \"application/json\", 400, 0},\n\t\t{\"number amount\", strings.Replace(valid, `\"1.25\"`, `1.25`, 1), \"application/json\", 400, 0},\n\t\t{\"invalid cents\", strings.Replace(valid, `1.25`, `0.001`, 1), \"application/json\", 422, 0},\n\t\t{\"missing description\", strings.Replace(valid, `,\"description\":\"\"`, \"\", 1), \"application/json\", 422, 0},\n\t\t{\"null\", \"null\", \"application/json\", 422, 0},\n\t\t{\"media\", valid, \"text/plain\", 415, 0},\n\t\t{\"too large\", valid + strings.Repeat(\" \", int(contracts.MaxBodyBytes)), \"application/json\", 413, 0},\n\t} {\n\t\tt.Run(tc.name, func(t *testing.T) {\n\t\t\tp := &processor{}\n\t\t\th := httpapi.Handler(\"test\", \"/payments/bulk\", p, func(context.Context) error { return nil })\n\t\t\treq := httptest.NewRequestWithContext(t.Context(), http.MethodPost, \"/payments/bulk\", strings.NewReader(tc.body))\n\t\t\treq.Header.Set(\"Content-Type\", tc.media)\n\t\t\tw := httptest.NewRecorder()\n\t\t\th.ServeHTTP(w, req)\n\t\t\tif w.Code != tc.status || p.calls != tc.calls {\n\t\t\t\tt.Fatalf(\"status %d calls %d; want %d/%d: %s\", w.Code, p.calls, tc.status, tc.calls, w.Body.String())\n\t\t\t}\n\t\t\tif tc.status == 201 && w.Body.Len() != 0 {\n\t\t\t\tt.Fatal(\"201 body must be empty\")\n\t\t\t}\n\t\t})\n\t}\n}",
+      "sha256": "1d122a90fd1976493a1993fe43ac4f9f20e63af91453b2831974136c90ae6ef6",
+      "startLine": 25,
+      "endLine": 56,
+      "assertLines": [
+        49,
+        52
+      ]
+    }
+  ],
   "profileSHA256": "69f70b1b174f0abca8e7fba19457e9748b1eba461e1f228c8d4d98497de22441",
-  "gifSHA256": "b61d25228fd253126b12ea04e9e6c46b7f2e7e915e780dc68c48b507b7d4bea7"
+  "gifSHA256": "4432b8ad8f06cf29d1961b814e208d7e5bea07abf291fea4f7357fec20ec0f17"
 }

@@ -2,6 +2,6 @@ go tool test2json -t -p github.com/newdarwindev/firm-payments/tools/requirements
 === RUN   TestPublicExtensionRejectsRawConversationAndRevisionMismatch
 --- PASS: TestPublicExtensionRejectsRawConversationAndRevisionMismatch (0.00s)
 PASS
-coverage: 8.2% of statements
+coverage: 6.8% of statements
 
 Exit status: 0

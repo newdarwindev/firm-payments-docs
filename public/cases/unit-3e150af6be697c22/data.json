@@ -2,10 +2,10 @@
   "id": "unit-3e150af6be697c22",
   "suite": "unit",
   "name": "TestFunctionalEvidenceFailsClosed",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/evidence/main_test.go#L24",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tools/evidence/main_test.go#L24",
   "package": "github.com/newdarwindev/firm-payments/tools/evidence",
   "command": [
     "go",
@@ -1318,6 +1318,31 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "tools/evidence/main_test.go",
+      "label": "Selected test / case body · TestFunctionalEvidenceFailsClosed",
+      "source": "func TestFunctionalEvidenceFailsClosed(t *testing.T) {\n\tpkg := \"github.com/newdarwindev/firm-payments/tests/functional\"\n\tfor _, tc := range []struct {\n\t\tname, action             string\n\t\tpackagePass, include, ok bool\n\t}{{\"passed\", \"pass\", true, true, true}, {\"failed\", \"fail\", false, true, false}, {\"skipped\", \"skip\", true, true, false}, {\"missing\", \"pass\", true, false, false}, {\"missing package result\", \"pass\", false, true, false}} {\n\t\tt.Run(tc.name, func(t *testing.T) {\n\t\t\tevents := []testEvent{}\n\t\t\tif tc.include {\n\t\t\t\tevents = append(events, testEvent{Package: pkg, Test: \"TestFunctional/One\", Action: \"run\"}, testEvent{Package: pkg, Test: \"TestFunctional/One\", Action: tc.action})\n\t\t\t}\n\t\t\tif tc.packagePass {\n\t\t\t\tevents = append(events, testEvent{Package: pkg, Action: \"pass\"})\n\t\t\t}\n\t\t\tr, err := consume(strings.NewReader(stream(t, events...)), []testCase{{Name: \"One\", Asserts: \"Database unchanged\", Status: \"queued\"}}, \"revision\", false)\n\t\t\tif (err == nil) != tc.ok {\n\t\t\t\tt.Fatalf(\"passed=%d, error=%v\", r.Passed, err)\n\t\t\t}\n\t\t})\n\t}\n\tfor _, input := range []string{\"not JSON\", stream(t, testEvent{Package: \"wrong\", Action: \"pass\"}), stream(t, testEvent{Package: pkg, Test: \"TestFunctional/One\", Action: \"pass\"}), stream(t, testEvent{Package: pkg, Test: \"TestFunctional/Other\", Action: \"pass\"}, testEvent{Package: pkg, Action: \"pass\"})} {\n\t\tif _, err := consume(strings.NewReader(input), []testCase{{Name: \"One\", Status: \"queued\"}}, \"x\", false); err == nil {\n\t\t\tt.Fatal(\"invalid evidence accepted\")\n\t\t}\n\t}\n}",
+      "sha256": "49f4bc5bd48a5a40fc78d28f1738e804cc5335d8ae89463d815b36ba0b506829",
+      "startLine": 24,
+      "endLine": 49,
+      "assertLines": [
+        40,
+        46
+      ]
+    },
+    {
+      "path": "tools/evidence/main_test.go",
+      "label": "Referenced test helper (static call graph) · stream",
+      "source": "func stream(t *testing.T, events ...testEvent) string {\n\tt.Helper()\n\tvar b strings.Builder\n\tfor _, e := range events {\n\t\tdata, err := json.Marshal(e)\n\t\tif err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t\tb.Write(data)\n\t\tb.WriteByte('\\n')\n\t}\n\treturn b.String()\n}",
+      "sha256": "49f4bc5bd48a5a40fc78d28f1738e804cc5335d8ae89463d815b36ba0b506829",
+      "startLine": 11,
+      "endLine": 23,
+      "assertLines": [
+        17
+      ]
+    }
+  ],
   "profileSHA256": "7bf1c9324548506444becbc7c6831ad76342d9f284f49c95cef166376bb8ed02",
-  "gifSHA256": "84207afde858ecac6599752d49e1cb891c683fbc20b11f2e948e3f55f172bd0f"
+  "gifSHA256": "582b1766feaa500afd18ecfeec36e133789d87cce03daa863e881a027e3f9bcd"
 }

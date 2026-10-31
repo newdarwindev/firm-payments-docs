@@ -2,10 +2,10 @@
   "id": "unit-dbccf2d343de9132",
   "suite": "unit",
   "name": "TestCatalogueRejectsDuplicatesAndMissingAssertions",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/evidence/main_test.go#L103",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tools/evidence/main_test.go#L103",
   "package": "github.com/newdarwindev/firm-payments/tools/evidence",
   "command": [
     "go",
@@ -1313,6 +1313,20 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "tools/evidence/main_test.go",
+      "label": "Selected test / case body · TestCatalogueRejectsDuplicatesAndMissingAssertions",
+      "source": "func TestCatalogueRejectsDuplicatesAndMissingAssertions(t *testing.T) {\n\tfor _, text := range []string{`[]`, `[{\"name\":\"One\"}]`, `[{\"name\":\"One\",\"asserts\":\"ok\"},{\"name\":\"One\",\"asserts\":\"ok\"}]`} {\n\t\tp := filepath.Join(t.TempDir(), \"catalogue.json\")\n\t\tif err := os.WriteFile(p, []byte(text), 0o600); err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t\tif _, err := loadCases(p); err == nil {\n\t\t\tt.Fatal(\"invalid catalogue accepted\")\n\t\t}\n\t}\n}",
+      "sha256": "49f4bc5bd48a5a40fc78d28f1738e804cc5335d8ae89463d815b36ba0b506829",
+      "startLine": 103,
+      "endLine": 113,
+      "assertLines": [
+        107,
+        110
+      ]
+    }
+  ],
   "profileSHA256": "31f6649def1d906c88b4d25498a77931afbc14ee44827c4d0d48078acb3a8bba",
-  "gifSHA256": "d9f11695b5b4202f8cb8bc421868f652459daecb20fb12f47832f2bf74d9185d"
+  "gifSHA256": "e32336b1701cf8b8abe8507df53d351c38d0f3253b874ed562ea4c50a2c4d014"
 }

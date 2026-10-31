@@ -2,10 +2,10 @@
   "id": "unit-c3dbc2b5277859ec",
   "suite": "unit",
   "name": "TestClientPreservesOutcomesWithoutRetry",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/ledgerclient/client_test.go#L16",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledgerclient/client_test.go#L16",
   "package": "github.com/newdarwindev/firm-payments/internal/ledgerclient",
   "command": [
     "go",
@@ -345,6 +345,22 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "internal/ledgerclient/client_test.go",
+      "label": "Selected test / case body · TestClientPreservesOutcomesWithoutRetry",
+      "source": "func TestClientPreservesOutcomesWithoutRetry(t *testing.T) {\n\tfor _, tc := range []struct {\n\t\tstatus int\n\t\tbody   string\n\t\twant   error\n\t}{{201, \"\", nil}, {422, `{\"error\":{\"code\":\"insufficient_funds\"}}`, contracts.ErrInsufficientFunds}, {503, `{\"error\":{\"code\":\"unavailable\"}}`, contracts.ErrUnavailable}, {500, `{\"error\":{\"code\":\"internal_error\"}}`, contracts.ErrInternal}, {504, `{\"error\":{\"code\":\"timeout\"}}`, context.DeadlineExceeded}, {502, \"bad gateway\", contracts.ErrUnavailable}, {500, `{\"error\":{\"code\":\"insufficient_funds\"}}`, contracts.ErrUnavailable}, {200, `{\"error\":{\"code\":\"insufficient_funds\"}}`, contracts.ErrUnavailable}} {\n\t\tvar calls atomic.Int32\n\t\tsrv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n\t\t\tcalls.Add(1)\n\t\t\tif r.URL.Path != \"/internal/payments/bulk\" || r.Method != \"POST\" {\n\t\t\t\tt.Error(\"wrong private request\")\n\t\t\t}\n\t\t\tw.WriteHeader(tc.status)\n\t\t\tif _, err := w.Write([]byte(tc.body)); err != nil {\n\t\t\t\tt.Error(err)\n\t\t\t}\n\t\t}))\n\t\tc, err := ledgerclient.New(srv.URL)\n\t\tif err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t\terr = c.Execute(t.Context(), contracts.BulkRequest{})\n\t\tsrv.Close()\n\t\tif !errors.Is(err, tc.want) || calls.Load() != 1 {\n\t\t\tt.Errorf(\"status %d: %v, calls %d\", tc.status, err, calls.Load())\n\t\t}\n\t}\n}",
+      "sha256": "8a044cf344f97053f22d79ace8050ca47342be92bde7207ee927ea255212f547",
+      "startLine": 16,
+      "endLine": 43,
+      "assertLines": [
+        26,
+        30,
+        35,
+        40
+      ]
+    }
+  ],
   "profileSHA256": "8090f8c286e2265e8b12a1b79634438776c6dc3b94006c790e1d505c1fb8494a",
-  "gifSHA256": "1257cb14524081442fd8f7785c916a13cf1be2b204edc42b2445d8e403b22d85"
+  "gifSHA256": "6db08cca39ebe79962bb336acc8029cf323d22e717c77a47bd747264a3fb29dc"
 }

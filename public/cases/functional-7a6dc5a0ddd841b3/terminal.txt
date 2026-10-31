@@ -1,8 +1,8 @@
 go tool test2json -t -p github.com/newdarwindev/firm-payments/tests/functional /home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/3c37d0e2e00b6a17.test -test.v=test2json -test.count=1 -test.timeout=180s -test.run=^TestFunctional$/^ConcurrentDisjointTransfers$
 === RUN   TestFunctional
 === RUN   TestFunctional/ConcurrentDisjointTransfers
---- PASS: TestFunctional/ConcurrentDisjointTransfers (0.11s)
---- PASS: TestFunctional (0.11s)
+--- PASS: TestFunctional/ConcurrentDisjointTransfers (0.08s)
+--- PASS: TestFunctional (0.08s)
 PASS
 
 Exit status: 0

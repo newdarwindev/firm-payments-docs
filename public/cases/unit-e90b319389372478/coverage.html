@@ -55,13 +55,15 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">github.com/newdarwindev/firm-payments/tools/requirements-site/build.go (9.4%)</option>
+				<option value="file0">github.com/newdarwindev/firm-payments/tools/requirements-site/assertions.go (0.0%)</option>
 				
-				<option value="file1">github.com/newdarwindev/firm-payments/tools/requirements-site/evidence.go (0.0%)</option>
+				<option value="file1">github.com/newdarwindev/firm-payments/tools/requirements-site/build.go (9.2%)</option>
 				
-				<option value="file2">github.com/newdarwindev/firm-payments/tools/requirements-site/main.go (0.0%)</option>
+				<option value="file2">github.com/newdarwindev/firm-payments/tools/requirements-site/evidence.go (0.0%)</option>
 				
-				<option value="file3">github.com/newdarwindev/firm-payments/tools/requirements-site/verify.go (0.0%)</option>
+				<option value="file3">github.com/newdarwindev/firm-payments/tools/requirements-site/main.go (0.0%)</option>
+				
+				<option value="file4">github.com/newdarwindev/firm-payments/tools/requirements-site/verify.go (0.0%)</option>
 				
 				</select>
 			</div>
@@ -85,6 +87,201 @@
 		<div id="content">
 		
 		<pre class="file" id="file0" style="display: none">package main
+
+import (
+        "errors"
+        "go/ast"
+        "go/parser"
+        "go/token"
+        "os"
+        "path/filepath"
+        "sort"
+        "strconv"
+        "strings"
+)
+
+// Test source is literal source, not a claim that every assertion branch ran.
+type assertionSource struct {
+        Path        string `json:"path"`
+        Label       string `json:"label"`
+        Source      string `json:"source"`
+        SHA256      string `json:"sha256"`
+        StartLine   int    `json:"startLine"`
+        EndLine     int    `json:"endLine"`
+        AssertLines []int  `json:"assertLines"`
+}
+type sourceNode struct {
+        file string
+        node ast.Node
+        fset *token.FileSet
+}
+type testSourceIndex struct {
+        functions map[string]sourceNode
+        locations map[string]sourceNode
+}
+
+func indexTestSources(root, dir string) (testSourceIndex, error) {
+        <span class="cov0" title="0">index := testSourceIndex{map[string]sourceNode{}, map[string]sourceNode{}}
+        files, err := filepath.Glob(filepath.Join(root, dir, "*_test.go"))
+        if err != nil </span>{
+                <span class="cov0" title="0">return index, err
+</span>        }
+        <span class="cov0" title="0">for _, path := range files </span>{
+                <span class="cov0" title="0">fset := token.NewFileSet()
+                file, err := parser.ParseFile(fset, path, nil, 0)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return index, err
+</span>                }
+                <span class="cov0" title="0">relative, err := filepath.Rel(root, path)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return index, err
+</span>                }
+                <span class="cov0" title="0">relative = filepath.ToSlash(relative)
+                ast.Inspect(file, func(node ast.Node) bool </span>{
+                        <span class="cov0" title="0">switch value := node.(type) </span>{
+                        case *ast.FuncDecl:
+                                <span class="cov0" title="0">if value.Recv == nil </span>{
+                                        <span class="cov0" title="0">index.functions[value.Name.Name] = sourceNode{relative, value, fset}
+</span>                                }
+                                <span class="cov0" title="0">index.locations[relative+"#L"+strconv.Itoa(fset.Position(value.Pos()).Line)] = sourceNode{relative, value, fset}</span>
+                        case *ast.KeyValueExpr:
+                                <span class="cov0" title="0">if _, ok := value.Key.(*ast.BasicLit); ok </span>{
+                                        <span class="cov0" title="0">index.locations[relative+"#L"+strconv.Itoa(fset.Position(value.Pos()).Line)] = sourceNode{relative, value, fset}
+</span>                                }
+                        }
+                        <span class="cov0" title="0">return true</span>
+                })
+        }
+        <span class="cov0" title="0">return index, nil</span>
+}
+
+func (index testSourceIndex) snippets(root, location string) ([]assertionSource, error) {
+        <span class="cov0" title="0">entry, ok := index.locations[location]
+        if !ok </span>{
+                <span class="cov0" title="0">return nil, errors.New("test source location has no matching Go syntax node")
+</span>        }
+        <span class="cov0" title="0">queue := []sourceNode{entry}
+        seen := map[string]bool{}
+        result := []assertionSource{}
+        for len(queue) &gt; 0 </span>{
+                <span class="cov0" title="0">current := queue[0]
+                queue = queue[1:]
+                key := current.file + ":" + strconv.Itoa(int(current.node.Pos()))
+                if seen[key] </span>{
+                        <span class="cov0" title="0">continue</span>
+                }
+                <span class="cov0" title="0">seen[key] = true
+                snippet, err := literalSnippet(root, current, len(result) == 0)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return nil, err
+</span>                }
+                <span class="cov0" title="0">result = append(result, snippet)
+                for _, name := range localCalls(current.node) </span>{
+                        <span class="cov0" title="0">if helper, exists := index.functions[name]; exists </span>{
+                                <span class="cov0" title="0">queue = append(queue, helper)
+</span>                        }
+                }
+        }
+        <span class="cov0" title="0">return result, nil</span>
+}
+
+func localCalls(node ast.Node) []string {
+        <span class="cov0" title="0">names := map[string]bool{}
+        ast.Inspect(node, func(node ast.Node) bool </span>{
+                <span class="cov0" title="0">if call, ok := node.(*ast.CallExpr); ok </span>{
+                        <span class="cov0" title="0">if name, ok := call.Fun.(*ast.Ident); ok </span>{
+                                <span class="cov0" title="0">names[name.Name] = true
+</span>                        }
+                }
+                // Registry entries can refer to a named function rather than a literal.
+                <span class="cov0" title="0">if entry, ok := node.(*ast.KeyValueExpr); ok </span>{
+                        <span class="cov0" title="0">if name, ok := entry.Value.(*ast.Ident); ok </span>{
+                                <span class="cov0" title="0">names[name.Name] = true
+</span>                        }
+                }
+                <span class="cov0" title="0">return true</span>
+        })
+        <span class="cov0" title="0">result := []string{}
+        for name := range names </span>{
+                <span class="cov0" title="0">result = append(result, name)
+</span>        }
+        <span class="cov0" title="0">sort.Strings(result)
+        return result</span>
+}
+
+func literalSnippet(root string, value sourceNode, selected bool) (assertionSource, error) {
+        <span class="cov0" title="0">data, err := os.ReadFile(filepath.Join(root, value.file))
+        if err != nil </span>{
+                <span class="cov0" title="0">return assertionSource{}, err
+</span>        }
+        <span class="cov0" title="0">start, end := value.fset.Position(value.node.Pos()).Line, value.fset.Position(value.node.End()).Line
+        label := "Referenced test helper (static call graph)"
+        if selected </span>{
+                <span class="cov0" title="0">label = "Selected test / case body"
+</span>        }
+        <span class="cov0" title="0">if declaration, ok := value.node.(*ast.FuncDecl); ok </span>{
+                <span class="cov0" title="0">label += " · " + declaration.Name.Name
+</span>        }
+        <span class="cov0" title="0">lines := []int{}
+        ast.Inspect(value.node, func(node ast.Node) bool </span>{
+                <span class="cov0" title="0">call, ok := node.(*ast.CallExpr)
+                if !ok </span>{
+                        <span class="cov0" title="0">return true
+</span>                }
+                <span class="cov0" title="0">selector, ok := call.Fun.(*ast.SelectorExpr)
+                if !ok </span>{
+                        <span class="cov0" title="0">return true
+</span>                }
+                <span class="cov0" title="0">receiver, ok := selector.X.(*ast.Ident)
+                if !ok || (receiver.Name != "t" &amp;&amp; receiver.Name != "b") </span>{
+                        <span class="cov0" title="0">return true
+</span>                }
+                <span class="cov0" title="0">for _, name := range []string{"Fatal", "Fatalf", "Error", "Errorf", "Fail", "FailNow"} </span>{
+                        <span class="cov0" title="0">if selector.Sel.Name == name </span>{
+                                <span class="cov0" title="0">lines = append(lines, value.fset.Position(call.Pos()).Line)
+</span>                        }
+                }
+                <span class="cov0" title="0">return true</span>
+        })
+        <span class="cov0" title="0">hash, err := fileHash(filepath.Join(root, value.file))
+        if err != nil </span>{
+                <span class="cov0" title="0">return assertionSource{}, err
+</span>        }
+        <span class="cov0" title="0">return assertionSource{value.file, label, strings.Join(strings.Split(string(data), "\n")[start-1:end], "\n"), hash, start, end, lines}, nil</span>
+}
+
+func attachAssertions(root, revision string, results []result) error {
+        <span class="cov0" title="0">indexes := map[string]testSourceIndex{}
+        for i := range results </span>{
+                <span class="cov0" title="0">if !strings.HasPrefix(results[i].SourceURL, repository+"/blob/"+revision+"/") </span>{
+                        <span class="cov0" title="0">return errors.New("test source revision mismatch")
+</span>                }
+                <span class="cov0" title="0">location := strings.TrimPrefix(results[i].SourceURL, repository+"/blob/"+revision+"/")
+                path, _, ok := strings.Cut(location, "#L")
+                if !ok || !filepath.IsLocal(path) || !strings.HasSuffix(path, "_test.go") </span>{
+                        <span class="cov0" title="0">return errors.New("unsafe test source URL")
+</span>                }
+                <span class="cov0" title="0">dir := filepath.Dir(path)
+                index, ok := indexes[dir]
+                if !ok </span>{
+                        <span class="cov0" title="0">var err error
+                        index, err = indexTestSources(root, dir)
+                        if err != nil </span>{
+                                <span class="cov0" title="0">return err
+</span>                        }
+                        <span class="cov0" title="0">indexes[dir] = index</span>
+                }
+                <span class="cov0" title="0">sources, err := index.snippets(root, location)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">results[i].Assertions = sources</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package main
 
 import (
         "bytes"
@@ -229,6 +426,9 @@ func build(root, input, out, revision string) error {
         if err != nil </span>{
                 <span class="cov0" title="0">return err
 </span>        }
+        <span class="cov0" title="0">if err := attachAssertions(root, revision, data.Results); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
         <span class="cov0" title="0">v := view{Title: "Assignment × evidence", Prefix: "", SHA: revision, ShortSHA: revision[:7], Mode: data.Evidence.Mode, VerifiedAt: data.Evidence.VerifiedAt, BuildURL: data.Evidence.Service.URL, SourceURL: repository + "/tree/" + revision, Coverage: fmt.Sprintf("%.2f", data.Coverage), Transcription: transcription, Results: data.Results}
         if err := mapRows(root, revision, rows, mappings, data, &amp;v); err != nil </span>{
                 <span class="cov0" title="0">return err
@@ -311,6 +511,9 @@ func build(root, input, out, revision string) error {
                         <span class="cov0" title="0">return err
 </span>                }
         }
+        <span class="cov0" title="0">if err := writePublicJSON(filepath.Join(out, "requirements.json"), v.Rows); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
         <span class="cov0" title="0">if err := os.WriteFile(filepath.Join(out, ".nojekyll"), nil, 0o644); err != nil </span>{
                 <span class="cov0" title="0">return err
 </span>        }
@@ -414,7 +617,7 @@ func renderMarkdown(text string) (template.HTML, error) {
 }
 </pre>
 		
-		<pre class="file" id="file1" style="display: none">package main
+		<pre class="file" id="file2" style="display: none">package main
 
 import (
         "bufio"
@@ -455,6 +658,7 @@ type evidence struct {
 }
 type result struct {
         Suite, Name, Package, Asserts, Status, SourceURL, ArtifactURL, Anchor string
+        Assertions                                                            []assertionSource
         Seconds                                                               float64
 }
 type inputData struct {
@@ -848,7 +1052,7 @@ func sourceLine(root, path, symbol string) (int, error) {
 }
 </pre>
 		
-		<pre class="file" id="file2" style="display: none">// Command requirements-site builds a public, requirement-by-requirement evidence site.
+		<pre class="file" id="file3" style="display: none">// Command requirements-site builds a public, requirement-by-requirement evidence site.
 package main
 
 import (
@@ -888,7 +1092,7 @@ func run(args []string) error {
 }
 </pre>
 		
-		<pre class="file" id="file3" style="display: none">package main
+		<pre class="file" id="file4" style="display: none">package main
 
 import (
         "errors"
@@ -903,7 +1107,7 @@ import (
         "golang.org/x/net/html"
 )
 
-var publicFiles = map[string]bool{"index.html": true, "results/index.html": true, "build/index.html": true, "assets/style.css": true, "assets/site.js": true, "assignment.md": true, "verification.json": true, "results/results.json": true, ".nojekyll": true, "SHA256SUMS": true}
+var publicFiles = map[string]bool{"index.html": true, "results/index.html": true, "build/index.html": true, "assets/style.css": true, "assets/site.js": true, "assignment.md": true, "requirements.json": true, "verification.json": true, "results/results.json": true, ".nojekyll": true, "SHA256SUMS": true}
 
 // Extra files are accepted only from the generated UI/case inventory, with a narrow path/type boundary.
 func allowedPublicFiles(root string) (map[string]bool, error) {

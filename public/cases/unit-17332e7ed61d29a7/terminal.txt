@@ -2,6 +2,6 @@ go tool test2json -t -p github.com/newdarwindev/firm-payments/tools/requirements
 === RUN   TestSiteRecitalAndReferencesCoverOriginalTask
 --- PASS: TestSiteRecitalAndReferencesCoverOriginalTask (0.01s)
 PASS
-coverage: 12.7% of statements
+coverage: 10.6% of statements
 
 Exit status: 0

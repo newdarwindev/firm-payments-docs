@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>24/24</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>27/27</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>13/13</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>14/14</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
@@ -78,28 +78,7 @@
 <a name='L13'></a><a href='#L13'>13</a>
 <a name='L14'></a><a href='#L14'>14</a>
 <a name='L15'></a><a href='#L15'>15</a>
-<a name='L16'></a><a href='#L16'>16</a>
-<a name='L17'></a><a href='#L17'>17</a>
-<a name='L18'></a><a href='#L18'>18</a>
-<a name='L19'></a><a href='#L19'>19</a>
-<a name='L20'></a><a href='#L20'>20</a>
-<a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">142x</span>
+<a name='L16'></a><a href='#L16'>16</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -109,66 +88,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4858572x</span>
-<span class="cline-any cline-yes">51171x</span>
-<span class="cline-any cline-yes">27169x</span>
-<span class="cline-any cline-yes">20402x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2836x</span>
-<span class="cline-any cline-yes">516x</span>
-<span class="cline-any cline-yes">2247x</span>
-<span class="cline-any cline-yes">516x</span>
+<span class="cline-any cline-yes">144x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1092x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2836x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">51171x</span>
-<span class="cline-any cline-yes">19452x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">284x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { AssertionsPane, type AssertionSource } from './AssertionsPane';
+import { CodePane } from './SourcePane';
+import { RecordingPane } from './RecordingPane';
 import './style.css';
-&nbsp;
 export interface Block { startLine: number; startColumn: number; endLine: number; endColumn: number; statements: number; count: number }
 export interface FileCoverage { path: string; sha256: string; source: string; blocks: Block[] }
 export interface Evidence {
   id: string; suite: string; name: string; sha: string; status: string; asserts: string; scope: string;
-  selected: string; command: string[]; build: string[]; binarySHA256: string; executed: string[]; group: boolean; covered: number; total: number; files: FileCoverage[];
-}
-export function lineState(blocks: Block[], line: number) {
-  const active = blocks.filter((block) =&gt; block.statements &gt; 0 &amp;&amp; block.startLine &lt;= line &amp;&amp; block.endLine &gt;= line &amp;&amp; !(block.endLine === line &amp;&amp; block.endColumn === 1));
-  if (!active.length) return 'neutral';
-  if (active.every((block) =&gt; block.count &gt; 0)) return 'covered';
-  return active.some((block) =&gt; block.count &gt; 0) ? 'mixed' : 'uncovered';
+  selected: string; command: string[]; build: string[]; binarySHA256: string; executed: string[]; group: boolean; covered: number; total: number; files: FileCoverage[]; assertions: AssertionSource[];
 }
 export function TestEvidence({ evidence, mediaBase, initialFile, onFileChange }: { evidence: Evidence; mediaBase: string; initialFile?: string; onFileChange?: (path: string) =&gt; void }) {
-  const [path, setPath] = useState(evidence.files.find((file) =&gt; file.path === initialFile)?.path ?? evidence.files[0]?.path ?? '');
-  const [play, setPlay] = useState(false);
-  const file = evidence.files.find((candidate) =&gt; candidate.path === path);
-  return &lt;article className="evidence"&gt;
-    &lt;p className="eyebrow"&gt;{evidence.suite} · {evidence.group ? 'test group' : 'individual test'} · {evidence.sha.slice(0, 7)}&lt;/p&gt;
-    &lt;h1&gt;{evidence.name}&lt;/h1&gt;
-    &lt;p className="summary" role="status"&gt;{evidence.status.toUpperCase()} · {evidence.total ? `${evidence.covered} / ${evidence.total} Go statements covered (${(100 * evidence.covered / evidence.total).toFixed(2)}%)` : 'No instrumented Go statements in this test package'}&lt;/p&gt;
-    &lt;p&gt;{evidence.asserts}&lt;/p&gt;&lt;p className="scope"&gt;{evidence.scope}&lt;/p&gt;
-    &lt;details&gt;&lt;summary&gt;Executed command and test selection&lt;/summary&gt;&lt;p&gt;Prepared once for this package:&lt;/p&gt;&lt;pre&gt;{evidence.build.join(' ')}&lt;/pre&gt;&lt;p&gt;Test executable SHA256: {evidence.binarySHA256}&lt;/p&gt;&lt;pre&gt;{evidence.command.join(' ')}&lt;/pre&gt;&lt;ul&gt;{evidence.executed.map((name) =&gt; &lt;li key={name}&gt;{name}&lt;/li&gt;)}&lt;/ul&gt;&lt;/details&gt;
-    &lt;nav aria-label="Downloads"&gt;&lt;a href={`${mediaBase}coverage.out`}&gt;Raw coverage profile&lt;/a&gt;&lt;a href={`${mediaBase}coverage.html`}&gt;Downloadable Go coverage HTML&lt;/a&gt;&lt;a href={`${mediaBase}data.json`}&gt;Evidence JSON&lt;/a&gt;&lt;a href={`${mediaBase}terminal.gif`}&gt;Direct terminal GIF&lt;/a&gt;&lt;a href={`${mediaBase}terminal.txt`}&gt;Terminal text&lt;/a&gt;&lt;/nav&gt;
-    {file &amp;&amp; &lt;section aria-label="Code coverage"&gt;
-      &lt;label&gt;Source file &lt;select aria-label="Source file" value={path} onChange={(event) =&gt; { setPath(event.target.value); onFileChange?.(event.target.value); }}&gt;{evidence.files.map((candidate) =&gt; &lt;option key={candidate.path} value={candidate.path}&gt;{candidate.path}&lt;/option&gt;)}&lt;/select&gt;&lt;/label&gt;
-      &lt;p className="legend"&gt;Green: covered · Red: uncovered · Amber: mixed statement blocks · Gray: uninstrumented&lt;/p&gt;
-      &lt;p className="hash"&gt;Source SHA256: {file.sha256}&lt;/p&gt;
-      &lt;div className="code" tabIndex={0} aria-label={`Source code: ${file.path}`}&gt;&lt;pre&gt;{file.source.split('\n').map((text, index) =&gt; &lt;span className={`line ${lineState(file.blocks, index + 1)}`} id={`L${index + 1}`} key={index}&gt;&lt;a href={`#L${index + 1}`} aria-label={`Line ${index + 1}`}&gt;{index + 1}&lt;/a&gt;&lt;code&gt;{text || ' '}&lt;/code&gt;&lt;/span&gt;)}&lt;/pre&gt;&lt;/div&gt;
-      &lt;details&gt;&lt;summary&gt;Exact statement blocks and execution counts&lt;/summary&gt;&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Position&lt;/th&gt;&lt;th&gt;Statements&lt;/th&gt;&lt;th&gt;Count&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;{file.blocks.map((block) =&gt; &lt;tr key={`${block.startLine}:${block.startColumn}`}&gt;&lt;td&gt;{block.startLine}:{block.startColumn}–{block.endLine}:{block.endColumn}&lt;/td&gt;&lt;td&gt;{block.statements}&lt;/td&gt;&lt;td&gt;{block.count}&lt;/td&gt;&lt;/tr&gt;)}&lt;/tbody&gt;&lt;/table&gt;&lt;/details&gt;
-    &lt;/section&gt;}
-    &lt;section aria-label="Terminal recording"&gt;&lt;h2&gt;Actual test execution&lt;/h2&gt;&lt;button onClick={() =&gt; setPlay(!play)}&gt;{play ? 'Pause terminal recording' : 'Play terminal recording'}&lt;/button&gt;&lt;img className="recording" alt={`Terminal execution of ${evidence.name}`} src={`${mediaBase}${play ? 'terminal.gif' : 'poster.png'}`} /&gt;&lt;/section&gt;
+  return &lt;article className="evidence"&gt;&lt;p className="eyebrow"&gt;{evidence.suite} · {evidence.group ? 'test group' : 'individual test'} · {evidence.sha.slice(0, 7)}&lt;/p&gt;&lt;h1&gt;{evidence.name}&lt;/h1&gt;
+    &lt;div className="case-panes"&gt;&lt;RecordingPane key={`video-${evidence.id}`} evidence={evidence} mediaBase={mediaBase} /&gt;&lt;CodePane key={`code-${evidence.id}`} evidence={evidence} initialFile={initialFile} onFileChange={onFileChange} /&gt;&lt;AssertionsPane key={`asserts-${evidence.id}`} evidence={evidence} /&gt;&lt;/div&gt;
   &lt;/article&gt;;
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -178,7 +115,7 @@ export function TestEvidence({ evidence, mediaBase, initialFile, onFileChange }:
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-31T12:26:41.862Z
+                at 2026-10-31T17:01:36.263Z
             </div>
         <script src="prettify.js"></script>
         <script>

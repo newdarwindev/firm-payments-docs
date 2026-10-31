@@ -2,10 +2,10 @@
   "id": "exporter-c98dfc08b963b05a",
   "suite": "exporter",
   "name": "TestSelectKeepsOriginalBytesAndCompleteRecords",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/docs/internal/dialog/dialog_test.go#L17",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/internal/dialog/dialog_test.go#L17",
   "package": "github.com/newdarwindev/firm-payments/docs/internal/dialog",
   "command": [
     "go",
@@ -1161,6 +1161,30 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "docs/internal/dialog/dialog_test.go",
+      "label": "Selected test / case body · TestSelectKeepsOriginalBytesAndCompleteRecords",
+      "source": "func TestSelectKeepsOriginalBytesAndCompleteRecords(t *testing.T) {\n\tline := sourceRecord(\"user\", \"amount 5800.5 — Ω \\\\end{document}\")\n\tsource := append([]byte(\"{\\\"type\\\":\\\"session_meta\\\"}\\n\"), line...)\n\tsource = append(source, []byte(\"{\\\"unfinished\\\":\")...)\n\tout, n, err := Select(source)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif n != 1 || !bytes.Equal(out, line) {\n\t\tt.Fatalf(\"changed original record: %s\", out)\n\t}\n\tif _, _, err := Select([]byte(\"broken\\n\")); err == nil {\n\t\tt.Fatal(\"accepted corrupted complete record\")\n\t}\n}",
+      "sha256": "8fce3ec2806da434eae76fbb01e54e60c2ae68a061a5a99259d067e61b4cf7e3",
+      "startLine": 17,
+      "endLine": 31,
+      "assertLines": [
+        23,
+        26,
+        29
+      ]
+    },
+    {
+      "path": "docs/internal/dialog/dialog_test.go",
+      "label": "Referenced test helper (static call graph) · sourceRecord",
+      "source": "func sourceRecord(role, text string) []byte {\n\tb, _ := json.Marshal(map[string]any{\"type\": \"response_item\", \"payload\": map[string]any{\"type\": \"message\", \"role\": role, \"content\": []map[string]string{{\"type\": \"input_text\", \"text\": text}}}})\n\treturn append(b, '\\n')\n}",
+      "sha256": "8fce3ec2806da434eae76fbb01e54e60c2ae68a061a5a99259d067e61b4cf7e3",
+      "startLine": 12,
+      "endLine": 15,
+      "assertLines": []
+    }
+  ],
   "profileSHA256": "6155847b19cc77245780f1263306c9476a182ba75b508ad2c33248750ee41419",
-  "gifSHA256": "e4cd4729a37c54a9c6baf32e0ca30f0a2e91479d948996f45ea338c99cbe51a5"
+  "gifSHA256": "3062f861a2d5e4ad7da9bbfa2125c8bcb7618c410d847e0ccacbe5c5488e2343"
 }

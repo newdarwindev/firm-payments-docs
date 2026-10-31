@@ -2,10 +2,10 @@
   "id": "functional-f1f2871ebe9926d9",
   "suite": "functional",
   "name": "HealthAndReadiness",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "Both API and both ledger processes return 200 for liveness and readiness.",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L175",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tests/functional/payments_test.go#L175",
   "package": "",
   "command": [
     "go",
@@ -1680,6 +1680,48 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "tests/functional/payments_test.go",
+      "label": "Selected test / case body",
+      "source": "\t\t\"HealthAndReadiness\": health,",
+      "sha256": "397e1cfe73a49fc3a8dd780ab0741806cc1c50cfd34e6884d9caf05e24cb6855",
+      "startLine": 175,
+      "endLine": 175,
+      "assertLines": []
+    },
+    {
+      "path": "tests/functional/payments_test.go",
+      "label": "Referenced test helper (static call graph) · health",
+      "source": "func health(t *testing.T) {\n\tt.Helper()\n\tfor _, p := range []*process{suite.apis[0], suite.apis[1], suite.ledgers[0], suite.ledgers[1]} {\n\t\tfor _, path := range []string{\"/healthz\", \"/readyz\"} {\n\t\t\tres, err := request(t.Context(), \"http://\"+p.addr, \"GET\", path, \"\", \"\")\n\t\t\tif err != nil {\n\t\t\t\tt.Fatal(err)\n\t\t\t}\n\t\t\texpect(t, res, 200, \"\")\n\t\t}\n\t}\n}",
+      "sha256": "397e1cfe73a49fc3a8dd780ab0741806cc1c50cfd34e6884d9caf05e24cb6855",
+      "startLine": 561,
+      "endLine": 572,
+      "assertLines": [
+        567
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · expect",
+      "source": "func expect(t *testing.T, got response, status int, code string) {\n\tt.Helper()\n\tif got.Status != status || got.Code != code || (status == 201 && got.Body != \"\") {\n\t\tt.Fatalf(\"response %+v; want %d/%s\", got, status, code)\n\t}\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 374,
+      "endLine": 379,
+      "assertLines": [
+        377
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · request",
+      "source": "func request(ctx context.Context, base, method, path, media, body string) (response, error) {\n\treq, err := http.NewRequestWithContext(ctx, method, base+path, strings.NewReader(body))\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tif media != \"\" {\n\t\treq.Header.Set(\"Content-Type\", media)\n\t}\n\tres, err := suite.client.Do(req)\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tdefer func() { _ = res.Body.Close() }()\n\tdata, err := io.ReadAll(io.LimitReader(res.Body, 2<<20))\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tvar failure struct {\n\t\tError struct {\n\t\t\tCode string `json:\"code\"`\n\t\t}\n\t}\n\tif res.StatusCode != 201 && res.StatusCode != 404 && res.StatusCode != 405 {\n\t\tif err := json.Unmarshal(data, &failure); err != nil {\n\t\t\treturn response{}, err\n\t\t}\n\t}\n\treturn response{res.StatusCode, string(data), failure.Error.Code}, nil\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 328,
+      "endLine": 356,
+      "assertLines": []
+    }
+  ],
   "profileSHA256": "dd06c4c35c9742d91c67304171f872c9246ad3aa29dad2cf22989bc9e1f5ba12",
-  "gifSHA256": "20c8f7f908a303641309b72911cda2c259f6e225fa0e4ab4a566cc85bb2c40ec"
+  "gifSHA256": "b92a803e17091708ff3f63d39cca2b774520245d0ec5f0cb563e70842a43c730"
 }

@@ -2,7 +2,7 @@ go tool test2json -t -p github.com/newdarwindev/firm-payments/tests/functional /
 === RUN   TestFunctional
 === RUN   TestFunctional/RejectMissingAndNullFields
 --- PASS: TestFunctional/RejectMissingAndNullFields (0.01s)
---- PASS: TestFunctional (0.02s)
+--- PASS: TestFunctional (0.01s)
 PASS
 
 Exit status: 0

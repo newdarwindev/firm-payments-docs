@@ -2,6 +2,6 @@ go tool test2json -t -p github.com/newdarwindev/firm-payments/tools/requirements
 === RUN   TestSiteSourceReferencesResolveMethodsAndNamedCases
 --- PASS: TestSiteSourceReferencesResolveMethodsAndNamedCases (0.00s)
 PASS
-coverage: 4.2% of statements
+coverage: 3.5% of statements
 
 Exit status: 0

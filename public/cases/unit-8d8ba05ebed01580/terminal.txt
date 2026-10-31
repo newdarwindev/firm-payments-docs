@@ -3,7 +3,7 @@ go tool test2json -t -p github.com/newdarwindev/firm-payments/tests /home/runner
 === RUN   TestPrePushRejectsUnverifiedTree/missing
 --- PASS: TestPrePushRejectsUnverifiedTree/missing (0.00s)
 === RUN   TestPrePushRejectsUnverifiedTree/stale
---- PASS: TestPrePushRejectsUnverifiedTree/stale (0.00s)
+--- PASS: TestPrePushRejectsUnverifiedTree/stale (0.01s)
 === RUN   TestPrePushRejectsUnverifiedTree/matching
 --- PASS: TestPrePushRejectsUnverifiedTree/matching (0.00s)
 --- PASS: TestPrePushRejectsUnverifiedTree (0.01s)

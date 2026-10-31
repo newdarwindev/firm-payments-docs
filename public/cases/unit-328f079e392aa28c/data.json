@@ -2,10 +2,10 @@
   "id": "unit-328f079e392aa28c",
   "suite": "unit",
   "name": "TestRedirectAndCancellation",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/ledgerclient/client_test.go#L44",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledgerclient/client_test.go#L44",
   "package": "github.com/newdarwindev/firm-payments/internal/ledgerclient",
   "command": [
     "go",
@@ -345,6 +345,23 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "internal/ledgerclient/client_test.go",
+      "label": "Selected test / case body · TestRedirectAndCancellation",
+      "source": "func TestRedirectAndCancellation(t *testing.T) {\n\tvar redirects atomic.Int32\n\ttarget := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) { redirects.Add(1); w.WriteHeader(201) }))\n\tdefer target.Close()\n\tsrv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n\t\thttp.Redirect(w, r, target.URL, http.StatusTemporaryRedirect)\n\t}))\n\tdefer srv.Close()\n\tclient, err := ledgerclient.New(srv.URL)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif err := client.Execute(t.Context(), contracts.BulkRequest{}); !errors.Is(err, contracts.ErrUnavailable) || redirects.Load() != 0 {\n\t\tt.Fatal(\"payment redirect was followed\", err)\n\t}\n\trelease := make(chan struct{})\n\tslow := httptest.NewServer(http.HandlerFunc(func(_ http.ResponseWriter, r *http.Request) {\n\t\tselect {\n\t\tcase <-r.Context().Done():\n\t\tcase <-release:\n\t\t}\n\t}))\n\tdefer slow.Close()\n\tdefer close(release)\n\tclient, err = ledgerclient.New(slow.URL)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tctx, cancel := context.WithTimeout(t.Context(), 20*time.Millisecond)\n\tdefer cancel()\n\tif err := client.Execute(ctx, contracts.BulkRequest{}); !errors.Is(err, context.DeadlineExceeded) {\n\t\tt.Fatalf(\"lost deadline: %v\", err)\n\t}\n\tfor _, url := range []string{\"\", \"file:///tmp/x\", \"http://host/path\", \"http://user:pass@host\", \"http://host?x=1\"} {\n\t\tif _, err := ledgerclient.New(url); err == nil {\n\t\t\tt.Errorf(\"accepted URL %q\", url)\n\t\t}\n\t}\n}",
+      "sha256": "8a044cf344f97053f22d79ace8050ca47342be92bde7207ee927ea255212f547",
+      "startLine": 44,
+      "endLine": 82,
+      "assertLines": [
+        54,
+        57,
+        70,
+        75,
+        79
+      ]
+    }
+  ],
   "profileSHA256": "0e031e4b1824a4b03a2f51989eaa12b539fe7a65865284f967010374ba26cf1c",
-  "gifSHA256": "f437f21ae295038d41519a7ff5b59bdcb1208390b22013f1b9ae52b5614ea629"
+  "gifSHA256": "80a751d0f4e0309172f849befd709594ddcab376552bb00917af9caf6401a3e2"
 }

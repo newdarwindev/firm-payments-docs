@@ -2,10 +2,10 @@
   "id": "functional-8b6b0d4dfe61e9a7",
   "suite": "functional",
   "name": "AcceptedMediaTypes",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "JSON with charset and omitted Content-Type both accept valid requests with exact rows and balances.",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L165",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tests/functional/payments_test.go#L165",
   "package": "",
   "command": [
     "go",
@@ -1680,6 +1680,86 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "tests/functional/payments_test.go",
+      "label": "Selected test / case body",
+      "source": "\t\t\"AcceptedMediaTypes\": func(t *testing.T) {\n\t\t\tfor _, media := range []string{\"application/json; charset=utf-8\", \"\"} {\n\t\t\t\tres, err := request(t.Context(), \"http://\"+suite.apis[0].addr, \"POST\", \"/payments/bulk\", media, encode(t, transfer(\"1\")))\n\t\t\t\tif err != nil {\n\t\t\t\t\tt.Fatal(err)\n\t\t\t\t}\n\t\t\t\texpect(t, res, 201, \"\")\n\t\t\t}\n\t\t\tcheckState(t, []int64{4999800, 50200, 200000}, []record{{1, 2, 100, \"transfer\"}, {1, 2, 100, \"transfer\"}})\n\t\t},",
+      "sha256": "397e1cfe73a49fc3a8dd780ab0741806cc1c50cfd34e6884d9caf05e24cb6855",
+      "startLine": 165,
+      "endLine": 174,
+      "assertLines": [
+        169
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · checkState",
+      "source": "func checkState(t *testing.T, balances []int64, payments []record) {\n\tt.Helper()\n\twant := state{Balances: balances, Payments: payments}\n\tif payments == nil {\n\t\twant.Payments = []record{}\n\t}\n\tif got := snapshot(t); !reflect.DeepEqual(got, want) {\n\t\tt.Fatalf(\"state %+v; want %+v\", got, want)\n\t}\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 312,
+      "endLine": 321,
+      "assertLines": [
+        319
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · encode",
+      "source": "func encode(t *testing.T, b batch) string {\n\tt.Helper()\n\tdata, err := json.Marshal(b)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\treturn string(data)\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 365,
+      "endLine": 372,
+      "assertLines": [
+        369
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · expect",
+      "source": "func expect(t *testing.T, got response, status int, code string) {\n\tt.Helper()\n\tif got.Status != status || got.Code != code || (status == 201 && got.Body != \"\") {\n\t\tt.Fatalf(\"response %+v; want %d/%s\", got, status, code)\n\t}\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 374,
+      "endLine": 379,
+      "assertLines": [
+        377
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · request",
+      "source": "func request(ctx context.Context, base, method, path, media, body string) (response, error) {\n\treq, err := http.NewRequestWithContext(ctx, method, base+path, strings.NewReader(body))\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tif media != \"\" {\n\t\treq.Header.Set(\"Content-Type\", media)\n\t}\n\tres, err := suite.client.Do(req)\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tdefer func() { _ = res.Body.Close() }()\n\tdata, err := io.ReadAll(io.LimitReader(res.Body, 2<<20))\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tvar failure struct {\n\t\tError struct {\n\t\t\tCode string `json:\"code\"`\n\t\t}\n\t}\n\tif res.StatusCode != 201 && res.StatusCode != 404 && res.StatusCode != 405 {\n\t\tif err := json.Unmarshal(data, &failure); err != nil {\n\t\t\treturn response{}, err\n\t\t}\n\t}\n\treturn response{res.StatusCode, string(data), failure.Error.Code}, nil\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 328,
+      "endLine": 356,
+      "assertLines": []
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · transfer",
+      "source": "func transfer(amount string) batch { return batch{payer, []entry{{amount, lopez, \"transfer\"}}} }",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 373,
+      "endLine": 373,
+      "assertLines": []
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · snapshot",
+      "source": "func snapshot(t *testing.T) state {\n\tt.Helper()\n\tctx, cancel := context.WithTimeout(t.Context(), 5*time.Second)\n\tdefer cancel()\n\ts := state{Balances: []int64{}, Payments: []record{}}\n\trows, err := suite.db.Query(ctx, \"SELECT balance_cents FROM firms ORDER BY id\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tfor rows.Next() {\n\t\tvar cents int64\n\t\tif err := rows.Scan(&cents); err != nil {\n\t\t\trows.Close()\n\t\t\tt.Fatal(err)\n\t\t}\n\t\ts.Balances = append(s.Balances, cents)\n\t}\n\trows.Close()\n\tif err := rows.Err(); err != nil {\n\t\tt.Fatal(err)\n\t}\n\trows, err = suite.db.Query(ctx, \"SELECT payer_firm_id,payee_firm_id,amount_cents,description FROM payments ORDER BY id\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tdefer rows.Close()\n\tfor rows.Next() {\n\t\tvar r record\n\t\tif err := rows.Scan(&r.Payer, &r.Payee, &r.Cents, &r.Description); err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t\ts.Payments = append(s.Payments, r)\n\t}\n\tif err := rows.Err(); err != nil {\n\t\tt.Fatal(err)\n\t}\n\treturn s\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 274,
+      "endLine": 311,
+      "assertLines": [
+        281,
+        287,
+        293,
+        297,
+        303,
+        308
+      ]
+    }
+  ],
   "profileSHA256": "fc9f56e48961996226c28818043e24383ab5125a9b58def2b481d34dcf4802f6",
-  "gifSHA256": "ace7f3e1aa55299bc9b8f236cc963036b01e92716d0d1c6cb631c54170ad2f2d"
+  "gifSHA256": "1c8ab7ab1b44074db029f58d82b37dd52c1b3f30e15a46f95cd1f420c481b209"
 }

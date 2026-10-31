@@ -1,571 +1,1303 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuites name="vitest tests" tests="142" failures="0" errors="0" time="24.8788">
-    <testsuite name="generated/exporter-4133126bb0e8d00d.stories.tsx" timestamp="2026-10-31T12:26:41.819Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.277">
-        <testcase classname="generated/exporter-4133126bb0e8d00d.stories.tsx" name="Recorded" time="0.2764">
+<testsuites name="vitest tests" tests="469" failures="0" errors="0" time="82.4438">
+    <testsuite name="generated/exporter-4133126bb0e8d00d.stories.tsx" timestamp="2026-10-31T17:01:36.185Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2725">
+        <testcase classname="generated/exporter-4133126bb0e8d00d.stories.tsx" name="Recorded" time="0.1674">
         </testcase>
+        <testcase classname="generated/exporter-4133126bb0e8d00d.stories.tsx" name="Covered Code" time="0.0778">
+        </testcase>
+        <testcase classname="generated/exporter-4133126bb0e8d00d.stories.tsx" name="Assertions" time="0.0271">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/exporter-4757c985702af3ee.stories.tsx" timestamp="2026-10-31T17:01:36.186Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2587">
+        <testcase classname="generated/exporter-4757c985702af3ee.stories.tsx" name="Recorded" time="0.1464">
+        </testcase>
+        <testcase classname="generated/exporter-4757c985702af3ee.stories.tsx" name="Covered Code" time="0.0746">
+        </testcase>
+        <testcase classname="generated/exporter-4757c985702af3ee.stories.tsx" name="Assertions" time="0.0373">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/exporter-4c9c8477e9416bf6.stories.tsx" timestamp="2026-10-31T17:01:36.187Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2548">
+        <testcase classname="generated/exporter-4c9c8477e9416bf6.stories.tsx" name="Recorded" time="0.1552">
+        </testcase>
+        <testcase classname="generated/exporter-4c9c8477e9416bf6.stories.tsx" name="Covered Code" time="0.0746">
+        </testcase>
+        <testcase classname="generated/exporter-4c9c8477e9416bf6.stories.tsx" name="Assertions" time="0.0248">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/exporter-73cb5e25f5656501.stories.tsx" timestamp="2026-10-31T17:01:36.188Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.4428">
+        <testcase classname="generated/exporter-73cb5e25f5656501.stories.tsx" name="Recorded" time="0.2425">
+        </testcase>
+        <testcase classname="generated/exporter-73cb5e25f5656501.stories.tsx" name="Covered Code" time="0.1534">
+        </testcase>
+        <testcase classname="generated/exporter-73cb5e25f5656501.stories.tsx" name="Assertions" time="0.046">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/exporter-7cbcecf99a07a7c8.stories.tsx" timestamp="2026-10-31T17:01:36.188Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2573">
+        <testcase classname="generated/exporter-7cbcecf99a07a7c8.stories.tsx" name="Recorded" time="0.1578">
+        </testcase>
+        <testcase classname="generated/exporter-7cbcecf99a07a7c8.stories.tsx" name="Covered Code" time="0.0755">
+        </testcase>
+        <testcase classname="generated/exporter-7cbcecf99a07a7c8.stories.tsx" name="Assertions" time="0.0238">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/exporter-8294ce11ff238288.stories.tsx" timestamp="2026-10-31T17:01:36.188Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2577">
+        <testcase classname="generated/exporter-8294ce11ff238288.stories.tsx" name="Recorded" time="0.1448">
+        </testcase>
+        <testcase classname="generated/exporter-8294ce11ff238288.stories.tsx" name="Covered Code" time="0.0864">
+        </testcase>
+        <testcase classname="generated/exporter-8294ce11ff238288.stories.tsx" name="Assertions" time="0.0261">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/exporter-bd668c5cefe03d9b.stories.tsx" timestamp="2026-10-31T17:01:36.189Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.4133">
+        <testcase classname="generated/exporter-bd668c5cefe03d9b.stories.tsx" name="Recorded" time="0.2258">
+        </testcase>
+        <testcase classname="generated/exporter-bd668c5cefe03d9b.stories.tsx" name="Covered Code" time="0.131">
+        </testcase>
+        <testcase classname="generated/exporter-bd668c5cefe03d9b.stories.tsx" name="Assertions" time="0.0561">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/exporter-c98dfc08b963b05a.stories.tsx" timestamp="2026-10-31T17:01:36.189Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2853">
+        <testcase classname="generated/exporter-c98dfc08b963b05a.stories.tsx" name="Recorded" time="0.156">
+        </testcase>
+        <testcase classname="generated/exporter-c98dfc08b963b05a.stories.tsx" name="Covered Code" time="0.1037">
+        </testcase>
+        <testcase classname="generated/exporter-c98dfc08b963b05a.stories.tsx" name="Assertions" time="0.0253">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/exporter-f8baa46c04c481a3.stories.tsx" timestamp="2026-10-31T17:01:36.190Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2555">
+        <testcase classname="generated/exporter-f8baa46c04c481a3.stories.tsx" name="Recorded" time="0.1557">
+        </testcase>
+        <testcase classname="generated/exporter-f8baa46c04c481a3.stories.tsx" name="Covered Code" time="0.073">
+        </testcase>
+        <testcase classname="generated/exporter-f8baa46c04c481a3.stories.tsx" name="Assertions" time="0.0264">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-025c90df1a641210.stories.tsx" timestamp="2026-10-31T17:01:36.190Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1699">
+        <testcase classname="generated/functional-025c90df1a641210.stories.tsx" name="Recorded" time="0.117">
+        </testcase>
+        <testcase classname="generated/functional-025c90df1a641210.stories.tsx" name="Covered Code" time="0.0326">
+        </testcase>
+        <testcase classname="generated/functional-025c90df1a641210.stories.tsx" name="Assertions" time="0.02">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-082f58d39dbccbf9.stories.tsx" timestamp="2026-10-31T17:01:36.190Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2138">
+        <testcase classname="generated/functional-082f58d39dbccbf9.stories.tsx" name="Recorded" time="0.1333">
+        </testcase>
+        <testcase classname="generated/functional-082f58d39dbccbf9.stories.tsx" name="Covered Code" time="0.0509">
+        </testcase>
+        <testcase classname="generated/functional-082f58d39dbccbf9.stories.tsx" name="Assertions" time="0.0293">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-117dc9968cca9c8a.stories.tsx" timestamp="2026-10-31T17:01:36.191Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1572">
+        <testcase classname="generated/functional-117dc9968cca9c8a.stories.tsx" name="Recorded" time="0.1064">
+        </testcase>
+        <testcase classname="generated/functional-117dc9968cca9c8a.stories.tsx" name="Covered Code" time="0.0312">
+        </testcase>
+        <testcase classname="generated/functional-117dc9968cca9c8a.stories.tsx" name="Assertions" time="0.0194">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-16e3534ceac20c81.stories.tsx" timestamp="2026-10-31T17:01:36.191Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1552">
+        <testcase classname="generated/functional-16e3534ceac20c81.stories.tsx" name="Recorded" time="0.104">
+        </testcase>
+        <testcase classname="generated/functional-16e3534ceac20c81.stories.tsx" name="Covered Code" time="0.0302">
+        </testcase>
+        <testcase classname="generated/functional-16e3534ceac20c81.stories.tsx" name="Assertions" time="0.0206">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-1840fc88374217e7.stories.tsx" timestamp="2026-10-31T17:01:36.192Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1734">
+        <testcase classname="generated/functional-1840fc88374217e7.stories.tsx" name="Recorded" time="0.1191">
+        </testcase>
+        <testcase classname="generated/functional-1840fc88374217e7.stories.tsx" name="Covered Code" time="0.0338">
+        </testcase>
+        <testcase classname="generated/functional-1840fc88374217e7.stories.tsx" name="Assertions" time="0.0203">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-1df3a3b6981c9d9c.stories.tsx" timestamp="2026-10-31T17:01:36.192Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2499">
+        <testcase classname="generated/functional-1df3a3b6981c9d9c.stories.tsx" name="Recorded" time="0.1547">
+        </testcase>
+        <testcase classname="generated/functional-1df3a3b6981c9d9c.stories.tsx" name="Covered Code" time="0.048">
+        </testcase>
+        <testcase classname="generated/functional-1df3a3b6981c9d9c.stories.tsx" name="Assertions" time="0.0468">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-1e57fbb4d9c031cc.stories.tsx" timestamp="2026-10-31T17:01:36.192Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2848">
+        <testcase classname="generated/functional-1e57fbb4d9c031cc.stories.tsx" name="Recorded" time="0.1749">
+        </testcase>
+        <testcase classname="generated/functional-1e57fbb4d9c031cc.stories.tsx" name="Covered Code" time="0.0556">
+        </testcase>
+        <testcase classname="generated/functional-1e57fbb4d9c031cc.stories.tsx" name="Assertions" time="0.0539">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-25a3a5437277ea8a.stories.tsx" timestamp="2026-10-31T17:01:36.193Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1848">
+        <testcase classname="generated/functional-25a3a5437277ea8a.stories.tsx" name="Recorded" time="0.1169">
+        </testcase>
+        <testcase classname="generated/functional-25a3a5437277ea8a.stories.tsx" name="Covered Code" time="0.0312">
+        </testcase>
+        <testcase classname="generated/functional-25a3a5437277ea8a.stories.tsx" name="Assertions" time="0.0366">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-27a4f62fc8b88da7.stories.tsx" timestamp="2026-10-31T17:01:36.193Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2623">
+        <testcase classname="generated/functional-27a4f62fc8b88da7.stories.tsx" name="Recorded" time="0.1623">
+        </testcase>
+        <testcase classname="generated/functional-27a4f62fc8b88da7.stories.tsx" name="Covered Code" time="0.0542">
+        </testcase>
+        <testcase classname="generated/functional-27a4f62fc8b88da7.stories.tsx" name="Assertions" time="0.0455">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-2863702ea987afe0.stories.tsx" timestamp="2026-10-31T17:01:36.194Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1558">
+        <testcase classname="generated/functional-2863702ea987afe0.stories.tsx" name="Recorded" time="0.1064">
+        </testcase>
+        <testcase classname="generated/functional-2863702ea987afe0.stories.tsx" name="Covered Code" time="0.0324">
+        </testcase>
+        <testcase classname="generated/functional-2863702ea987afe0.stories.tsx" name="Assertions" time="0.0168">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-295b17c29a6abb43.stories.tsx" timestamp="2026-10-31T17:01:36.194Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1617">
+        <testcase classname="generated/functional-295b17c29a6abb43.stories.tsx" name="Recorded" time="0.1103">
+        </testcase>
+        <testcase classname="generated/functional-295b17c29a6abb43.stories.tsx" name="Covered Code" time="0.0301">
+        </testcase>
+        <testcase classname="generated/functional-295b17c29a6abb43.stories.tsx" name="Assertions" time="0.0209">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-2a63c75db811d8d5.stories.tsx" timestamp="2026-10-31T17:01:36.194Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2387">
+        <testcase classname="generated/functional-2a63c75db811d8d5.stories.tsx" name="Recorded" time="0.1461">
+        </testcase>
+        <testcase classname="generated/functional-2a63c75db811d8d5.stories.tsx" name="Covered Code" time="0.0569">
+        </testcase>
+        <testcase classname="generated/functional-2a63c75db811d8d5.stories.tsx" name="Assertions" time="0.0353">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-2ada5074f6c50bda.stories.tsx" timestamp="2026-10-31T17:01:36.195Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1729">
+        <testcase classname="generated/functional-2ada5074f6c50bda.stories.tsx" name="Recorded" time="0.1173">
+        </testcase>
+        <testcase classname="generated/functional-2ada5074f6c50bda.stories.tsx" name="Covered Code" time="0.0312">
+        </testcase>
+        <testcase classname="generated/functional-2ada5074f6c50bda.stories.tsx" name="Assertions" time="0.0241">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-2bfb869f13e10518.stories.tsx" timestamp="2026-10-31T17:01:36.195Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.178">
+        <testcase classname="generated/functional-2bfb869f13e10518.stories.tsx" name="Recorded" time="0.1182">
+        </testcase>
+        <testcase classname="generated/functional-2bfb869f13e10518.stories.tsx" name="Covered Code" time="0.0334">
+        </testcase>
+        <testcase classname="generated/functional-2bfb869f13e10518.stories.tsx" name="Assertions" time="0.0262">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-2d4e1712739e0447.stories.tsx" timestamp="2026-10-31T17:01:36.196Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2541">
+        <testcase classname="generated/functional-2d4e1712739e0447.stories.tsx" name="Recorded" time="0.16">
+        </testcase>
+        <testcase classname="generated/functional-2d4e1712739e0447.stories.tsx" name="Covered Code" time="0.0566">
+        </testcase>
+        <testcase classname="generated/functional-2d4e1712739e0447.stories.tsx" name="Assertions" time="0.0366">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-2f3a868c006658ac.stories.tsx" timestamp="2026-10-31T17:01:36.196Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1586">
+        <testcase classname="generated/functional-2f3a868c006658ac.stories.tsx" name="Recorded" time="0.1084">
+        </testcase>
+        <testcase classname="generated/functional-2f3a868c006658ac.stories.tsx" name="Covered Code" time="0.0314">
+        </testcase>
+        <testcase classname="generated/functional-2f3a868c006658ac.stories.tsx" name="Assertions" time="0.0185">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-2fc95b7cca2c90a6.stories.tsx" timestamp="2026-10-31T17:01:36.197Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1689">
+        <testcase classname="generated/functional-2fc95b7cca2c90a6.stories.tsx" name="Recorded" time="0.1156">
+        </testcase>
+        <testcase classname="generated/functional-2fc95b7cca2c90a6.stories.tsx" name="Covered Code" time="0.0344">
+        </testcase>
+        <testcase classname="generated/functional-2fc95b7cca2c90a6.stories.tsx" name="Assertions" time="0.0186">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-36d99f291df5b868.stories.tsx" timestamp="2026-10-31T17:01:36.197Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1614">
+        <testcase classname="generated/functional-36d99f291df5b868.stories.tsx" name="Recorded" time="0.1107">
+        </testcase>
+        <testcase classname="generated/functional-36d99f291df5b868.stories.tsx" name="Covered Code" time="0.0313">
+        </testcase>
+        <testcase classname="generated/functional-36d99f291df5b868.stories.tsx" name="Assertions" time="0.019">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-39b60aa163632bc4.stories.tsx" timestamp="2026-10-31T17:01:36.197Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1707">
+        <testcase classname="generated/functional-39b60aa163632bc4.stories.tsx" name="Recorded" time="0.1173">
+        </testcase>
+        <testcase classname="generated/functional-39b60aa163632bc4.stories.tsx" name="Covered Code" time="0.033">
+        </testcase>
+        <testcase classname="generated/functional-39b60aa163632bc4.stories.tsx" name="Assertions" time="0.02">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-3a03eb603821a133.stories.tsx" timestamp="2026-10-31T17:01:36.198Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.169">
+        <testcase classname="generated/functional-3a03eb603821a133.stories.tsx" name="Recorded" time="0.1174">
+        </testcase>
+        <testcase classname="generated/functional-3a03eb603821a133.stories.tsx" name="Covered Code" time="0.0327">
+        </testcase>
+        <testcase classname="generated/functional-3a03eb603821a133.stories.tsx" name="Assertions" time="0.0187">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-3ae383f2188d406f.stories.tsx" timestamp="2026-10-31T17:01:36.198Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1633">
+        <testcase classname="generated/functional-3ae383f2188d406f.stories.tsx" name="Recorded" time="0.1112">
+        </testcase>
+        <testcase classname="generated/functional-3ae383f2188d406f.stories.tsx" name="Covered Code" time="0.0325">
+        </testcase>
+        <testcase classname="generated/functional-3ae383f2188d406f.stories.tsx" name="Assertions" time="0.0193">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-3b9dd1132acb005c.stories.tsx" timestamp="2026-10-31T17:01:36.199Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1593">
+        <testcase classname="generated/functional-3b9dd1132acb005c.stories.tsx" name="Recorded" time="0.1085">
+        </testcase>
+        <testcase classname="generated/functional-3b9dd1132acb005c.stories.tsx" name="Covered Code" time="0.0303">
+        </testcase>
+        <testcase classname="generated/functional-3b9dd1132acb005c.stories.tsx" name="Assertions" time="0.0202">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-45be0104681f2244.stories.tsx" timestamp="2026-10-31T17:01:36.200Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2455">
+        <testcase classname="generated/functional-45be0104681f2244.stories.tsx" name="Recorded" time="0.1528">
+        </testcase>
+        <testcase classname="generated/functional-45be0104681f2244.stories.tsx" name="Covered Code" time="0.0482">
+        </testcase>
+        <testcase classname="generated/functional-45be0104681f2244.stories.tsx" name="Assertions" time="0.0436">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-4bc1f03569d00c48.stories.tsx" timestamp="2026-10-31T17:01:36.200Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.185">
+        <testcase classname="generated/functional-4bc1f03569d00c48.stories.tsx" name="Recorded" time="0.1141">
+        </testcase>
+        <testcase classname="generated/functional-4bc1f03569d00c48.stories.tsx" name="Covered Code" time="0.0342">
+        </testcase>
+        <testcase classname="generated/functional-4bc1f03569d00c48.stories.tsx" name="Assertions" time="0.0364">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-5e60f356c43b7103.stories.tsx" timestamp="2026-10-31T17:01:36.201Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1559">
+        <testcase classname="generated/functional-5e60f356c43b7103.stories.tsx" name="Recorded" time="0.0991">
+        </testcase>
+        <testcase classname="generated/functional-5e60f356c43b7103.stories.tsx" name="Covered Code" time="0.0324">
+        </testcase>
+        <testcase classname="generated/functional-5e60f356c43b7103.stories.tsx" name="Assertions" time="0.024">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-5f02d36053cf22ec.stories.tsx" timestamp="2026-10-31T17:01:36.201Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2243">
+        <testcase classname="generated/functional-5f02d36053cf22ec.stories.tsx" name="Recorded" time="0.1415">
+        </testcase>
+        <testcase classname="generated/functional-5f02d36053cf22ec.stories.tsx" name="Covered Code" time="0.0459">
+        </testcase>
+        <testcase classname="generated/functional-5f02d36053cf22ec.stories.tsx" name="Assertions" time="0.0365">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-5fc061df767ffd58.stories.tsx" timestamp="2026-10-31T17:01:36.201Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2587">
+        <testcase classname="generated/functional-5fc061df767ffd58.stories.tsx" name="Recorded" time="0.1621">
+        </testcase>
+        <testcase classname="generated/functional-5fc061df767ffd58.stories.tsx" name="Covered Code" time="0.0507">
+        </testcase>
+        <testcase classname="generated/functional-5fc061df767ffd58.stories.tsx" name="Assertions" time="0.0457">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-62267021ded86473.stories.tsx" timestamp="2026-10-31T17:01:36.202Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1684">
+        <testcase classname="generated/functional-62267021ded86473.stories.tsx" name="Recorded" time="0.1172">
+        </testcase>
+        <testcase classname="generated/functional-62267021ded86473.stories.tsx" name="Covered Code" time="0.0314">
+        </testcase>
+        <testcase classname="generated/functional-62267021ded86473.stories.tsx" name="Assertions" time="0.0194">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-63b0ada9fbd41fb9.stories.tsx" timestamp="2026-10-31T17:01:36.202Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1666">
+        <testcase classname="generated/functional-63b0ada9fbd41fb9.stories.tsx" name="Recorded" time="0.1098">
+        </testcase>
+        <testcase classname="generated/functional-63b0ada9fbd41fb9.stories.tsx" name="Covered Code" time="0.0331">
+        </testcase>
+        <testcase classname="generated/functional-63b0ada9fbd41fb9.stories.tsx" name="Assertions" time="0.0234">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-65e16743f7299b65.stories.tsx" timestamp="2026-10-31T17:01:36.202Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1625">
+        <testcase classname="generated/functional-65e16743f7299b65.stories.tsx" name="Recorded" time="0.1109">
+        </testcase>
+        <testcase classname="generated/functional-65e16743f7299b65.stories.tsx" name="Covered Code" time="0.0323">
+        </testcase>
+        <testcase classname="generated/functional-65e16743f7299b65.stories.tsx" name="Assertions" time="0.0191">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/exporter-4757c985702af3ee.stories.tsx" timestamp="2026-10-31T12:26:41.820Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.3263">
-        <testcase classname="generated/exporter-4757c985702af3ee.stories.tsx" name="Recorded" time="0.3254">
+    <testsuite name="generated/functional-67de03dbbce2cd93.stories.tsx" timestamp="2026-10-31T17:01:36.203Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1643">
+        <testcase classname="generated/functional-67de03dbbce2cd93.stories.tsx" name="Recorded" time="0.1137">
+        </testcase>
+        <testcase classname="generated/functional-67de03dbbce2cd93.stories.tsx" name="Covered Code" time="0.0301">
+        </testcase>
+        <testcase classname="generated/functional-67de03dbbce2cd93.stories.tsx" name="Assertions" time="0.0202">
+        </testcase>
+    </testsuite>
+    <testsuite name="generated/functional-6aae47aecdfa91a6.stories.tsx" timestamp="2026-10-31T17:01:36.203Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1794">
+        <testcase classname="generated/functional-6aae47aecdfa91a6.stories.tsx" name="Recorded" time="0.1098">
+        </testcase>
+        <testcase classname="generated/functional-6aae47aecdfa91a6.stories.tsx" name="Covered Code" time="0.0461">
+        </testcase>
+        <testcase classname="generated/functional-6aae47aecdfa91a6.stories.tsx" name="Assertions" time="0.0231">
         </testcase>
     </testsuite>
-    <testsuite name="generated/exporter-4c9c8477e9416bf6.stories.tsx" timestamp="2026-10-31T12:26:41.820Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2691">
-        <testcase classname="generated/exporter-4c9c8477e9416bf6.stories.tsx" name="Recorded" time="0.2681">
+    <testsuite name="generated/functional-737e3e9a8b441f32.stories.tsx" timestamp="2026-10-31T17:01:36.204Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1711">
+        <testcase classname="generated/functional-737e3e9a8b441f32.stories.tsx" name="Recorded" time="0.1149">
         </testcase>
+        <testcase classname="generated/functional-737e3e9a8b441f32.stories.tsx" name="Covered Code" time="0.0332">
+        </testcase>
+        <testcase classname="generated/functional-737e3e9a8b441f32.stories.tsx" name="Assertions" time="0.0228">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/exporter-73cb5e25f5656501.stories.tsx" timestamp="2026-10-31T12:26:41.820Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2539">
-        <testcase classname="generated/exporter-73cb5e25f5656501.stories.tsx" name="Recorded" time="0.2531">
+    <testsuite name="generated/functional-7a6dc5a0ddd841b3.stories.tsx" timestamp="2026-10-31T17:01:36.205Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2399">
+        <testcase classname="generated/functional-7a6dc5a0ddd841b3.stories.tsx" name="Recorded" time="0.1498">
         </testcase>
+        <testcase classname="generated/functional-7a6dc5a0ddd841b3.stories.tsx" name="Covered Code" time="0.0496">
+        </testcase>
+        <testcase classname="generated/functional-7a6dc5a0ddd841b3.stories.tsx" name="Assertions" time="0.0401">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/exporter-7cbcecf99a07a7c8.stories.tsx" timestamp="2026-10-31T12:26:41.820Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2671">
-        <testcase classname="generated/exporter-7cbcecf99a07a7c8.stories.tsx" name="Recorded" time="0.2664">
+    <testsuite name="generated/functional-7f1620c211942327.stories.tsx" timestamp="2026-10-31T17:01:36.205Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1671">
+        <testcase classname="generated/functional-7f1620c211942327.stories.tsx" name="Recorded" time="0.1158">
+        </testcase>
+        <testcase classname="generated/functional-7f1620c211942327.stories.tsx" name="Covered Code" time="0.0311">
         </testcase>
+        <testcase classname="generated/functional-7f1620c211942327.stories.tsx" name="Assertions" time="0.0198">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/exporter-8294ce11ff238288.stories.tsx" timestamp="2026-10-31T12:26:41.821Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2788">
-        <testcase classname="generated/exporter-8294ce11ff238288.stories.tsx" name="Recorded" time="0.2784">
+    <testsuite name="generated/functional-806e881c9ad6365d.stories.tsx" timestamp="2026-10-31T17:01:36.205Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2214">
+        <testcase classname="generated/functional-806e881c9ad6365d.stories.tsx" name="Recorded" time="0.1414">
+        </testcase>
+        <testcase classname="generated/functional-806e881c9ad6365d.stories.tsx" name="Covered Code" time="0.0539">
+        </testcase>
+        <testcase classname="generated/functional-806e881c9ad6365d.stories.tsx" name="Assertions" time="0.0255">
         </testcase>
     </testsuite>
-    <testsuite name="generated/exporter-bd668c5cefe03d9b.stories.tsx" timestamp="2026-10-31T12:26:41.821Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.3993">
-        <testcase classname="generated/exporter-bd668c5cefe03d9b.stories.tsx" name="Recorded" time="0.3987">
+    <testsuite name="generated/functional-853c53e7a2657ea6.stories.tsx" timestamp="2026-10-31T17:01:36.206Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1824">
+        <testcase classname="generated/functional-853c53e7a2657ea6.stories.tsx" name="Recorded" time="0.1153">
         </testcase>
+        <testcase classname="generated/functional-853c53e7a2657ea6.stories.tsx" name="Covered Code" time="0.0446">
+        </testcase>
+        <testcase classname="generated/functional-853c53e7a2657ea6.stories.tsx" name="Assertions" time="0.0223">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/exporter-c98dfc08b963b05a.stories.tsx" timestamp="2026-10-31T12:26:41.822Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2657">
-        <testcase classname="generated/exporter-c98dfc08b963b05a.stories.tsx" name="Recorded" time="0.2644">
+    <testsuite name="generated/functional-8b6b0d4dfe61e9a7.stories.tsx" timestamp="2026-10-31T17:01:36.206Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1778">
+        <testcase classname="generated/functional-8b6b0d4dfe61e9a7.stories.tsx" name="Recorded" time="0.1195">
+        </testcase>
+        <testcase classname="generated/functional-8b6b0d4dfe61e9a7.stories.tsx" name="Covered Code" time="0.0318">
         </testcase>
+        <testcase classname="generated/functional-8b6b0d4dfe61e9a7.stories.tsx" name="Assertions" time="0.0264">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/exporter-f8baa46c04c481a3.stories.tsx" timestamp="2026-10-31T12:26:41.822Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2738">
-        <testcase classname="generated/exporter-f8baa46c04c481a3.stories.tsx" name="Recorded" time="0.2728">
+    <testsuite name="generated/functional-8f748fa6ad096784.stories.tsx" timestamp="2026-10-31T17:01:36.207Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.156">
+        <testcase classname="generated/functional-8f748fa6ad096784.stories.tsx" name="Recorded" time="0.1055">
+        </testcase>
+        <testcase classname="generated/functional-8f748fa6ad096784.stories.tsx" name="Covered Code" time="0.0301">
+        </testcase>
+        <testcase classname="generated/functional-8f748fa6ad096784.stories.tsx" name="Assertions" time="0.02">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-025c90df1a641210.stories.tsx" timestamp="2026-10-31T12:26:41.822Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1457">
-        <testcase classname="generated/functional-025c90df1a641210.stories.tsx" name="Recorded" time="0.1448">
+    <testsuite name="generated/functional-913c4340f75419a8.stories.tsx" timestamp="2026-10-31T17:01:36.207Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1668">
+        <testcase classname="generated/functional-913c4340f75419a8.stories.tsx" name="Recorded" time="0.1147">
         </testcase>
+        <testcase classname="generated/functional-913c4340f75419a8.stories.tsx" name="Covered Code" time="0.0315">
+        </testcase>
+        <testcase classname="generated/functional-913c4340f75419a8.stories.tsx" name="Assertions" time="0.0204">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-082f58d39dbccbf9.stories.tsx" timestamp="2026-10-31T12:26:41.823Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1228">
-        <testcase classname="generated/functional-082f58d39dbccbf9.stories.tsx" name="Recorded" time="0.1221">
+    <testsuite name="generated/functional-95aeb2e2ce5063cd.stories.tsx" timestamp="2026-10-31T17:01:36.207Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1754">
+        <testcase classname="generated/functional-95aeb2e2ce5063cd.stories.tsx" name="Recorded" time="0.1135">
+        </testcase>
+        <testcase classname="generated/functional-95aeb2e2ce5063cd.stories.tsx" name="Covered Code" time="0.0409">
         </testcase>
+        <testcase classname="generated/functional-95aeb2e2ce5063cd.stories.tsx" name="Assertions" time="0.0208">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-117dc9968cca9c8a.stories.tsx" timestamp="2026-10-31T12:26:41.823Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1521">
-        <testcase classname="generated/functional-117dc9968cca9c8a.stories.tsx" name="Recorded" time="0.1514">
+    <testsuite name="generated/functional-979f0da351a4d102.stories.tsx" timestamp="2026-10-31T17:01:36.208Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1769">
+        <testcase classname="generated/functional-979f0da351a4d102.stories.tsx" name="Recorded" time="0.122">
+        </testcase>
+        <testcase classname="generated/functional-979f0da351a4d102.stories.tsx" name="Covered Code" time="0.0341">
+        </testcase>
+        <testcase classname="generated/functional-979f0da351a4d102.stories.tsx" name="Assertions" time="0.0205">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-16e3534ceac20c81.stories.tsx" timestamp="2026-10-31T12:26:41.823Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1113">
-        <testcase classname="generated/functional-16e3534ceac20c81.stories.tsx" name="Recorded" time="0.1107">
+    <testsuite name="generated/functional-9b4d05dd1985b013.stories.tsx" timestamp="2026-10-31T17:01:36.208Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1634">
+        <testcase classname="generated/functional-9b4d05dd1985b013.stories.tsx" name="Recorded" time="0.113">
         </testcase>
+        <testcase classname="generated/functional-9b4d05dd1985b013.stories.tsx" name="Covered Code" time="0.0318">
+        </testcase>
+        <testcase classname="generated/functional-9b4d05dd1985b013.stories.tsx" name="Assertions" time="0.0182">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-1840fc88374217e7.stories.tsx" timestamp="2026-10-31T12:26:41.823Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1134">
-        <testcase classname="generated/functional-1840fc88374217e7.stories.tsx" name="Recorded" time="0.1126">
+    <testsuite name="generated/functional-9fb5f4717acb9bf6.stories.tsx" timestamp="2026-10-31T17:01:36.208Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1715">
+        <testcase classname="generated/functional-9fb5f4717acb9bf6.stories.tsx" name="Recorded" time="0.1191">
+        </testcase>
+        <testcase classname="generated/functional-9fb5f4717acb9bf6.stories.tsx" name="Covered Code" time="0.0307">
         </testcase>
+        <testcase classname="generated/functional-9fb5f4717acb9bf6.stories.tsx" name="Assertions" time="0.0214">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-1df3a3b6981c9d9c.stories.tsx" timestamp="2026-10-31T12:26:41.824Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.184">
-        <testcase classname="generated/functional-1df3a3b6981c9d9c.stories.tsx" name="Recorded" time="0.1831">
+    <testsuite name="generated/functional-a3ba4fd1dbc68bcc.stories.tsx" timestamp="2026-10-31T17:01:36.209Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1795">
+        <testcase classname="generated/functional-a3ba4fd1dbc68bcc.stories.tsx" name="Recorded" time="0.126">
+        </testcase>
+        <testcase classname="generated/functional-a3ba4fd1dbc68bcc.stories.tsx" name="Covered Code" time="0.03">
         </testcase>
+        <testcase classname="generated/functional-a3ba4fd1dbc68bcc.stories.tsx" name="Assertions" time="0.0232">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-1e57fbb4d9c031cc.stories.tsx" timestamp="2026-10-31T12:26:41.824Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1683">
-        <testcase classname="generated/functional-1e57fbb4d9c031cc.stories.tsx" name="Recorded" time="0.1677">
+    <testsuite name="generated/functional-a7dd6b053a705fd4.stories.tsx" timestamp="2026-10-31T17:01:36.209Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1683">
+        <testcase classname="generated/functional-a7dd6b053a705fd4.stories.tsx" name="Recorded" time="0.1169">
+        </testcase>
+        <testcase classname="generated/functional-a7dd6b053a705fd4.stories.tsx" name="Covered Code" time="0.0305">
+        </testcase>
+        <testcase classname="generated/functional-a7dd6b053a705fd4.stories.tsx" name="Assertions" time="0.0206">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-25a3a5437277ea8a.stories.tsx" timestamp="2026-10-31T12:26:41.824Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1238">
-        <testcase classname="generated/functional-25a3a5437277ea8a.stories.tsx" name="Recorded" time="0.1232">
+    <testsuite name="generated/functional-ab06070789234139.stories.tsx" timestamp="2026-10-31T17:01:36.209Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2619">
+        <testcase classname="generated/functional-ab06070789234139.stories.tsx" name="Recorded" time="0.1706">
         </testcase>
+        <testcase classname="generated/functional-ab06070789234139.stories.tsx" name="Covered Code" time="0.0552">
+        </testcase>
+        <testcase classname="generated/functional-ab06070789234139.stories.tsx" name="Assertions" time="0.0358">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-27a4f62fc8b88da7.stories.tsx" timestamp="2026-10-31T12:26:41.825Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1804">
-        <testcase classname="generated/functional-27a4f62fc8b88da7.stories.tsx" name="Recorded" time="0.1797">
+    <testsuite name="generated/functional-ab9973d088231866.stories.tsx" timestamp="2026-10-31T17:01:36.210Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2437">
+        <testcase classname="generated/functional-ab9973d088231866.stories.tsx" name="Recorded" time="0.1554">
+        </testcase>
+        <testcase classname="generated/functional-ab9973d088231866.stories.tsx" name="Covered Code" time="0.0536">
         </testcase>
+        <testcase classname="generated/functional-ab9973d088231866.stories.tsx" name="Assertions" time="0.0341">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-2863702ea987afe0.stories.tsx" timestamp="2026-10-31T12:26:41.825Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1194">
-        <testcase classname="generated/functional-2863702ea987afe0.stories.tsx" name="Recorded" time="0.118">
+    <testsuite name="generated/functional-ac86a67f1147e19b.stories.tsx" timestamp="2026-10-31T17:01:36.210Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1618">
+        <testcase classname="generated/functional-ac86a67f1147e19b.stories.tsx" name="Recorded" time="0.1047">
+        </testcase>
+        <testcase classname="generated/functional-ac86a67f1147e19b.stories.tsx" name="Covered Code" time="0.0313">
+        </testcase>
+        <testcase classname="generated/functional-ac86a67f1147e19b.stories.tsx" name="Assertions" time="0.0256">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-295b17c29a6abb43.stories.tsx" timestamp="2026-10-31T12:26:41.825Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1436">
-        <testcase classname="generated/functional-295b17c29a6abb43.stories.tsx" name="Recorded" time="0.1428">
+    <testsuite name="generated/functional-af5ef40ab8e2dac7.stories.tsx" timestamp="2026-10-31T17:01:36.211Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.18">
+        <testcase classname="generated/functional-af5ef40ab8e2dac7.stories.tsx" name="Recorded" time="0.1274">
         </testcase>
+        <testcase classname="generated/functional-af5ef40ab8e2dac7.stories.tsx" name="Covered Code" time="0.0332">
+        </testcase>
+        <testcase classname="generated/functional-af5ef40ab8e2dac7.stories.tsx" name="Assertions" time="0.019">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-2a63c75db811d8d5.stories.tsx" timestamp="2026-10-31T12:26:41.825Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1722">
-        <testcase classname="generated/functional-2a63c75db811d8d5.stories.tsx" name="Recorded" time="0.1715">
+    <testsuite name="generated/functional-b055649965c4ce38.stories.tsx" timestamp="2026-10-31T17:01:36.211Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1667">
+        <testcase classname="generated/functional-b055649965c4ce38.stories.tsx" name="Recorded" time="0.1139">
         </testcase>
+        <testcase classname="generated/functional-b055649965c4ce38.stories.tsx" name="Covered Code" time="0.0297">
+        </testcase>
+        <testcase classname="generated/functional-b055649965c4ce38.stories.tsx" name="Assertions" time="0.0228">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-2ada5074f6c50bda.stories.tsx" timestamp="2026-10-31T12:26:41.826Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1497">
-        <testcase classname="generated/functional-2ada5074f6c50bda.stories.tsx" name="Recorded" time="0.1486">
+    <testsuite name="generated/functional-b4d930405d4c86ac.stories.tsx" timestamp="2026-10-31T17:01:36.211Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2374">
+        <testcase classname="generated/functional-b4d930405d4c86ac.stories.tsx" name="Recorded" time="0.1485">
+        </testcase>
+        <testcase classname="generated/functional-b4d930405d4c86ac.stories.tsx" name="Covered Code" time="0.0505">
         </testcase>
+        <testcase classname="generated/functional-b4d930405d4c86ac.stories.tsx" name="Assertions" time="0.038">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-2bfb869f13e10518.stories.tsx" timestamp="2026-10-31T12:26:41.826Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.143">
-        <testcase classname="generated/functional-2bfb869f13e10518.stories.tsx" name="Recorded" time="0.1422">
+    <testsuite name="generated/functional-b61b5dc4e22e3ffb.stories.tsx" timestamp="2026-10-31T17:01:36.212Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2314">
+        <testcase classname="generated/functional-b61b5dc4e22e3ffb.stories.tsx" name="Recorded" time="0.1664">
+        </testcase>
+        <testcase classname="generated/functional-b61b5dc4e22e3ffb.stories.tsx" name="Covered Code" time="0.0405">
+        </testcase>
+        <testcase classname="generated/functional-b61b5dc4e22e3ffb.stories.tsx" name="Assertions" time="0.0241">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-2d4e1712739e0447.stories.tsx" timestamp="2026-10-31T12:26:41.826Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.127">
-        <testcase classname="generated/functional-2d4e1712739e0447.stories.tsx" name="Recorded" time="0.1264">
+    <testsuite name="generated/functional-bcc0ad45683f4623.stories.tsx" timestamp="2026-10-31T17:01:36.212Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1707">
+        <testcase classname="generated/functional-bcc0ad45683f4623.stories.tsx" name="Recorded" time="0.1173">
         </testcase>
+        <testcase classname="generated/functional-bcc0ad45683f4623.stories.tsx" name="Covered Code" time="0.0334">
+        </testcase>
+        <testcase classname="generated/functional-bcc0ad45683f4623.stories.tsx" name="Assertions" time="0.0196">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-2f3a868c006658ac.stories.tsx" timestamp="2026-10-31T12:26:41.827Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1147">
-        <testcase classname="generated/functional-2f3a868c006658ac.stories.tsx" name="Recorded" time="0.114">
+    <testsuite name="generated/functional-beb6faf1cd6fc5b6.stories.tsx" timestamp="2026-10-31T17:01:36.212Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1729">
+        <testcase classname="generated/functional-beb6faf1cd6fc5b6.stories.tsx" name="Recorded" time="0.1137">
+        </testcase>
+        <testcase classname="generated/functional-beb6faf1cd6fc5b6.stories.tsx" name="Covered Code" time="0.0365">
         </testcase>
+        <testcase classname="generated/functional-beb6faf1cd6fc5b6.stories.tsx" name="Assertions" time="0.0224">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-2fc95b7cca2c90a6.stories.tsx" timestamp="2026-10-31T12:26:41.827Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1499">
-        <testcase classname="generated/functional-2fc95b7cca2c90a6.stories.tsx" name="Recorded" time="0.1493">
+    <testsuite name="generated/functional-bf6ddeb1959f2577.stories.tsx" timestamp="2026-10-31T17:01:36.213Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.189">
+        <testcase classname="generated/functional-bf6ddeb1959f2577.stories.tsx" name="Recorded" time="0.1237">
+        </testcase>
+        <testcase classname="generated/functional-bf6ddeb1959f2577.stories.tsx" name="Covered Code" time="0.0308">
         </testcase>
+        <testcase classname="generated/functional-bf6ddeb1959f2577.stories.tsx" name="Assertions" time="0.0343">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-36d99f291df5b868.stories.tsx" timestamp="2026-10-31T12:26:41.827Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1171">
-        <testcase classname="generated/functional-36d99f291df5b868.stories.tsx" name="Recorded" time="0.1165">
+    <testsuite name="generated/functional-c824fc4222212b24.stories.tsx" timestamp="2026-10-31T17:01:36.213Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2522">
+        <testcase classname="generated/functional-c824fc4222212b24.stories.tsx" name="Recorded" time="0.1965">
+        </testcase>
+        <testcase classname="generated/functional-c824fc4222212b24.stories.tsx" name="Covered Code" time="0.0337">
+        </testcase>
+        <testcase classname="generated/functional-c824fc4222212b24.stories.tsx" name="Assertions" time="0.0217">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-39b60aa163632bc4.stories.tsx" timestamp="2026-10-31T12:26:41.827Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1167">
-        <testcase classname="generated/functional-39b60aa163632bc4.stories.tsx" name="Recorded" time="0.1158">
+    <testsuite name="generated/functional-d1c2c0b71770de59.stories.tsx" timestamp="2026-10-31T17:01:36.214Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1739">
+        <testcase classname="generated/functional-d1c2c0b71770de59.stories.tsx" name="Recorded" time="0.1148">
         </testcase>
+        <testcase classname="generated/functional-d1c2c0b71770de59.stories.tsx" name="Covered Code" time="0.0327">
+        </testcase>
+        <testcase classname="generated/functional-d1c2c0b71770de59.stories.tsx" name="Assertions" time="0.0261">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-3a03eb603821a133.stories.tsx" timestamp="2026-10-31T12:26:41.828Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1221">
-        <testcase classname="generated/functional-3a03eb603821a133.stories.tsx" name="Recorded" time="0.1213">
+    <testsuite name="generated/functional-e2aa479beb89e819.stories.tsx" timestamp="2026-10-31T17:01:36.215Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2523">
+        <testcase classname="generated/functional-e2aa479beb89e819.stories.tsx" name="Recorded" time="0.1605">
+        </testcase>
+        <testcase classname="generated/functional-e2aa479beb89e819.stories.tsx" name="Covered Code" time="0.0529">
         </testcase>
+        <testcase classname="generated/functional-e2aa479beb89e819.stories.tsx" name="Assertions" time="0.0386">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-3ae383f2188d406f.stories.tsx" timestamp="2026-10-31T12:26:41.828Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1489">
-        <testcase classname="generated/functional-3ae383f2188d406f.stories.tsx" name="Recorded" time="0.1483">
+    <testsuite name="generated/functional-e4f6394b6e1d711a.stories.tsx" timestamp="2026-10-31T17:01:36.215Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1637">
+        <testcase classname="generated/functional-e4f6394b6e1d711a.stories.tsx" name="Recorded" time="0.1102">
+        </testcase>
+        <testcase classname="generated/functional-e4f6394b6e1d711a.stories.tsx" name="Covered Code" time="0.0332">
+        </testcase>
+        <testcase classname="generated/functional-e4f6394b6e1d711a.stories.tsx" name="Assertions" time="0.02">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-3b9dd1132acb005c.stories.tsx" timestamp="2026-10-31T12:26:41.828Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1154">
-        <testcase classname="generated/functional-3b9dd1132acb005c.stories.tsx" name="Recorded" time="0.1148">
+    <testsuite name="generated/functional-ec5547a7de94ea92.stories.tsx" timestamp="2026-10-31T17:01:36.216Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2494">
+        <testcase classname="generated/functional-ec5547a7de94ea92.stories.tsx" name="Recorded" time="0.1626">
         </testcase>
+        <testcase classname="generated/functional-ec5547a7de94ea92.stories.tsx" name="Covered Code" time="0.0448">
+        </testcase>
+        <testcase classname="generated/functional-ec5547a7de94ea92.stories.tsx" name="Assertions" time="0.0416">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-45be0104681f2244.stories.tsx" timestamp="2026-10-31T12:26:41.828Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1292">
-        <testcase classname="generated/functional-45be0104681f2244.stories.tsx" name="Recorded" time="0.1285">
+    <testsuite name="generated/functional-ef9cb719435bc53a.stories.tsx" timestamp="2026-10-31T17:01:36.216Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1729">
+        <testcase classname="generated/functional-ef9cb719435bc53a.stories.tsx" name="Recorded" time="0.1161">
+        </testcase>
+        <testcase classname="generated/functional-ef9cb719435bc53a.stories.tsx" name="Covered Code" time="0.0327">
         </testcase>
+        <testcase classname="generated/functional-ef9cb719435bc53a.stories.tsx" name="Assertions" time="0.024">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-4bc1f03569d00c48.stories.tsx" timestamp="2026-10-31T12:26:41.829Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1123">
-        <testcase classname="generated/functional-4bc1f03569d00c48.stories.tsx" name="Recorded" time="0.1117">
+    <testsuite name="generated/functional-f1f2871ebe9926d9.stories.tsx" timestamp="2026-10-31T17:01:36.217Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1591">
+        <testcase classname="generated/functional-f1f2871ebe9926d9.stories.tsx" name="Recorded" time="0.1092">
+        </testcase>
+        <testcase classname="generated/functional-f1f2871ebe9926d9.stories.tsx" name="Covered Code" time="0.0319">
+        </testcase>
+        <testcase classname="generated/functional-f1f2871ebe9926d9.stories.tsx" name="Assertions" time="0.0177">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-5e60f356c43b7103.stories.tsx" timestamp="2026-10-31T12:26:41.829Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1114">
-        <testcase classname="generated/functional-5e60f356c43b7103.stories.tsx" name="Recorded" time="0.1109">
+    <testsuite name="generated/functional-f7314bcd5330bb9f.stories.tsx" timestamp="2026-10-31T17:01:36.218Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1686">
+        <testcase classname="generated/functional-f7314bcd5330bb9f.stories.tsx" name="Recorded" time="0.116">
         </testcase>
+        <testcase classname="generated/functional-f7314bcd5330bb9f.stories.tsx" name="Covered Code" time="0.0328">
+        </testcase>
+        <testcase classname="generated/functional-f7314bcd5330bb9f.stories.tsx" name="Assertions" time="0.0196">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-5f02d36053cf22ec.stories.tsx" timestamp="2026-10-31T12:26:41.829Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1658">
-        <testcase classname="generated/functional-5f02d36053cf22ec.stories.tsx" name="Recorded" time="0.1653">
+    <testsuite name="generated/functional-f987b4e66e6f5620.stories.tsx" timestamp="2026-10-31T17:01:36.218Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1767">
+        <testcase classname="generated/functional-f987b4e66e6f5620.stories.tsx" name="Recorded" time="0.1189">
+        </testcase>
+        <testcase classname="generated/functional-f987b4e66e6f5620.stories.tsx" name="Covered Code" time="0.0391">
         </testcase>
+        <testcase classname="generated/functional-f987b4e66e6f5620.stories.tsx" name="Assertions" time="0.0185">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-5fc061df767ffd58.stories.tsx" timestamp="2026-10-31T12:26:41.829Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1093">
-        <testcase classname="generated/functional-5fc061df767ffd58.stories.tsx" name="Recorded" time="0.1087">
+    <testsuite name="generated/functional-fbad68574810439d.stories.tsx" timestamp="2026-10-31T17:01:36.219Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.161">
+        <testcase classname="generated/functional-fbad68574810439d.stories.tsx" name="Recorded" time="0.1106">
+        </testcase>
+        <testcase classname="generated/functional-fbad68574810439d.stories.tsx" name="Covered Code" time="0.0302">
+        </testcase>
+        <testcase classname="generated/functional-fbad68574810439d.stories.tsx" name="Assertions" time="0.02">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-62267021ded86473.stories.tsx" timestamp="2026-10-31T12:26:41.829Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1136">
-        <testcase classname="generated/functional-62267021ded86473.stories.tsx" name="Recorded" time="0.113">
+    <testsuite name="generated/functional-fed5da96e91de5e4.stories.tsx" timestamp="2026-10-31T17:01:36.224Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1713">
+        <testcase classname="generated/functional-fed5da96e91de5e4.stories.tsx" name="Recorded" time="0.1208">
         </testcase>
+        <testcase classname="generated/functional-fed5da96e91de5e4.stories.tsx" name="Covered Code" time="0.032">
+        </testcase>
+        <testcase classname="generated/functional-fed5da96e91de5e4.stories.tsx" name="Assertions" time="0.0182">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-63b0ada9fbd41fb9.stories.tsx" timestamp="2026-10-31T12:26:41.830Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1465">
-        <testcase classname="generated/functional-63b0ada9fbd41fb9.stories.tsx" name="Recorded" time="0.1457">
+    <testsuite name="generated/requirement-ai-logs.stories.tsx" timestamp="2026-10-31T17:01:36.224Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.6861">
+        <testcase classname="generated/requirement-ai-logs.stories.tsx" name="Literate" time="1.6854">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-65e16743f7299b65.stories.tsx" timestamp="2026-10-31T12:26:41.830Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1202">
-        <testcase classname="generated/functional-65e16743f7299b65.stories.tsx" name="Recorded" time="0.1195">
+    <testsuite name="generated/requirement-cover.stories.tsx" timestamp="2026-10-31T17:01:36.225Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.1284">
+        <testcase classname="generated/requirement-cover.stories.tsx" name="Literate" time="1.1281">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-67de03dbbce2cd93.stories.tsx" timestamp="2026-10-31T12:26:41.830Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1425">
-        <testcase classname="generated/functional-67de03dbbce2cd93.stories.tsx" name="Recorded" time="0.1417">
+    <testsuite name="generated/requirement-created.stories.tsx" timestamp="2026-10-31T17:01:36.225Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.314">
+        <testcase classname="generated/requirement-created.stories.tsx" name="Literate" time="1.3137">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-6aae47aecdfa91a6.stories.tsx" timestamp="2026-10-31T12:26:41.830Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1119">
-        <testcase classname="generated/functional-6aae47aecdfa91a6.stories.tsx" name="Recorded" time="0.1111">
+    <testsuite name="generated/requirement-database-tables.stories.tsx" timestamp="2026-10-31T17:01:36.225Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.4005">
+        <testcase classname="generated/requirement-database-tables.stories.tsx" name="Literate" time="1.4004">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-737e3e9a8b441f32.stories.tsx" timestamp="2026-10-31T12:26:41.831Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1391">
-        <testcase classname="generated/functional-737e3e9a8b441f32.stories.tsx" name="Recorded" time="0.1385">
+    <testsuite name="generated/requirement-deliver-history.stories.tsx" timestamp="2026-10-31T17:01:36.225Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.5827">
+        <testcase classname="generated/requirement-deliver-history.stories.tsx" name="Literate" time="1.5824">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-7a6dc5a0ddd841b3.stories.tsx" timestamp="2026-10-31T12:26:41.831Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2085">
-        <testcase classname="generated/functional-7a6dc5a0ddd841b3.stories.tsx" name="Recorded" time="0.2079">
+    <testsuite name="generated/requirement-deliver-readme.stories.tsx" timestamp="2026-10-31T17:01:36.225Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.3002">
+        <testcase classname="generated/requirement-deliver-readme.stories.tsx" name="Literate" time="1.3001">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-7f1620c211942327.stories.tsx" timestamp="2026-10-31T12:26:41.831Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1081">
-        <testcase classname="generated/functional-7f1620c211942327.stories.tsx" name="Recorded" time="0.1076">
+    <testsuite name="generated/requirement-deliver-source.stories.tsx" timestamp="2026-10-31T17:01:36.226Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.4966">
+        <testcase classname="generated/requirement-deliver-source.stories.tsx" name="Literate" time="1.4962">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-806e881c9ad6365d.stories.tsx" timestamp="2026-10-31T12:26:41.831Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1327">
-        <testcase classname="generated/functional-806e881c9ad6365d.stories.tsx" name="Recorded" time="0.1322">
+    <testsuite name="generated/requirement-denied.stories.tsx" timestamp="2026-10-31T17:01:36.226Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.3553">
+        <testcase classname="generated/requirement-denied.stories.tsx" name="Literate" time="1.3552">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-853c53e7a2657ea6.stories.tsx" timestamp="2026-10-31T12:26:41.832Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1111">
-        <testcase classname="generated/functional-853c53e7a2657ea6.stories.tsx" name="Recorded" time="0.1105">
+    <testsuite name="generated/requirement-firms-balance.stories.tsx" timestamp="2026-10-31T17:01:36.226Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.546">
+        <testcase classname="generated/requirement-firms-balance.stories.tsx" name="Literate" time="1.5457">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-8b6b0d4dfe61e9a7.stories.tsx" timestamp="2026-10-31T12:26:41.832Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1221">
-        <testcase classname="generated/functional-8b6b0d4dfe61e9a7.stories.tsx" name="Recorded" time="0.1215">
+    <testsuite name="generated/requirement-firms-id.stories.tsx" timestamp="2026-10-31T17:01:36.226Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.4366">
+        <testcase classname="generated/requirement-firms-id.stories.tsx" name="Literate" time="1.4363">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-8f748fa6ad096784.stories.tsx" timestamp="2026-10-31T12:26:41.833Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1085">
-        <testcase classname="generated/functional-8f748fa6ad096784.stories.tsx" name="Recorded" time="0.1077">
+    <testsuite name="generated/requirement-firms-name.stories.tsx" timestamp="2026-10-31T17:01:36.226Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.2783">
+        <testcase classname="generated/requirement-firms-name.stories.tsx" name="Literate" time="1.2779">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-913c4340f75419a8.stories.tsx" timestamp="2026-10-31T12:26:41.833Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.118">
-        <testcase classname="generated/functional-913c4340f75419a8.stories.tsx" name="Recorded" time="0.1174">
+    <testsuite name="generated/requirement-firms-uuid.stories.tsx" timestamp="2026-10-31T17:01:36.227Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.5419">
+        <testcase classname="generated/requirement-firms-uuid.stories.tsx" name="Literate" time="1.5416">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-95aeb2e2ce5063cd.stories.tsx" timestamp="2026-10-31T12:26:41.833Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1371">
-        <testcase classname="generated/functional-95aeb2e2ce5063cd.stories.tsx" name="Recorded" time="0.1364">
+    <testsuite name="generated/requirement-goal.stories.tsx" timestamp="2026-10-31T17:01:36.227Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.0892">
+        <testcase classname="generated/requirement-goal.stories.tsx" name="Literate" time="1.0889">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-979f0da351a4d102.stories.tsx" timestamp="2026-10-31T12:26:41.833Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.135">
-        <testcase classname="generated/functional-979f0da351a4d102.stories.tsx" name="Recorded" time="0.1343">
+    <testsuite name="generated/requirement-language.stories.tsx" timestamp="2026-10-31T17:01:36.227Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.163">
+        <testcase classname="generated/requirement-language.stories.tsx" name="Literate" time="1.1627">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-9b4d05dd1985b013.stories.tsx" timestamp="2026-10-31T12:26:41.833Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1156">
-        <testcase classname="generated/functional-9b4d05dd1985b013.stories.tsx" name="Recorded" time="0.1147">
+    <testsuite name="generated/requirement-libraries.stories.tsx" timestamp="2026-10-31T17:01:36.227Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.3044">
+        <testcase classname="generated/requirement-libraries.stories.tsx" name="Literate" time="1.3041">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-9fb5f4717acb9bf6.stories.tsx" timestamp="2026-10-31T12:26:41.834Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1059">
-        <testcase classname="generated/functional-9fb5f4717acb9bf6.stories.tsx" name="Recorded" time="0.1052">
+    <testsuite name="generated/requirement-mission.stories.tsx" timestamp="2026-10-31T17:01:36.227Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.3183">
+        <testcase classname="generated/requirement-mission.stories.tsx" name="Literate" time="1.318">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-a3ba4fd1dbc68bcc.stories.tsx" timestamp="2026-10-31T12:26:41.834Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1132">
-        <testcase classname="generated/functional-a3ba4fd1dbc68bcc.stories.tsx" name="Recorded" time="0.1125">
+    <testsuite name="generated/requirement-multiple-instances.stories.tsx" timestamp="2026-10-31T17:01:36.227Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.4071">
+        <testcase classname="generated/requirement-multiple-instances.stories.tsx" name="Literate" time="1.4067">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-a7dd6b053a705fd4.stories.tsx" timestamp="2026-10-31T12:26:41.834Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1474">
-        <testcase classname="generated/functional-a7dd6b053a705fd4.stories.tsx" name="Recorded" time="0.1469">
+    <testsuite name="generated/requirement-no-perfect-solution.stories.tsx" timestamp="2026-10-31T17:01:36.228Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.2926">
+        <testcase classname="generated/requirement-no-perfect-solution.stories.tsx" name="Literate" time="1.2924">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-ab06070789234139.stories.tsx" timestamp="2026-10-31T12:26:41.834Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1205">
-        <testcase classname="generated/functional-ab06070789234139.stories.tsx" name="Recorded" time="0.1199">
+    <testsuite name="generated/requirement-payments-amount.stories.tsx" timestamp="2026-10-31T17:01:36.228Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.5723">
+        <testcase classname="generated/requirement-payments-amount.stories.tsx" name="Literate" time="1.5722">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-ab9973d088231866.stories.tsx" timestamp="2026-10-31T12:26:41.835Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1121">
-        <testcase classname="generated/functional-ab9973d088231866.stories.tsx" name="Recorded" time="0.1114">
+    <testsuite name="generated/requirement-payments-description.stories.tsx" timestamp="2026-10-31T17:01:36.228Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.7062">
+        <testcase classname="generated/requirement-payments-description.stories.tsx" name="Literate" time="1.706">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-ac86a67f1147e19b.stories.tsx" timestamp="2026-10-31T12:26:41.835Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1133">
-        <testcase classname="generated/functional-ac86a67f1147e19b.stories.tsx" name="Recorded" time="0.1118">
+    <testsuite name="generated/requirement-payments-id.stories.tsx" timestamp="2026-10-31T17:01:36.228Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.4383">
+        <testcase classname="generated/requirement-payments-id.stories.tsx" name="Literate" time="1.4379">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-af5ef40ab8e2dac7.stories.tsx" timestamp="2026-10-31T12:26:41.835Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1256">
-        <testcase classname="generated/functional-af5ef40ab8e2dac7.stories.tsx" name="Recorded" time="0.1242">
+    <testsuite name="generated/requirement-payments-payee.stories.tsx" timestamp="2026-10-31T17:01:36.228Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.4837">
+        <testcase classname="generated/requirement-payments-payee.stories.tsx" name="Literate" time="1.4834">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-b055649965c4ce38.stories.tsx" timestamp="2026-10-31T12:26:41.836Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1245">
-        <testcase classname="generated/functional-b055649965c4ce38.stories.tsx" name="Recorded" time="0.1237">
+    <testsuite name="generated/requirement-payments-payer.stories.tsx" timestamp="2026-10-31T17:01:36.229Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.5422">
+        <testcase classname="generated/requirement-payments-payer.stories.tsx" name="Literate" time="1.542">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-b4d930405d4c86ac.stories.tsx" timestamp="2026-10-31T12:26:41.836Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1069">
-        <testcase classname="generated/functional-b4d930405d4c86ac.stories.tsx" name="Recorded" time="0.1063">
+    <testsuite name="generated/requirement-pride-question.stories.tsx" timestamp="2026-10-31T17:01:36.229Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.196">
+        <testcase classname="generated/requirement-pride-question.stories.tsx" name="Literate" time="1.1956">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-b61b5dc4e22e3ffb.stories.tsx" timestamp="2026-10-31T12:26:41.836Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1295">
-        <testcase classname="generated/functional-b61b5dc4e22e3ffb.stories.tsx" name="Recorded" time="0.129">
+    <testsuite name="generated/requirement-questions-intro.stories.tsx" timestamp="2026-10-31T17:01:36.229Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.1052">
+        <testcase classname="generated/requirement-questions-intro.stories.tsx" name="Literate" time="1.105">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-bcc0ad45683f4623.stories.tsx" timestamp="2026-10-31T12:26:41.836Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1183">
-        <testcase classname="generated/functional-bcc0ad45683f4623.stories.tsx" name="Recorded" time="0.1177">
+    <testsuite name="generated/requirement-relational-database.stories.tsx" timestamp="2026-10-31T17:01:36.229Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.3312">
+        <testcase classname="generated/requirement-relational-database.stories.tsx" name="Literate" time="1.331">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-beb6faf1cd6fc5b6.stories.tsx" timestamp="2026-10-31T12:26:41.837Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1079">
-        <testcase classname="generated/functional-beb6faf1cd6fc5b6.stories.tsx" name="Recorded" time="0.107">
+    <testsuite name="generated/requirement-request-amount.stories.tsx" timestamp="2026-10-31T17:01:36.229Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.3457">
+        <testcase classname="generated/requirement-request-amount.stories.tsx" name="Literate" time="1.3454">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-bf6ddeb1959f2577.stories.tsx" timestamp="2026-10-31T12:26:41.837Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.121">
-        <testcase classname="generated/functional-bf6ddeb1959f2577.stories.tsx" name="Recorded" time="0.1203">
+    <testsuite name="generated/requirement-request-description.stories.tsx" timestamp="2026-10-31T17:01:36.230Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.5319">
+        <testcase classname="generated/requirement-request-description.stories.tsx" name="Literate" time="1.5316">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-c824fc4222212b24.stories.tsx" timestamp="2026-10-31T12:26:41.837Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1072">
-        <testcase classname="generated/functional-c824fc4222212b24.stories.tsx" name="Recorded" time="0.1059">
+    <testsuite name="generated/requirement-request-entries.stories.tsx" timestamp="2026-10-31T17:01:36.230Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.4647">
+        <testcase classname="generated/requirement-request-entries.stories.tsx" name="Literate" time="1.4645">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-d1c2c0b71770de59.stories.tsx" timestamp="2026-10-31T12:26:41.837Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1164">
-        <testcase classname="generated/functional-d1c2c0b71770de59.stories.tsx" name="Recorded" time="0.1153">
+    <testsuite name="generated/requirement-request-format.stories.tsx" timestamp="2026-10-31T17:01:36.230Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.2661">
+        <testcase classname="generated/requirement-request-format.stories.tsx" name="Literate" time="1.2658">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-e2aa479beb89e819.stories.tsx" timestamp="2026-10-31T12:26:41.838Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1183">
-        <testcase classname="generated/functional-e2aa479beb89e819.stories.tsx" name="Recorded" time="0.1176">
+    <testsuite name="generated/requirement-request-payee.stories.tsx" timestamp="2026-10-31T17:01:36.230Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.3944">
+        <testcase classname="generated/requirement-request-payee.stories.tsx" name="Literate" time="1.3941">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-e4f6394b6e1d711a.stories.tsx" timestamp="2026-10-31T12:26:41.838Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1126">
-        <testcase classname="generated/functional-e4f6394b6e1d711a.stories.tsx" name="Recorded" time="0.1118">
+    <testsuite name="generated/requirement-request-payer.stories.tsx" timestamp="2026-10-31T17:01:36.230Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.5549">
+        <testcase classname="generated/requirement-request-payer.stories.tsx" name="Literate" time="1.5546">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-ec5547a7de94ea92.stories.tsx" timestamp="2026-10-31T12:26:41.838Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1103">
-        <testcase classname="generated/functional-ec5547a7de94ea92.stories.tsx" name="Recorded" time="0.1092">
+    <testsuite name="generated/requirement-sample-outcome.stories.tsx" timestamp="2026-10-31T17:01:36.230Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.6257">
+        <testcase classname="generated/requirement-sample-outcome.stories.tsx" name="Literate" time="1.6254">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-ef9cb719435bc53a.stories.tsx" timestamp="2026-10-31T12:26:41.838Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1465">
-        <testcase classname="generated/functional-ef9cb719435bc53a.stories.tsx" name="Recorded" time="0.1454">
+    <testsuite name="generated/requirement-sample-request.stories.tsx" timestamp="2026-10-31T17:01:36.231Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.315">
+        <testcase classname="generated/requirement-sample-request.stories.tsx" name="Literate" time="1.3147">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-f1f2871ebe9926d9.stories.tsx" timestamp="2026-10-31T12:26:41.839Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1499">
-        <testcase classname="generated/functional-f1f2871ebe9926d9.stories.tsx" name="Recorded" time="0.1494">
+    <testsuite name="generated/requirement-sample-seed.stories.tsx" timestamp="2026-10-31T17:01:36.231Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.5251">
+        <testcase classname="generated/requirement-sample-seed.stories.tsx" name="Literate" time="1.5249">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-f7314bcd5330bb9f.stories.tsx" timestamp="2026-10-31T12:26:41.839Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1094">
-        <testcase classname="generated/functional-f7314bcd5330bb9f.stories.tsx" name="Recorded" time="0.1088">
+    <testsuite name="generated/requirement-send-link.stories.tsx" timestamp="2026-10-31T17:01:36.231Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.1501">
+        <testcase classname="generated/requirement-send-link.stories.tsx" name="Literate" time="1.1498">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-f987b4e66e6f5620.stories.tsx" timestamp="2026-10-31T12:26:41.839Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1064">
-        <testcase classname="generated/functional-f987b4e66e6f5620.stories.tsx" name="Recorded" time="0.1058">
+    <testsuite name="generated/requirement-time-question.stories.tsx" timestamp="2026-10-31T17:01:36.231Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="1.0785">
+        <testcase classname="generated/requirement-time-question.stories.tsx" name="Literate" time="1.0783">
         </testcase>
     </testsuite>
-    <testsuite name="generated/functional-fbad68574810439d.stories.tsx" timestamp="2026-10-31T12:26:41.839Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1053">
-        <testcase classname="generated/functional-fbad68574810439d.stories.tsx" name="Recorded" time="0.1045">
+    <testsuite name="generated/unit-0482d2c0ec7b0717.stories.tsx" timestamp="2026-10-31T17:01:36.231Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.4635">
+        <testcase classname="generated/unit-0482d2c0ec7b0717.stories.tsx" name="Recorded" time="0.247">
         </testcase>
+        <testcase classname="generated/unit-0482d2c0ec7b0717.stories.tsx" name="Covered Code" time="0.159">
+        </testcase>
+        <testcase classname="generated/unit-0482d2c0ec7b0717.stories.tsx" name="Assertions" time="0.0567">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/functional-fed5da96e91de5e4.stories.tsx" timestamp="2026-10-31T12:26:41.840Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1316">
-        <testcase classname="generated/functional-fed5da96e91de5e4.stories.tsx" name="Recorded" time="0.131">
+    <testsuite name="generated/unit-087a7efbffd74a55.stories.tsx" timestamp="2026-10-31T17:01:36.232Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2811">
+        <testcase classname="generated/unit-087a7efbffd74a55.stories.tsx" name="Recorded" time="0.1886">
+        </testcase>
+        <testcase classname="generated/unit-087a7efbffd74a55.stories.tsx" name="Covered Code" time="0.0591">
         </testcase>
+        <testcase classname="generated/unit-087a7efbffd74a55.stories.tsx" name="Assertions" time="0.0331">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-0482d2c0ec7b0717.stories.tsx" timestamp="2026-10-31T12:26:41.840Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.3175">
-        <testcase classname="generated/unit-0482d2c0ec7b0717.stories.tsx" name="Recorded" time="0.3167">
+    <testsuite name="generated/unit-10a253aab833569a.stories.tsx" timestamp="2026-10-31T17:01:36.232Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2789">
+        <testcase classname="generated/unit-10a253aab833569a.stories.tsx" name="Recorded" time="0.1648">
+        </testcase>
+        <testcase classname="generated/unit-10a253aab833569a.stories.tsx" name="Covered Code" time="0.0856">
+        </testcase>
+        <testcase classname="generated/unit-10a253aab833569a.stories.tsx" name="Assertions" time="0.028">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-087a7efbffd74a55.stories.tsx" timestamp="2026-10-31T12:26:41.840Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1915">
-        <testcase classname="generated/unit-087a7efbffd74a55.stories.tsx" name="Recorded" time="0.1907">
+    <testsuite name="generated/unit-146317ae33d38a00.stories.tsx" timestamp="2026-10-31T17:01:36.232Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.0916">
+        <testcase classname="generated/unit-146317ae33d38a00.stories.tsx" name="Recorded" time="0.0667">
         </testcase>
+        <testcase classname="generated/unit-146317ae33d38a00.stories.tsx" name="Covered Code" time="0.0072">
+        </testcase>
+        <testcase classname="generated/unit-146317ae33d38a00.stories.tsx" name="Assertions" time="0.0175">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-10a253aab833569a.stories.tsx" timestamp="2026-10-31T12:26:41.840Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.3432">
-        <testcase classname="generated/unit-10a253aab833569a.stories.tsx" name="Recorded" time="0.3425">
+    <testsuite name="generated/unit-16382ff73df92d97.stories.tsx" timestamp="2026-10-31T17:01:36.233Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.3115">
+        <testcase classname="generated/unit-16382ff73df92d97.stories.tsx" name="Recorded" time="0.1854">
+        </testcase>
+        <testcase classname="generated/unit-16382ff73df92d97.stories.tsx" name="Covered Code" time="0.0958">
         </testcase>
+        <testcase classname="generated/unit-16382ff73df92d97.stories.tsx" name="Assertions" time="0.0299">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-146317ae33d38a00.stories.tsx" timestamp="2026-10-31T12:26:41.840Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1003">
-        <testcase classname="generated/unit-146317ae33d38a00.stories.tsx" name="Recorded" time="0.099">
+    <testsuite name="generated/unit-17332e7ed61d29a7.stories.tsx" timestamp="2026-10-31T17:01:36.233Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2884">
+        <testcase classname="generated/unit-17332e7ed61d29a7.stories.tsx" name="Recorded" time="0.1714">
+        </testcase>
+        <testcase classname="generated/unit-17332e7ed61d29a7.stories.tsx" name="Covered Code" time="0.0902">
+        </testcase>
+        <testcase classname="generated/unit-17332e7ed61d29a7.stories.tsx" name="Assertions" time="0.0264">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-16382ff73df92d97.stories.tsx" timestamp="2026-10-31T12:26:41.841Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2916">
-        <testcase classname="generated/unit-16382ff73df92d97.stories.tsx" name="Recorded" time="0.2909">
+    <testsuite name="generated/unit-1e5065600c3d1185.stories.tsx" timestamp="2026-10-31T17:01:36.233Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1848">
+        <testcase classname="generated/unit-1e5065600c3d1185.stories.tsx" name="Recorded" time="0.1187">
         </testcase>
+        <testcase classname="generated/unit-1e5065600c3d1185.stories.tsx" name="Covered Code" time="0.0441">
+        </testcase>
+        <testcase classname="generated/unit-1e5065600c3d1185.stories.tsx" name="Assertions" time="0.0218">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-17332e7ed61d29a7.stories.tsx" timestamp="2026-10-31T12:26:41.841Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2892">
-        <testcase classname="generated/unit-17332e7ed61d29a7.stories.tsx" name="Recorded" time="0.2885">
+    <testsuite name="generated/unit-1f92ee8f80da27f2.stories.tsx" timestamp="2026-10-31T17:01:36.234Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.0909">
+        <testcase classname="generated/unit-1f92ee8f80da27f2.stories.tsx" name="Recorded" time="0.068">
+        </testcase>
+        <testcase classname="generated/unit-1f92ee8f80da27f2.stories.tsx" name="Covered Code" time="0.0076">
         </testcase>
+        <testcase classname="generated/unit-1f92ee8f80da27f2.stories.tsx" name="Assertions" time="0.015">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-1e5065600c3d1185.stories.tsx" timestamp="2026-10-31T12:26:41.841Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2058">
-        <testcase classname="generated/unit-1e5065600c3d1185.stories.tsx" name="Recorded" time="0.2052">
+    <testsuite name="generated/unit-1fef8c65a51700aa.stories.tsx" timestamp="2026-10-31T17:01:36.234Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2895">
+        <testcase classname="generated/unit-1fef8c65a51700aa.stories.tsx" name="Recorded" time="0.1742">
+        </testcase>
+        <testcase classname="generated/unit-1fef8c65a51700aa.stories.tsx" name="Covered Code" time="0.0862">
+        </testcase>
+        <testcase classname="generated/unit-1fef8c65a51700aa.stories.tsx" name="Assertions" time="0.0287">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-1f92ee8f80da27f2.stories.tsx" timestamp="2026-10-31T12:26:41.841Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.098">
-        <testcase classname="generated/unit-1f92ee8f80da27f2.stories.tsx" name="Recorded" time="0.0973">
+    <testsuite name="generated/unit-22416f4348ae5fb2.stories.tsx" timestamp="2026-10-31T17:01:36.234Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2934">
+        <testcase classname="generated/unit-22416f4348ae5fb2.stories.tsx" name="Recorded" time="0.1801">
         </testcase>
+        <testcase classname="generated/unit-22416f4348ae5fb2.stories.tsx" name="Covered Code" time="0.0853">
+        </testcase>
+        <testcase classname="generated/unit-22416f4348ae5fb2.stories.tsx" name="Assertions" time="0.0277">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-1fef8c65a51700aa.stories.tsx" timestamp="2026-10-31T12:26:41.842Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2992">
-        <testcase classname="generated/unit-1fef8c65a51700aa.stories.tsx" name="Recorded" time="0.2984">
+    <testsuite name="generated/unit-2ca7beabc7c217e4.stories.tsx" timestamp="2026-10-31T17:01:36.235Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1027">
+        <testcase classname="generated/unit-2ca7beabc7c217e4.stories.tsx" name="Recorded" time="0.073">
+        </testcase>
+        <testcase classname="generated/unit-2ca7beabc7c217e4.stories.tsx" name="Covered Code" time="0.0096">
         </testcase>
+        <testcase classname="generated/unit-2ca7beabc7c217e4.stories.tsx" name="Assertions" time="0.0192">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-22416f4348ae5fb2.stories.tsx" timestamp="2026-10-31T12:26:41.842Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2986">
-        <testcase classname="generated/unit-22416f4348ae5fb2.stories.tsx" name="Recorded" time="0.2979">
+    <testsuite name="generated/unit-3189a2aff31bb2d7.stories.tsx" timestamp="2026-10-31T17:01:36.235Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1811">
+        <testcase classname="generated/unit-3189a2aff31bb2d7.stories.tsx" name="Recorded" time="0.1203">
+        </testcase>
+        <testcase classname="generated/unit-3189a2aff31bb2d7.stories.tsx" name="Covered Code" time="0.0401">
         </testcase>
+        <testcase classname="generated/unit-3189a2aff31bb2d7.stories.tsx" name="Assertions" time="0.0204">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-2ca7beabc7c217e4.stories.tsx" timestamp="2026-10-31T12:26:41.842Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.0986">
-        <testcase classname="generated/unit-2ca7beabc7c217e4.stories.tsx" name="Recorded" time="0.098">
+    <testsuite name="generated/unit-31f6a0dc3518ff2e.stories.tsx" timestamp="2026-10-31T17:01:36.235Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1065">
+        <testcase classname="generated/unit-31f6a0dc3518ff2e.stories.tsx" name="Recorded" time="0.0676">
+        </testcase>
+        <testcase classname="generated/unit-31f6a0dc3518ff2e.stories.tsx" name="Covered Code" time="0.0073">
+        </testcase>
+        <testcase classname="generated/unit-31f6a0dc3518ff2e.stories.tsx" name="Assertions" time="0.0313">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-3189a2aff31bb2d7.stories.tsx" timestamp="2026-10-31T12:26:41.842Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1293">
-        <testcase classname="generated/unit-3189a2aff31bb2d7.stories.tsx" name="Recorded" time="0.1286">
+    <testsuite name="generated/unit-328f079e392aa28c.stories.tsx" timestamp="2026-10-31T17:01:36.236Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1751">
+        <testcase classname="generated/unit-328f079e392aa28c.stories.tsx" name="Recorded" time="0.1088">
         </testcase>
+        <testcase classname="generated/unit-328f079e392aa28c.stories.tsx" name="Covered Code" time="0.0357">
+        </testcase>
+        <testcase classname="generated/unit-328f079e392aa28c.stories.tsx" name="Assertions" time="0.0304">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-31f6a0dc3518ff2e.stories.tsx" timestamp="2026-10-31T12:26:41.843Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1047">
-        <testcase classname="generated/unit-31f6a0dc3518ff2e.stories.tsx" name="Recorded" time="0.1038">
+    <testsuite name="generated/unit-3511bbb893529e6e.stories.tsx" timestamp="2026-10-31T17:01:36.236Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.098">
+        <testcase classname="generated/unit-3511bbb893529e6e.stories.tsx" name="Recorded" time="0.0738">
+        </testcase>
+        <testcase classname="generated/unit-3511bbb893529e6e.stories.tsx" name="Covered Code" time="0.0075">
         </testcase>
+        <testcase classname="generated/unit-3511bbb893529e6e.stories.tsx" name="Assertions" time="0.0164">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-328f079e392aa28c.stories.tsx" timestamp="2026-10-31T12:26:41.843Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1359">
-        <testcase classname="generated/unit-328f079e392aa28c.stories.tsx" name="Recorded" time="0.1353">
+    <testsuite name="generated/unit-3e150af6be697c22.stories.tsx" timestamp="2026-10-31T17:01:36.236Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2987">
+        <testcase classname="generated/unit-3e150af6be697c22.stories.tsx" name="Recorded" time="0.171">
+        </testcase>
+        <testcase classname="generated/unit-3e150af6be697c22.stories.tsx" name="Covered Code" time="0.0872">
+        </testcase>
+        <testcase classname="generated/unit-3e150af6be697c22.stories.tsx" name="Assertions" time="0.0401">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-3511bbb893529e6e.stories.tsx" timestamp="2026-10-31T12:26:41.843Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.0997">
-        <testcase classname="generated/unit-3511bbb893529e6e.stories.tsx" name="Recorded" time="0.0992">
+    <testsuite name="generated/unit-407edf449f897b9c.stories.tsx" timestamp="2026-10-31T17:01:36.237Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1468">
+        <testcase classname="generated/unit-407edf449f897b9c.stories.tsx" name="Recorded" time="0.0917">
         </testcase>
+        <testcase classname="generated/unit-407edf449f897b9c.stories.tsx" name="Covered Code" time="0.0252">
+        </testcase>
+        <testcase classname="generated/unit-407edf449f897b9c.stories.tsx" name="Assertions" time="0.0297">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-3e150af6be697c22.stories.tsx" timestamp="2026-10-31T12:26:41.843Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.3596">
-        <testcase classname="generated/unit-3e150af6be697c22.stories.tsx" name="Recorded" time="0.3588">
+    <testsuite name="generated/unit-41fb52ce3afc7f7b.stories.tsx" timestamp="2026-10-31T17:01:36.237Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1928">
+        <testcase classname="generated/unit-41fb52ce3afc7f7b.stories.tsx" name="Recorded" time="0.1275">
+        </testcase>
+        <testcase classname="generated/unit-41fb52ce3afc7f7b.stories.tsx" name="Covered Code" time="0.043">
         </testcase>
+        <testcase classname="generated/unit-41fb52ce3afc7f7b.stories.tsx" name="Assertions" time="0.022">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-407edf449f897b9c.stories.tsx" timestamp="2026-10-31T12:26:41.844Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1602">
-        <testcase classname="generated/unit-407edf449f897b9c.stories.tsx" name="Recorded" time="0.1595">
+    <testsuite name="generated/unit-45308e1644af641c.stories.tsx" timestamp="2026-10-31T17:01:36.238Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1826">
+        <testcase classname="generated/unit-45308e1644af641c.stories.tsx" name="Recorded" time="0.1182">
+        </testcase>
+        <testcase classname="generated/unit-45308e1644af641c.stories.tsx" name="Covered Code" time="0.0439">
+        </testcase>
+        <testcase classname="generated/unit-45308e1644af641c.stories.tsx" name="Assertions" time="0.0201">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-41fb52ce3afc7f7b.stories.tsx" timestamp="2026-10-31T12:26:41.844Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1971">
-        <testcase classname="generated/unit-41fb52ce3afc7f7b.stories.tsx" name="Recorded" time="0.1964">
+    <testsuite name="generated/unit-473ac4867bd52477.stories.tsx" timestamp="2026-10-31T17:01:36.238Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1006">
+        <testcase classname="generated/unit-473ac4867bd52477.stories.tsx" name="Recorded" time="0.0676">
         </testcase>
+        <testcase classname="generated/unit-473ac4867bd52477.stories.tsx" name="Covered Code" time="0.0069">
+        </testcase>
+        <testcase classname="generated/unit-473ac4867bd52477.stories.tsx" name="Assertions" time="0.026">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-45308e1644af641c.stories.tsx" timestamp="2026-10-31T12:26:41.845Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1376">
-        <testcase classname="generated/unit-45308e1644af641c.stories.tsx" name="Recorded" time="0.1365">
+    <testsuite name="generated/unit-4e54cf5cab89a55e.stories.tsx" timestamp="2026-10-31T17:01:36.238Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2864">
+        <testcase classname="generated/unit-4e54cf5cab89a55e.stories.tsx" name="Recorded" time="0.1702">
+        </testcase>
+        <testcase classname="generated/unit-4e54cf5cab89a55e.stories.tsx" name="Covered Code" time="0.0868">
         </testcase>
+        <testcase classname="generated/unit-4e54cf5cab89a55e.stories.tsx" name="Assertions" time="0.0292">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-473ac4867bd52477.stories.tsx" timestamp="2026-10-31T12:26:41.845Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1018">
-        <testcase classname="generated/unit-473ac4867bd52477.stories.tsx" name="Recorded" time="0.1012">
+    <testsuite name="generated/unit-5382da053633cee9.stories.tsx" timestamp="2026-10-31T17:01:36.239Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1444">
+        <testcase classname="generated/unit-5382da053633cee9.stories.tsx" name="Recorded" time="0.0987">
+        </testcase>
+        <testcase classname="generated/unit-5382da053633cee9.stories.tsx" name="Covered Code" time="0.0284">
+        </testcase>
+        <testcase classname="generated/unit-5382da053633cee9.stories.tsx" name="Assertions" time="0.0171">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-4e54cf5cab89a55e.stories.tsx" timestamp="2026-10-31T12:26:41.845Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2947">
-        <testcase classname="generated/unit-4e54cf5cab89a55e.stories.tsx" name="Recorded" time="0.2941">
+    <testsuite name="generated/unit-5580b945ac4515d1.stories.tsx" timestamp="2026-10-31T17:01:36.239Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1716">
+        <testcase classname="generated/unit-5580b945ac4515d1.stories.tsx" name="Recorded" time="0.1118">
         </testcase>
+        <testcase classname="generated/unit-5580b945ac4515d1.stories.tsx" name="Covered Code" time="0.0366">
+        </testcase>
+        <testcase classname="generated/unit-5580b945ac4515d1.stories.tsx" name="Assertions" time="0.0228">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-5382da053633cee9.stories.tsx" timestamp="2026-10-31T12:26:41.845Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1134">
-        <testcase classname="generated/unit-5382da053633cee9.stories.tsx" name="Recorded" time="0.1127">
+    <testsuite name="generated/unit-5607de67df4c8eff.stories.tsx" timestamp="2026-10-31T17:01:36.240Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.159">
+        <testcase classname="generated/unit-5607de67df4c8eff.stories.tsx" name="Recorded" time="0.1124">
         </testcase>
+        <testcase classname="generated/unit-5607de67df4c8eff.stories.tsx" name="Covered Code" time="0.0229">
+        </testcase>
+        <testcase classname="generated/unit-5607de67df4c8eff.stories.tsx" name="Assertions" time="0.0235">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-5580b945ac4515d1.stories.tsx" timestamp="2026-10-31T12:26:41.846Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1373">
-        <testcase classname="generated/unit-5580b945ac4515d1.stories.tsx" name="Recorded" time="0.1366">
+    <testsuite name="generated/unit-568d2f355f9cee99.stories.tsx" timestamp="2026-10-31T17:01:36.240Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.4777">
+        <testcase classname="generated/unit-568d2f355f9cee99.stories.tsx" name="Recorded" time="0.2531">
+        </testcase>
+        <testcase classname="generated/unit-568d2f355f9cee99.stories.tsx" name="Covered Code" time="0.1559">
         </testcase>
+        <testcase classname="generated/unit-568d2f355f9cee99.stories.tsx" name="Assertions" time="0.0684">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-5607de67df4c8eff.stories.tsx" timestamp="2026-10-31T12:26:41.846Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1103">
-        <testcase classname="generated/unit-5607de67df4c8eff.stories.tsx" name="Recorded" time="0.1096">
+    <testsuite name="generated/unit-5969d512a69b3290.stories.tsx" timestamp="2026-10-31T17:01:36.240Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2923">
+        <testcase classname="generated/unit-5969d512a69b3290.stories.tsx" name="Recorded" time="0.167">
+        </testcase>
+        <testcase classname="generated/unit-5969d512a69b3290.stories.tsx" name="Covered Code" time="0.1004">
+        </testcase>
+        <testcase classname="generated/unit-5969d512a69b3290.stories.tsx" name="Assertions" time="0.0245">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-568d2f355f9cee99.stories.tsx" timestamp="2026-10-31T12:26:41.846Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.3869">
-        <testcase classname="generated/unit-568d2f355f9cee99.stories.tsx" name="Recorded" time="0.385">
+    <testsuite name="generated/unit-5993ce65f67b10ab.stories.tsx" timestamp="2026-10-31T17:01:36.241Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1935">
+        <testcase classname="generated/unit-5993ce65f67b10ab.stories.tsx" name="Recorded" time="0.1266">
         </testcase>
+        <testcase classname="generated/unit-5993ce65f67b10ab.stories.tsx" name="Covered Code" time="0.0437">
+        </testcase>
+        <testcase classname="generated/unit-5993ce65f67b10ab.stories.tsx" name="Assertions" time="0.0228">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-5993ce65f67b10ab.stories.tsx" timestamp="2026-10-31T12:26:41.846Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1579">
-        <testcase classname="generated/unit-5993ce65f67b10ab.stories.tsx" name="Recorded" time="0.1571">
+    <testsuite name="generated/unit-6058a0455e3f37d8.stories.tsx" timestamp="2026-10-31T17:01:36.241Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.0916">
+        <testcase classname="generated/unit-6058a0455e3f37d8.stories.tsx" name="Recorded" time="0.064">
+        </testcase>
+        <testcase classname="generated/unit-6058a0455e3f37d8.stories.tsx" name="Covered Code" time="0.0084">
         </testcase>
+        <testcase classname="generated/unit-6058a0455e3f37d8.stories.tsx" name="Assertions" time="0.0189">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-6058a0455e3f37d8.stories.tsx" timestamp="2026-10-31T12:26:41.847Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1059">
-        <testcase classname="generated/unit-6058a0455e3f37d8.stories.tsx" name="Recorded" time="0.1052">
+    <testsuite name="generated/unit-60bc4aefaf93746e.stories.tsx" timestamp="2026-10-31T17:01:36.242Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.4773">
+        <testcase classname="generated/unit-60bc4aefaf93746e.stories.tsx" name="Recorded" time="0.2787">
+        </testcase>
+        <testcase classname="generated/unit-60bc4aefaf93746e.stories.tsx" name="Covered Code" time="0.1589">
+        </testcase>
+        <testcase classname="generated/unit-60bc4aefaf93746e.stories.tsx" name="Assertions" time="0.0388">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-60bc4aefaf93746e.stories.tsx" timestamp="2026-10-31T12:26:41.847Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.3805">
-        <testcase classname="generated/unit-60bc4aefaf93746e.stories.tsx" name="Recorded" time="0.3795">
+    <testsuite name="generated/unit-62e4fffacae8cf93.stories.tsx" timestamp="2026-10-31T17:01:36.242Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.3029">
+        <testcase classname="generated/unit-62e4fffacae8cf93.stories.tsx" name="Recorded" time="0.1796">
         </testcase>
+        <testcase classname="generated/unit-62e4fffacae8cf93.stories.tsx" name="Covered Code" time="0.102">
+        </testcase>
+        <testcase classname="generated/unit-62e4fffacae8cf93.stories.tsx" name="Assertions" time="0.0211">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-62e4fffacae8cf93.stories.tsx" timestamp="2026-10-31T12:26:41.847Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2699">
-        <testcase classname="generated/unit-62e4fffacae8cf93.stories.tsx" name="Recorded" time="0.2694">
+    <testsuite name="generated/unit-68de0baaab5ccb74.stories.tsx" timestamp="2026-10-31T17:01:36.243Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.0731">
+        <testcase classname="generated/unit-68de0baaab5ccb74.stories.tsx" name="Recorded" time="0.0523">
+        </testcase>
+        <testcase classname="generated/unit-68de0baaab5ccb74.stories.tsx" name="Covered Code" time="0.0074">
         </testcase>
+        <testcase classname="generated/unit-68de0baaab5ccb74.stories.tsx" name="Assertions" time="0.0131">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-68de0baaab5ccb74.stories.tsx" timestamp="2026-10-31T12:26:41.847Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.104">
-        <testcase classname="generated/unit-68de0baaab5ccb74.stories.tsx" name="Recorded" time="0.1033">
+    <testsuite name="generated/unit-71d932469ee019bb.stories.tsx" timestamp="2026-10-31T17:01:36.243Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.3392">
+        <testcase classname="generated/unit-71d932469ee019bb.stories.tsx" name="Recorded" time="0.1987">
+        </testcase>
+        <testcase classname="generated/unit-71d932469ee019bb.stories.tsx" name="Covered Code" time="0.1061">
+        </testcase>
+        <testcase classname="generated/unit-71d932469ee019bb.stories.tsx" name="Assertions" time="0.0337">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-71d932469ee019bb.stories.tsx" timestamp="2026-10-31T12:26:41.848Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2995">
-        <testcase classname="generated/unit-71d932469ee019bb.stories.tsx" name="Recorded" time="0.2986">
+    <testsuite name="generated/unit-777a98b0eab0a78a.stories.tsx" timestamp="2026-10-31T17:01:36.243Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1953">
+        <testcase classname="generated/unit-777a98b0eab0a78a.stories.tsx" name="Recorded" time="0.1183">
         </testcase>
+        <testcase classname="generated/unit-777a98b0eab0a78a.stories.tsx" name="Covered Code" time="0.0439">
+        </testcase>
+        <testcase classname="generated/unit-777a98b0eab0a78a.stories.tsx" name="Assertions" time="0.0327">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-777a98b0eab0a78a.stories.tsx" timestamp="2026-10-31T12:26:41.848Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1992">
-        <testcase classname="generated/unit-777a98b0eab0a78a.stories.tsx" name="Recorded" time="0.1981">
+    <testsuite name="generated/unit-77a21639f0b9f9da.stories.tsx" timestamp="2026-10-31T17:01:36.244Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.223">
+        <testcase classname="generated/unit-77a21639f0b9f9da.stories.tsx" name="Recorded" time="0.1621">
+        </testcase>
+        <testcase classname="generated/unit-77a21639f0b9f9da.stories.tsx" name="Covered Code" time="0.0359">
         </testcase>
+        <testcase classname="generated/unit-77a21639f0b9f9da.stories.tsx" name="Assertions" time="0.0247">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-77a21639f0b9f9da.stories.tsx" timestamp="2026-10-31T12:26:41.848Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1209">
-        <testcase classname="generated/unit-77a21639f0b9f9da.stories.tsx" name="Recorded" time="0.1203">
+    <testsuite name="generated/unit-7a03c13f9d9d8dbe.stories.tsx" timestamp="2026-10-31T17:01:36.245Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.191">
+        <testcase classname="generated/unit-7a03c13f9d9d8dbe.stories.tsx" name="Recorded" time="0.1262">
+        </testcase>
+        <testcase classname="generated/unit-7a03c13f9d9d8dbe.stories.tsx" name="Covered Code" time="0.0446">
         </testcase>
+        <testcase classname="generated/unit-7a03c13f9d9d8dbe.stories.tsx" name="Assertions" time="0.0199">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-7a03c13f9d9d8dbe.stories.tsx" timestamp="2026-10-31T12:26:41.848Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1576">
-        <testcase classname="generated/unit-7a03c13f9d9d8dbe.stories.tsx" name="Recorded" time="0.1568">
+    <testsuite name="generated/unit-81b20a0ab0c3c958.stories.tsx" timestamp="2026-10-31T17:01:36.245Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1525">
+        <testcase classname="generated/unit-81b20a0ab0c3c958.stories.tsx" name="Recorded" time="0.1101">
+        </testcase>
+        <testcase classname="generated/unit-81b20a0ab0c3c958.stories.tsx" name="Covered Code" time="0.0266">
+        </testcase>
+        <testcase classname="generated/unit-81b20a0ab0c3c958.stories.tsx" name="Assertions" time="0.0154">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-81b20a0ab0c3c958.stories.tsx" timestamp="2026-10-31T12:26:41.848Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1105">
-        <testcase classname="generated/unit-81b20a0ab0c3c958.stories.tsx" name="Recorded" time="0.1098">
+    <testsuite name="generated/unit-8a5791e6b463bd31.stories.tsx" timestamp="2026-10-31T17:01:36.246Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2813">
+        <testcase classname="generated/unit-8a5791e6b463bd31.stories.tsx" name="Recorded" time="0.1708">
         </testcase>
+        <testcase classname="generated/unit-8a5791e6b463bd31.stories.tsx" name="Covered Code" time="0.089">
+        </testcase>
+        <testcase classname="generated/unit-8a5791e6b463bd31.stories.tsx" name="Assertions" time="0.0214">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-8d8ba05ebed01580.stories.tsx" timestamp="2026-10-31T12:26:41.849Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.0996">
-        <testcase classname="generated/unit-8d8ba05ebed01580.stories.tsx" name="Recorded" time="0.0988">
+    <testsuite name="generated/unit-8d8ba05ebed01580.stories.tsx" timestamp="2026-10-31T17:01:36.246Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.0942">
+        <testcase classname="generated/unit-8d8ba05ebed01580.stories.tsx" name="Recorded" time="0.0677">
+        </testcase>
+        <testcase classname="generated/unit-8d8ba05ebed01580.stories.tsx" name="Covered Code" time="0.0071">
         </testcase>
+        <testcase classname="generated/unit-8d8ba05ebed01580.stories.tsx" name="Assertions" time="0.019">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-900d5840ee5af04e.stories.tsx" timestamp="2026-10-31T12:26:41.849Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1704">
-        <testcase classname="generated/unit-900d5840ee5af04e.stories.tsx" name="Recorded" time="0.1692">
+    <testsuite name="generated/unit-900d5840ee5af04e.stories.tsx" timestamp="2026-10-31T17:01:36.246Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1741">
+        <testcase classname="generated/unit-900d5840ee5af04e.stories.tsx" name="Recorded" time="0.1152">
+        </testcase>
+        <testcase classname="generated/unit-900d5840ee5af04e.stories.tsx" name="Covered Code" time="0.0411">
+        </testcase>
+        <testcase classname="generated/unit-900d5840ee5af04e.stories.tsx" name="Assertions" time="0.0175">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-98469fa7c6e96eb7.stories.tsx" timestamp="2026-10-31T12:26:41.849Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1642">
-        <testcase classname="generated/unit-98469fa7c6e96eb7.stories.tsx" name="Recorded" time="0.1636">
+    <testsuite name="generated/unit-98469fa7c6e96eb7.stories.tsx" timestamp="2026-10-31T17:01:36.247Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1782">
+        <testcase classname="generated/unit-98469fa7c6e96eb7.stories.tsx" name="Recorded" time="0.1184">
         </testcase>
+        <testcase classname="generated/unit-98469fa7c6e96eb7.stories.tsx" name="Covered Code" time="0.0379">
+        </testcase>
+        <testcase classname="generated/unit-98469fa7c6e96eb7.stories.tsx" name="Assertions" time="0.0217">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-99acd089364e1e03.stories.tsx" timestamp="2026-10-31T12:26:41.849Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2789">
-        <testcase classname="generated/unit-99acd089364e1e03.stories.tsx" name="Recorded" time="0.2778">
+    <testsuite name="generated/unit-99acd089364e1e03.stories.tsx" timestamp="2026-10-31T17:01:36.247Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2844">
+        <testcase classname="generated/unit-99acd089364e1e03.stories.tsx" name="Recorded" time="0.175">
+        </testcase>
+        <testcase classname="generated/unit-99acd089364e1e03.stories.tsx" name="Covered Code" time="0.0864">
         </testcase>
+        <testcase classname="generated/unit-99acd089364e1e03.stories.tsx" name="Assertions" time="0.0226">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-aaab8d173532a2bb.stories.tsx" timestamp="2026-10-31T12:26:41.850Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2831">
-        <testcase classname="generated/unit-aaab8d173532a2bb.stories.tsx" name="Recorded" time="0.2825">
+    <testsuite name="generated/unit-aaab8d173532a2bb.stories.tsx" timestamp="2026-10-31T17:01:36.247Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.3333">
+        <testcase classname="generated/unit-aaab8d173532a2bb.stories.tsx" name="Recorded" time="0.222">
+        </testcase>
+        <testcase classname="generated/unit-aaab8d173532a2bb.stories.tsx" name="Covered Code" time="0.0862">
+        </testcase>
+        <testcase classname="generated/unit-aaab8d173532a2bb.stories.tsx" name="Assertions" time="0.0248">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-ad5d0d9e7a4f6f2c.stories.tsx" timestamp="2026-10-31T12:26:41.850Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1512">
-        <testcase classname="generated/unit-ad5d0d9e7a4f6f2c.stories.tsx" name="Recorded" time="0.1505">
+    <testsuite name="generated/unit-ad5d0d9e7a4f6f2c.stories.tsx" timestamp="2026-10-31T17:01:36.248Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1395">
+        <testcase classname="generated/unit-ad5d0d9e7a4f6f2c.stories.tsx" name="Recorded" time="0.0993">
         </testcase>
+        <testcase classname="generated/unit-ad5d0d9e7a4f6f2c.stories.tsx" name="Covered Code" time="0.0256">
+        </testcase>
+        <testcase classname="generated/unit-ad5d0d9e7a4f6f2c.stories.tsx" name="Assertions" time="0.0144">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-ad8199f1dabf9638.stories.tsx" timestamp="2026-10-31T12:26:41.850Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1576">
-        <testcase classname="generated/unit-ad8199f1dabf9638.stories.tsx" name="Recorded" time="0.1571">
+    <testsuite name="generated/unit-ad8199f1dabf9638.stories.tsx" timestamp="2026-10-31T17:01:36.248Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1459">
+        <testcase classname="generated/unit-ad8199f1dabf9638.stories.tsx" name="Recorded" time="0.1044">
+        </testcase>
+        <testcase classname="generated/unit-ad8199f1dabf9638.stories.tsx" name="Covered Code" time="0.0216">
         </testcase>
+        <testcase classname="generated/unit-ad8199f1dabf9638.stories.tsx" name="Assertions" time="0.0198">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-b06722951fb7ad44.stories.tsx" timestamp="2026-10-31T12:26:41.850Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.3123">
-        <testcase classname="generated/unit-b06722951fb7ad44.stories.tsx" name="Recorded" time="0.3108">
+    <testsuite name="generated/unit-b06722951fb7ad44.stories.tsx" timestamp="2026-10-31T17:01:36.248Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.332">
+        <testcase classname="generated/unit-b06722951fb7ad44.stories.tsx" name="Recorded" time="0.1957">
+        </testcase>
+        <testcase classname="generated/unit-b06722951fb7ad44.stories.tsx" name="Covered Code" time="0.1123">
+        </testcase>
+        <testcase classname="generated/unit-b06722951fb7ad44.stories.tsx" name="Assertions" time="0.0234">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-b1b46539317d5712.stories.tsx" timestamp="2026-10-31T12:26:41.851Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1943">
-        <testcase classname="generated/unit-b1b46539317d5712.stories.tsx" name="Recorded" time="0.1936">
+    <testsuite name="generated/unit-b1b46539317d5712.stories.tsx" timestamp="2026-10-31T17:01:36.249Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1934">
+        <testcase classname="generated/unit-b1b46539317d5712.stories.tsx" name="Recorded" time="0.1291">
         </testcase>
+        <testcase classname="generated/unit-b1b46539317d5712.stories.tsx" name="Covered Code" time="0.0434">
+        </testcase>
+        <testcase classname="generated/unit-b1b46539317d5712.stories.tsx" name="Assertions" time="0.0207">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-b62217e65b3f21fb.stories.tsx" timestamp="2026-10-31T12:26:41.851Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1053">
-        <testcase classname="generated/unit-b62217e65b3f21fb.stories.tsx" name="Recorded" time="0.1046">
+    <testsuite name="generated/unit-b62217e65b3f21fb.stories.tsx" timestamp="2026-10-31T17:01:36.249Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1341">
+        <testcase classname="generated/unit-b62217e65b3f21fb.stories.tsx" name="Recorded" time="0.111">
         </testcase>
+        <testcase classname="generated/unit-b62217e65b3f21fb.stories.tsx" name="Covered Code" time="0.0083">
+        </testcase>
+        <testcase classname="generated/unit-b62217e65b3f21fb.stories.tsx" name="Assertions" time="0.0145">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-b7679ccd3872e56f.stories.tsx" timestamp="2026-10-31T12:26:41.851Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1929">
-        <testcase classname="generated/unit-b7679ccd3872e56f.stories.tsx" name="Recorded" time="0.1914">
+    <testsuite name="generated/unit-b7679ccd3872e56f.stories.tsx" timestamp="2026-10-31T17:01:36.249Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1879">
+        <testcase classname="generated/unit-b7679ccd3872e56f.stories.tsx" name="Recorded" time="0.113">
+        </testcase>
+        <testcase classname="generated/unit-b7679ccd3872e56f.stories.tsx" name="Covered Code" time="0.042">
         </testcase>
+        <testcase classname="generated/unit-b7679ccd3872e56f.stories.tsx" name="Assertions" time="0.0325">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-b7de72dcf143a4ad.stories.tsx" timestamp="2026-10-31T12:26:41.852Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.3046">
-        <testcase classname="generated/unit-b7de72dcf143a4ad.stories.tsx" name="Recorded" time="0.3041">
+    <testsuite name="generated/unit-b7de72dcf143a4ad.stories.tsx" timestamp="2026-10-31T17:01:36.250Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2902">
+        <testcase classname="generated/unit-b7de72dcf143a4ad.stories.tsx" name="Recorded" time="0.1721">
+        </testcase>
+        <testcase classname="generated/unit-b7de72dcf143a4ad.stories.tsx" name="Covered Code" time="0.089">
+        </testcase>
+        <testcase classname="generated/unit-b7de72dcf143a4ad.stories.tsx" name="Assertions" time="0.0288">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-bdaf0c4e9c6f354b.stories.tsx" timestamp="2026-10-31T12:26:41.852Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2989">
-        <testcase classname="generated/unit-bdaf0c4e9c6f354b.stories.tsx" name="Recorded" time="0.2982">
+    <testsuite name="generated/unit-bdaf0c4e9c6f354b.stories.tsx" timestamp="2026-10-31T17:01:36.250Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.3516">
+        <testcase classname="generated/unit-bdaf0c4e9c6f354b.stories.tsx" name="Recorded" time="0.2238">
         </testcase>
+        <testcase classname="generated/unit-bdaf0c4e9c6f354b.stories.tsx" name="Covered Code" time="0.0947">
+        </testcase>
+        <testcase classname="generated/unit-bdaf0c4e9c6f354b.stories.tsx" name="Assertions" time="0.0327">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-c3dbc2b5277859ec.stories.tsx" timestamp="2026-10-31T12:26:41.852Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1681">
-        <testcase classname="generated/unit-c3dbc2b5277859ec.stories.tsx" name="Recorded" time="0.1673">
+    <testsuite name="generated/unit-c3dbc2b5277859ec.stories.tsx" timestamp="2026-10-31T17:01:36.251Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1894">
+        <testcase classname="generated/unit-c3dbc2b5277859ec.stories.tsx" name="Recorded" time="0.1351">
+        </testcase>
+        <testcase classname="generated/unit-c3dbc2b5277859ec.stories.tsx" name="Covered Code" time="0.0366">
         </testcase>
+        <testcase classname="generated/unit-c3dbc2b5277859ec.stories.tsx" name="Assertions" time="0.0172">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-c97ec15759e8e20a.stories.tsx" timestamp="2026-10-31T12:26:41.852Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1959">
-        <testcase classname="generated/unit-c97ec15759e8e20a.stories.tsx" name="Recorded" time="0.1949">
+    <testsuite name="generated/unit-c97ec15759e8e20a.stories.tsx" timestamp="2026-10-31T17:01:36.251Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1836">
+        <testcase classname="generated/unit-c97ec15759e8e20a.stories.tsx" name="Recorded" time="0.1188">
+        </testcase>
+        <testcase classname="generated/unit-c97ec15759e8e20a.stories.tsx" name="Covered Code" time="0.0443">
+        </testcase>
+        <testcase classname="generated/unit-c97ec15759e8e20a.stories.tsx" name="Assertions" time="0.0202">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-cbe33e97e7ab2662.stories.tsx" timestamp="2026-10-31T12:26:41.853Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1197">
-        <testcase classname="generated/unit-cbe33e97e7ab2662.stories.tsx" name="Recorded" time="0.119">
+    <testsuite name="generated/unit-cbe33e97e7ab2662.stories.tsx" timestamp="2026-10-31T17:01:36.251Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1686">
+        <testcase classname="generated/unit-cbe33e97e7ab2662.stories.tsx" name="Recorded" time="0.1005">
         </testcase>
+        <testcase classname="generated/unit-cbe33e97e7ab2662.stories.tsx" name="Covered Code" time="0.022">
+        </testcase>
+        <testcase classname="generated/unit-cbe33e97e7ab2662.stories.tsx" name="Assertions" time="0.0457">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-cc3da46208764794.stories.tsx" timestamp="2026-10-31T12:26:41.853Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1699">
-        <testcase classname="generated/unit-cc3da46208764794.stories.tsx" name="Recorded" time="0.1689">
+    <testsuite name="generated/unit-cc3da46208764794.stories.tsx" timestamp="2026-10-31T17:01:36.252Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1638">
+        <testcase classname="generated/unit-cc3da46208764794.stories.tsx" name="Recorded" time="0.1096">
+        </testcase>
+        <testcase classname="generated/unit-cc3da46208764794.stories.tsx" name="Covered Code" time="0.0368">
         </testcase>
+        <testcase classname="generated/unit-cc3da46208764794.stories.tsx" name="Assertions" time="0.017">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-cd25af6d5b429bf1.stories.tsx" timestamp="2026-10-31T12:26:41.853Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2849">
-        <testcase classname="generated/unit-cd25af6d5b429bf1.stories.tsx" name="Recorded" time="0.2839">
+    <testsuite name="generated/unit-cd25af6d5b429bf1.stories.tsx" timestamp="2026-10-31T17:01:36.252Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.3029">
+        <testcase classname="generated/unit-cd25af6d5b429bf1.stories.tsx" name="Recorded" time="0.1703">
+        </testcase>
+        <testcase classname="generated/unit-cd25af6d5b429bf1.stories.tsx" name="Covered Code" time="0.1046">
+        </testcase>
+        <testcase classname="generated/unit-cd25af6d5b429bf1.stories.tsx" name="Assertions" time="0.0277">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-cf3ed79c87e20a30.stories.tsx" timestamp="2026-10-31T12:26:41.853Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2968">
-        <testcase classname="generated/unit-cf3ed79c87e20a30.stories.tsx" name="Recorded" time="0.2961">
+    <testsuite name="generated/unit-cf3ed79c87e20a30.stories.tsx" timestamp="2026-10-31T17:01:36.252Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.278">
+        <testcase classname="generated/unit-cf3ed79c87e20a30.stories.tsx" name="Recorded" time="0.1649">
         </testcase>
+        <testcase classname="generated/unit-cf3ed79c87e20a30.stories.tsx" name="Covered Code" time="0.0889">
+        </testcase>
+        <testcase classname="generated/unit-cf3ed79c87e20a30.stories.tsx" name="Assertions" time="0.024">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-d162a664786b52ae.stories.tsx" timestamp="2026-10-31T12:26:41.854Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.3351">
-        <testcase classname="generated/unit-d162a664786b52ae.stories.tsx" name="Recorded" time="0.3344">
+    <testsuite name="generated/unit-d162a664786b52ae.stories.tsx" timestamp="2026-10-31T17:01:36.253Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.362">
+        <testcase classname="generated/unit-d162a664786b52ae.stories.tsx" name="Recorded" time="0.2515">
+        </testcase>
+        <testcase classname="generated/unit-d162a664786b52ae.stories.tsx" name="Covered Code" time="0.0914">
         </testcase>
+        <testcase classname="generated/unit-d162a664786b52ae.stories.tsx" name="Assertions" time="0.0187">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-d39d6107d9b6f999.stories.tsx" timestamp="2026-10-31T12:26:41.854Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.173">
-        <testcase classname="generated/unit-d39d6107d9b6f999.stories.tsx" name="Recorded" time="0.1713">
+    <testsuite name="generated/unit-d39d6107d9b6f999.stories.tsx" timestamp="2026-10-31T17:01:36.254Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.196">
+        <testcase classname="generated/unit-d39d6107d9b6f999.stories.tsx" name="Recorded" time="0.1302">
+        </testcase>
+        <testcase classname="generated/unit-d39d6107d9b6f999.stories.tsx" name="Covered Code" time="0.043">
         </testcase>
+        <testcase classname="generated/unit-d39d6107d9b6f999.stories.tsx" name="Assertions" time="0.0224">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-d807f9e16b0fce9b.stories.tsx" timestamp="2026-10-31T12:26:41.854Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1705">
-        <testcase classname="generated/unit-d807f9e16b0fce9b.stories.tsx" name="Recorded" time="0.1697">
+    <testsuite name="generated/unit-d807f9e16b0fce9b.stories.tsx" timestamp="2026-10-31T17:01:36.254Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1769">
+        <testcase classname="generated/unit-d807f9e16b0fce9b.stories.tsx" name="Recorded" time="0.1114">
+        </testcase>
+        <testcase classname="generated/unit-d807f9e16b0fce9b.stories.tsx" name="Covered Code" time="0.0379">
+        </testcase>
+        <testcase classname="generated/unit-d807f9e16b0fce9b.stories.tsx" name="Assertions" time="0.0274">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-dbccf2d343de9132.stories.tsx" timestamp="2026-10-31T12:26:41.854Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2883">
-        <testcase classname="generated/unit-dbccf2d343de9132.stories.tsx" name="Recorded" time="0.2876">
+    <testsuite name="generated/unit-dbccf2d343de9132.stories.tsx" timestamp="2026-10-31T17:01:36.255Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2845">
+        <testcase classname="generated/unit-dbccf2d343de9132.stories.tsx" name="Recorded" time="0.1642">
         </testcase>
+        <testcase classname="generated/unit-dbccf2d343de9132.stories.tsx" name="Covered Code" time="0.0952">
+        </testcase>
+        <testcase classname="generated/unit-dbccf2d343de9132.stories.tsx" name="Assertions" time="0.0249">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-de6905bdf8b60aaa.stories.tsx" timestamp="2026-10-31T12:26:41.855Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2019">
-        <testcase classname="generated/unit-de6905bdf8b60aaa.stories.tsx" name="Recorded" time="0.2013">
+    <testsuite name="generated/unit-de6905bdf8b60aaa.stories.tsx" timestamp="2026-10-31T17:01:36.255Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1811">
+        <testcase classname="generated/unit-de6905bdf8b60aaa.stories.tsx" name="Recorded" time="0.1152">
+        </testcase>
+        <testcase classname="generated/unit-de6905bdf8b60aaa.stories.tsx" name="Covered Code" time="0.0426">
         </testcase>
+        <testcase classname="generated/unit-de6905bdf8b60aaa.stories.tsx" name="Assertions" time="0.0229">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-e42ce8ba9c7decc7.stories.tsx" timestamp="2026-10-31T12:26:41.855Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.3191">
-        <testcase classname="generated/unit-e42ce8ba9c7decc7.stories.tsx" name="Recorded" time="0.3186">
+    <testsuite name="generated/unit-e42ce8ba9c7decc7.stories.tsx" timestamp="2026-10-31T17:01:36.255Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.5741">
+        <testcase classname="generated/unit-e42ce8ba9c7decc7.stories.tsx" name="Recorded" time="0.2744">
+        </testcase>
+        <testcase classname="generated/unit-e42ce8ba9c7decc7.stories.tsx" name="Covered Code" time="0.2276">
+        </testcase>
+        <testcase classname="generated/unit-e42ce8ba9c7decc7.stories.tsx" name="Assertions" time="0.0719">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-e8c114bf8a5f6b4d.stories.tsx" timestamp="2026-10-31T12:26:41.855Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1588">
-        <testcase classname="generated/unit-e8c114bf8a5f6b4d.stories.tsx" name="Recorded" time="0.1581">
+    <testsuite name="generated/unit-e8c114bf8a5f6b4d.stories.tsx" timestamp="2026-10-31T17:01:36.256Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.143">
+        <testcase classname="generated/unit-e8c114bf8a5f6b4d.stories.tsx" name="Recorded" time="0.0995">
         </testcase>
+        <testcase classname="generated/unit-e8c114bf8a5f6b4d.stories.tsx" name="Covered Code" time="0.0229">
+        </testcase>
+        <testcase classname="generated/unit-e8c114bf8a5f6b4d.stories.tsx" name="Assertions" time="0.0203">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-e90b319389372478.stories.tsx" timestamp="2026-10-31T12:26:41.856Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.2782">
-        <testcase classname="generated/unit-e90b319389372478.stories.tsx" name="Recorded" time="0.2775">
+    <testsuite name="generated/unit-e90b319389372478.stories.tsx" timestamp="2026-10-31T17:01:36.256Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.2806">
+        <testcase classname="generated/unit-e90b319389372478.stories.tsx" name="Recorded" time="0.1607">
+        </testcase>
+        <testcase classname="generated/unit-e90b319389372478.stories.tsx" name="Covered Code" time="0.0886">
         </testcase>
+        <testcase classname="generated/unit-e90b319389372478.stories.tsx" name="Assertions" time="0.031">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-e99743f30d1ebde6.stories.tsx" timestamp="2026-10-31T12:26:41.856Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.4746">
-        <testcase classname="generated/unit-e99743f30d1ebde6.stories.tsx" name="Recorded" time="0.4715">
+    <testsuite name="generated/unit-e99743f30d1ebde6.stories.tsx" timestamp="2026-10-31T17:01:36.256Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.8096">
+        <testcase classname="generated/unit-e99743f30d1ebde6.stories.tsx" name="Recorded" time="0.6447">
+        </testcase>
+        <testcase classname="generated/unit-e99743f30d1ebde6.stories.tsx" name="Covered Code" time="0.127">
+        </testcase>
+        <testcase classname="generated/unit-e99743f30d1ebde6.stories.tsx" name="Assertions" time="0.0337">
         </testcase>
     </testsuite>
-    <testsuite name="generated/unit-ec27ec9256382ff4.stories.tsx" timestamp="2026-10-31T12:26:41.856Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1072">
-        <testcase classname="generated/unit-ec27ec9256382ff4.stories.tsx" name="Recorded" time="0.1067">
+    <testsuite name="generated/unit-ec27ec9256382ff4.stories.tsx" timestamp="2026-10-31T17:01:36.257Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1391">
+        <testcase classname="generated/unit-ec27ec9256382ff4.stories.tsx" name="Recorded" time="0.1172">
         </testcase>
+        <testcase classname="generated/unit-ec27ec9256382ff4.stories.tsx" name="Covered Code" time="0.0081">
+        </testcase>
+        <testcase classname="generated/unit-ec27ec9256382ff4.stories.tsx" name="Assertions" time="0.0135">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-ee1d3e226a2a16c5.stories.tsx" timestamp="2026-10-31T12:26:41.856Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1105">
-        <testcase classname="generated/unit-ee1d3e226a2a16c5.stories.tsx" name="Recorded" time="0.1098">
+    <testsuite name="generated/unit-ee1d3e226a2a16c5.stories.tsx" timestamp="2026-10-31T17:01:36.257Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1034">
+        <testcase classname="generated/unit-ee1d3e226a2a16c5.stories.tsx" name="Recorded" time="0.0754">
+        </testcase>
+        <testcase classname="generated/unit-ee1d3e226a2a16c5.stories.tsx" name="Covered Code" time="0.0096">
         </testcase>
+        <testcase classname="generated/unit-ee1d3e226a2a16c5.stories.tsx" name="Assertions" time="0.018">
+        </testcase>
     </testsuite>
-    <testsuite name="generated/unit-ef1513aea19aa46b.stories.tsx" timestamp="2026-10-31T12:26:41.856Z" hostname="runnervm48cm3" tests="1" failures="0" errors="0" skipped="0" time="0.1941">
-        <testcase classname="generated/unit-ef1513aea19aa46b.stories.tsx" name="Recorded" time="0.1933">
+    <testsuite name="generated/unit-ef1513aea19aa46b.stories.tsx" timestamp="2026-10-31T17:01:36.257Z" hostname="runnervm48cm3" tests="3" failures="0" errors="0" skipped="0" time="0.1831">
+        <testcase classname="generated/unit-ef1513aea19aa46b.stories.tsx" name="Recorded" time="0.1185">
+        </testcase>
+        <testcase classname="generated/unit-ef1513aea19aa46b.stories.tsx" name="Covered Code" time="0.0447">
+        </testcase>
+        <testcase classname="generated/unit-ef1513aea19aa46b.stories.tsx" name="Assertions" time="0.0195">
         </testcase>
     </testsuite>
 </testsuites>

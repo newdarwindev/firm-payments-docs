@@ -2,10 +2,10 @@
   "id": "unit-77a21639f0b9f9da",
   "suite": "unit",
   "name": "TestPrepare",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/contracts/validate_test.go#L14",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/contracts/validate_test.go#L14",
   "package": "github.com/newdarwindev/firm-payments/internal/contracts",
   "command": [
     "go",
@@ -311,6 +311,21 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "internal/contracts/validate_test.go",
+      "label": "Selected test / case body · TestPrepare",
+      "source": "func TestPrepare(t *testing.T) {\n\treq := contracts.BulkRequest{PayerFirmUUID: strings.ToUpper(payer), Payments: []contracts.Payment{{Amount: \"1.25\", PayeeFirmUUID: payee, Description: \"first\"}, {Amount: \"2\", PayeeFirmUUID: payee, Description: \"second\"}}}\n\tbatch, err := contracts.Prepare(req)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif batch.PayerUUID != payer || batch.Total != 325 || batch.Credits[payee] != 325 || len(batch.Payments) != 2 || batch.Payments[0].Description != \"first\" {\n\t\tt.Fatalf(\"invalid prepared batch: %+v\", batch)\n\t}\n\tfor _, tc := range []struct {\n\t\tname   string\n\t\tmutate func(*contracts.BulkRequest)\n\t}{\n\t\t{\"bad payer\", func(r *contracts.BulkRequest) { r.PayerFirmUUID = \"invalid\" }},\n\t\t{\"bad recipient\", func(r *contracts.BulkRequest) { r.Payments[0].PayeeFirmUUID = \"x\" }},\n\t\t{\"self payment\", func(r *contracts.BulkRequest) { r.Payments[0].PayeeFirmUUID = payer }},\n\t\t{\"empty\", func(r *contracts.BulkRequest) { r.Payments = nil }},\n\t\t{\"too many\", func(r *contracts.BulkRequest) { r.Payments = make([]contracts.Payment, contracts.MaxPayments+1) }},\n\t\t{\"bad amount\", func(r *contracts.BulkRequest) { r.Payments[0].Amount = \"1.001\" }},\n\t\t{\"total overflow\", func(r *contracts.BulkRequest) { r.Payments[0].Amount = \"21474836.47\" }},\n\t} {\n\t\tt.Run(tc.name, func(t *testing.T) {\n\t\t\tbad := req\n\t\t\tbad.Payments = append([]contracts.Payment{}, req.Payments...)\n\t\t\ttc.mutate(&bad)\n\t\t\tif _, err := contracts.Prepare(bad); !errors.Is(err, contracts.ErrInvalidRequest) {\n\t\t\t\tt.Fatalf(\"expected invalid request, got %v\", err)\n\t\t\t}\n\t\t})\n\t}\n}",
+      "sha256": "f5e31d87022282d3e2f41c3bb265777ace4d0eb12737c525e557f0a4c7fe84b4",
+      "startLine": 14,
+      "endLine": 44,
+      "assertLines": [
+        18,
+        21,
+        40
+      ]
+    }
+  ],
   "profileSHA256": "2b10be13b0ac21c7530651ed327c460df2ce31e27357eb3f7603a0567188e00c",
-  "gifSHA256": "ad52566eb4623542bf2da42205d3cbed91254782b4731dfd6930e7fd65e5f4b9"
+  "gifSHA256": "00ba8146b1209ae437b07684816b5f22a3c91344b0a0b5a7f14a08d29ef00a9c"
 }

@@ -2,10 +2,10 @@
   "id": "unit-cf3ed79c87e20a30",
   "suite": "unit",
   "name": "TestReportEscapesInputAndRetainsFailure",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/evidence/main_test.go#L50",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tools/evidence/main_test.go#L50",
   "package": "github.com/newdarwindev/firm-payments/tools/evidence",
   "command": [
     "go",
@@ -1313,6 +1313,23 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "tools/evidence/main_test.go",
+      "label": "Selected test / case body · TestReportEscapesInputAndRetainsFailure",
+      "source": "func TestReportEscapesInputAndRetainsFailure(t *testing.T) {\n\tout := t.TempDir()\n\tr := report{Revision: \"<script>bad</script>\", Total: 1, Cases: []testCase{{Name: \"One\", Asserts: \"<script>alert(1)</script>\", Status: \"skip\", Output: \"original output\"}}}\n\tif err := writeReport(out, r); err != nil {\n\t\tt.Fatal(err)\n\t}\n\thtml, err := os.ReadFile(filepath.Join(out, \"index.html\"))\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif strings.Contains(string(html), \"<script>\") || !strings.Contains(string(html), \"&lt;script&gt;\") {\n\t\tt.Fatal(\"unsafe HTML\")\n\t}\n\txml, err := os.ReadFile(filepath.Join(out, \"junit.xml\"))\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif !strings.Contains(string(xml), `failures=\"1\"`) || !strings.Contains(string(xml), \"original output\") {\n\t\tt.Fatal(\"skipped case was hidden\")\n\t}\n}",
+      "sha256": "49f4bc5bd48a5a40fc78d28f1738e804cc5335d8ae89463d815b36ba0b506829",
+      "startLine": 50,
+      "endLine": 70,
+      "assertLines": [
+        54,
+        58,
+        61,
+        65,
+        68
+      ]
+    }
+  ],
   "profileSHA256": "e2253d13365bb1d635992bd33dee462972d1847b1c5c56e399000f4642eb92b3",
-  "gifSHA256": "fc132b9d6244e291acf6b3bd05f6b14dcee1cde0efaf09fcf67f056b0d1269e7"
+  "gifSHA256": "eab45cc618d658acd2658de51d92db0746475fe29c8ea74ad09db9a084d6f611"
 }

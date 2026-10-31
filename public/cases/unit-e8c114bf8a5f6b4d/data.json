@@ -2,10 +2,10 @@
   "id": "unit-e8c114bf8a5f6b4d",
   "suite": "unit",
   "name": "FuzzParseCents/seed#3",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/money/money_test.go#L28",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/money/money_test.go#L28",
   "package": "github.com/newdarwindev/firm-payments/internal/money",
   "command": [
     "go",
@@ -186,6 +186,19 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "internal/money/money_test.go",
+      "label": "Selected test / case body · FuzzParseCents",
+      "source": "func FuzzParseCents(f *testing.F) {\n\tfor _, s := range []string{\"1\", \"0.01\", \"5800.5\", \"21474836.48\", \"-1\", \"\"} {\n\t\tf.Add(s)\n\t}\n\tf.Fuzz(func(t *testing.T, s string) {\n\t\tc, err := money.ParseCents(s)\n\t\tif err == nil && (c <= 0 || c > money.MaxCents) {\n\t\t\tt.Fatalf(\"out-of-range result %d for %q\", c, s)\n\t\t}\n\t})\n}",
+      "sha256": "419060d18b2c125e1d6742fca73263dabcd5d5b260581da407ad62254b50bb05",
+      "startLine": 28,
+      "endLine": 38,
+      "assertLines": [
+        35
+      ]
+    }
+  ],
   "profileSHA256": "b1c313a195c721bd9b353b4aa99f7a2525ee4c15d73d392e5400150e6924a8b8",
-  "gifSHA256": "0f7718fbb720c776cedc9d0671a017548a4edf5ca1ba7a8fc20a3682155435bd"
+  "gifSHA256": "88552693cbe31b1d6b0c54b0cc00de456693759bc66c8b12c27477b0c80e5088"
 }

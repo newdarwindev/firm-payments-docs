@@ -2,10 +2,10 @@
   "id": "functional-bf6ddeb1959f2577",
   "suite": "functional",
   "name": "LockDeadlineRollback",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "Held PostgreSQL lock produces bounded 504 without writes; valid processing resumes after release.",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L247",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tests/functional/payments_test.go#L247",
   "package": "",
   "command": [
     "go",
@@ -38,7 +38,7 @@
   "group": false,
   "scope": "Service processes; includes startup, readiness and shutdown. Full-suite race checks run separately.",
   "total": 275,
-  "covered": 161,
+  "covered": 168,
   "files": [
     {
       "path": "cmd/ledger-service/main.go",
@@ -209,7 +209,7 @@
           "endLine": 26,
           "endColumn": 14,
           "statements": 1,
-          "count": 0
+          "count": 1
         },
         {
           "startLine": 28,
@@ -217,7 +217,7 @@
           "endLine": 28,
           "endColumn": 34,
           "statements": 1,
-          "count": 0
+          "count": 1
         },
         {
           "startLine": 30,
@@ -703,7 +703,7 @@
           "endLine": 93,
           "endColumn": 105,
           "statements": 1,
-          "count": 1
+          "count": 2
         },
         {
           "startLine": 95,
@@ -711,7 +711,7 @@
           "endLine": 95,
           "endColumn": 104,
           "statements": 1,
-          "count": 1
+          "count": 0
         },
         {
           "startLine": 97,
@@ -1325,7 +1325,7 @@
           "endLine": 61,
           "endColumn": 1,
           "statements": 1,
-          "count": 1
+          "count": 0
         },
         {
           "startLine": 62,
@@ -1333,7 +1333,7 @@
           "endLine": 62,
           "endColumn": 15,
           "statements": 1,
-          "count": 1
+          "count": 2
         },
         {
           "startLine": 62,
@@ -1341,7 +1341,7 @@
           "endLine": 62,
           "endColumn": 39,
           "statements": 1,
-          "count": 1
+          "count": 2
         },
         {
           "startLine": 63,
@@ -1349,7 +1349,7 @@
           "endLine": 63,
           "endColumn": 42,
           "statements": 1,
-          "count": 1
+          "count": 2
         },
         {
           "startLine": 64,
@@ -1365,7 +1365,7 @@
           "endLine": 68,
           "endColumn": 102,
           "statements": 1,
-          "count": 0
+          "count": 1
         },
         {
           "startLine": 69,
@@ -1381,7 +1381,7 @@
           "endLine": 72,
           "endColumn": 91,
           "statements": 2,
-          "count": 0
+          "count": 1
         },
         {
           "startLine": 73,
@@ -1397,7 +1397,7 @@
           "endLine": 76,
           "endColumn": 24,
           "statements": 2,
-          "count": 0
+          "count": 1
         },
         {
           "startLine": 78,
@@ -1453,7 +1453,7 @@
           "endLine": 90,
           "endColumn": 48,
           "statements": 1,
-          "count": 0
+          "count": 1
         },
         {
           "startLine": 91,
@@ -1469,7 +1469,7 @@
           "endLine": 94,
           "endColumn": 12,
           "statements": 1,
-          "count": 0
+          "count": 1
         }
       ]
     },
@@ -1680,6 +1680,129 @@
       ]
     }
   ],
-  "profileSHA256": "5418c741f88f94c52342bd3daa5689864791afc2c17f601bc5d6de57ef791459",
-  "gifSHA256": "f4ebf8e0c4f93dfefd01c6742b91b3e736a1efb13bc7d91c5c5a76cfcdee9426"
+  "assertions": [
+    {
+      "path": "tests/functional/payments_test.go",
+      "label": "Selected test / case body",
+      "source": "\t\t\"LockDeadlineRollback\":      lockDeadline,",
+      "sha256": "397e1cfe73a49fc3a8dd780ab0741806cc1c50cfd34e6884d9caf05e24cb6855",
+      "startLine": 247,
+      "endLine": 247,
+      "assertLines": []
+    },
+    {
+      "path": "tests/functional/payments_test.go",
+      "label": "Referenced test helper (static call graph) · lockDeadline",
+      "source": "func lockDeadline(t *testing.T) {\n\tbefore := snapshot(t)\n\ttx, err := suite.db.Begin(t.Context())\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tdefer func() {\n\t\tctx, cancel := context.WithTimeout(context.Background(), time.Second)\n\t\tdefer cancel()\n\t\t_ = tx.Rollback(ctx)\n\t}()\n\tif _, err := tx.Exec(t.Context(), \"SELECT id FROM firms WHERE id=1 FOR UPDATE\"); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tstart := time.Now()\n\tres := call(t, 0, encode(t, transfer(\"1\")))\n\texpect(t, res, 504, \"timeout\")\n\tif time.Since(start) > 9*time.Second {\n\t\tt.Fatal(\"unbounded request\")\n\t}\n\tunchanged(t, before)\n\tif err := tx.Rollback(t.Context()); err != nil {\n\t\tt.Fatal(err)\n\t}\n\taccepted(t, transfer(\"1\"))\n\tcheckState(t, []int64{4999900, 50100, 200000}, []record{{1, 2, 100, \"transfer\"}})\n}",
+      "sha256": "397e1cfe73a49fc3a8dd780ab0741806cc1c50cfd34e6884d9caf05e24cb6855",
+      "startLine": 573,
+      "endLine": 599,
+      "assertLines": [
+        577,
+        585,
+        591,
+        595
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · accepted",
+      "source": "func accepted(t *testing.T, b batch) { t.Helper(); expect(t, call(t, 0, encode(t, b)), 201, \"\") }",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 380,
+      "endLine": 380,
+      "assertLines": []
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · call",
+      "source": "func call(t *testing.T, index int, body string) response {\n\tt.Helper()\n\tres, err := request(t.Context(), \"http://\"+suite.apis[index].addr, http.MethodPost, \"/payments/bulk\", \"application/json\", body)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\treturn res\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 357,
+      "endLine": 364,
+      "assertLines": [
+        361
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · checkState",
+      "source": "func checkState(t *testing.T, balances []int64, payments []record) {\n\tt.Helper()\n\twant := state{Balances: balances, Payments: payments}\n\tif payments == nil {\n\t\twant.Payments = []record{}\n\t}\n\tif got := snapshot(t); !reflect.DeepEqual(got, want) {\n\t\tt.Fatalf(\"state %+v; want %+v\", got, want)\n\t}\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 312,
+      "endLine": 321,
+      "assertLines": [
+        319
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · encode",
+      "source": "func encode(t *testing.T, b batch) string {\n\tt.Helper()\n\tdata, err := json.Marshal(b)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\treturn string(data)\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 365,
+      "endLine": 372,
+      "assertLines": [
+        369
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · expect",
+      "source": "func expect(t *testing.T, got response, status int, code string) {\n\tt.Helper()\n\tif got.Status != status || got.Code != code || (status == 201 && got.Body != \"\") {\n\t\tt.Fatalf(\"response %+v; want %d/%s\", got, status, code)\n\t}\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 374,
+      "endLine": 379,
+      "assertLines": [
+        377
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · snapshot",
+      "source": "func snapshot(t *testing.T) state {\n\tt.Helper()\n\tctx, cancel := context.WithTimeout(t.Context(), 5*time.Second)\n\tdefer cancel()\n\ts := state{Balances: []int64{}, Payments: []record{}}\n\trows, err := suite.db.Query(ctx, \"SELECT balance_cents FROM firms ORDER BY id\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tfor rows.Next() {\n\t\tvar cents int64\n\t\tif err := rows.Scan(&cents); err != nil {\n\t\t\trows.Close()\n\t\t\tt.Fatal(err)\n\t\t}\n\t\ts.Balances = append(s.Balances, cents)\n\t}\n\trows.Close()\n\tif err := rows.Err(); err != nil {\n\t\tt.Fatal(err)\n\t}\n\trows, err = suite.db.Query(ctx, \"SELECT payer_firm_id,payee_firm_id,amount_cents,description FROM payments ORDER BY id\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tdefer rows.Close()\n\tfor rows.Next() {\n\t\tvar r record\n\t\tif err := rows.Scan(&r.Payer, &r.Payee, &r.Cents, &r.Description); err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t\ts.Payments = append(s.Payments, r)\n\t}\n\tif err := rows.Err(); err != nil {\n\t\tt.Fatal(err)\n\t}\n\treturn s\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 274,
+      "endLine": 311,
+      "assertLines": [
+        281,
+        287,
+        293,
+        297,
+        303,
+        308
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · transfer",
+      "source": "func transfer(amount string) batch { return batch{payer, []entry{{amount, lopez, \"transfer\"}}} }",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 373,
+      "endLine": 373,
+      "assertLines": []
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · unchanged",
+      "source": "func unchanged(t *testing.T, before state) {\n\tt.Helper()\n\tif got := snapshot(t); !reflect.DeepEqual(got, before) {\n\t\tt.Fatalf(\"rejected request changed state: before %+v; after %+v\", before, got)\n\t}\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 322,
+      "endLine": 327,
+      "assertLines": [
+        325
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · request",
+      "source": "func request(ctx context.Context, base, method, path, media, body string) (response, error) {\n\treq, err := http.NewRequestWithContext(ctx, method, base+path, strings.NewReader(body))\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tif media != \"\" {\n\t\treq.Header.Set(\"Content-Type\", media)\n\t}\n\tres, err := suite.client.Do(req)\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tdefer func() { _ = res.Body.Close() }()\n\tdata, err := io.ReadAll(io.LimitReader(res.Body, 2<<20))\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tvar failure struct {\n\t\tError struct {\n\t\t\tCode string `json:\"code\"`\n\t\t}\n\t}\n\tif res.StatusCode != 201 && res.StatusCode != 404 && res.StatusCode != 405 {\n\t\tif err := json.Unmarshal(data, &failure); err != nil {\n\t\t\treturn response{}, err\n\t\t}\n\t}\n\treturn response{res.StatusCode, string(data), failure.Error.Code}, nil\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 328,
+      "endLine": 356,
+      "assertLines": []
+    }
+  ],
+  "profileSHA256": "6f2ff1f379c8cdaa2ba0859b1856f5a59076529f11d8f18cad3f2e22095a6a03",
+  "gifSHA256": "bcf39fd346d3346ac5ed183b8767b5704fb2f889c7f649cfd7cdc123bdc9edb5"
 }

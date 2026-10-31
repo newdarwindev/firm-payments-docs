@@ -2,10 +2,10 @@
   "id": "unit-2ca7beabc7c217e4",
   "suite": "unit",
   "name": "TestPrePushRejectsUnverifiedTree/missing",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/gates_test.go#L13",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tests/gates_test.go#L13",
   "package": "github.com/newdarwindev/firm-payments/tests",
   "command": [
     "go",
@@ -42,6 +42,24 @@
   "total": 0,
   "covered": 0,
   "files": [],
+  "assertions": [
+    {
+      "path": "tests/gates_test.go",
+      "label": "Selected test / case body · TestPrePushRejectsUnverifiedTree",
+      "source": "func TestPrePushRejectsUnverifiedTree(t *testing.T) {\n\thook, err := filepath.Abs(\"../.githooks/pre-push\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\troot := t.TempDir()\n\tbin := filepath.Join(root, \"bin\")\n\tif err := os.MkdirAll(bin, 0o755); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tfake := `#!/bin/sh\ncase \"$1 $2\" in\n 'rev-parse --show-toplevel') printf '%s\\n' \"$FP_TEST_ROOT\" ;;\n 'rev-parse HEAD^{tree}') printf '%s\\n' \"$FP_TEST_TREE\" ;;\n *) exit 2 ;;\nesac\n`\n\tif err := os.WriteFile(filepath.Join(bin, \"git\"), []byte(fake), 0o755); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tt.Setenv(\"PATH\", bin+string(os.PathListSeparator)+os.Getenv(\"PATH\"))\n\tt.Setenv(\"FP_TEST_ROOT\", root)\n\tt.Setenv(\"FP_TEST_TREE\", \"verified-tree\")\n\tif err := os.MkdirAll(filepath.Join(root, \".local\"), 0o755); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tfor _, tc := range []struct {\n\t\tname, receipt string\n\t\tok            bool\n\t}{{\"missing\", \"\", false}, {\"stale\", \"other-tree\\n\", false}, {\"matching\", \"verified-tree\\n\", true}} {\n\t\tt.Run(tc.name, func(t *testing.T) {\n\t\t\tif tc.receipt != \"\" {\n\t\t\t\tif err := os.WriteFile(filepath.Join(root, \".local\", \"verified-index\"), []byte(tc.receipt), 0o600); err != nil {\n\t\t\t\t\tt.Fatal(err)\n\t\t\t\t}\n\t\t\t}\n\t\t\tcommand := exec.CommandContext(t.Context(), \"bash\", hook)\n\t\t\toutput, err := command.CombinedOutput()\n\t\t\tif (err == nil) != tc.ok {\n\t\t\t\tt.Fatalf(\"gate result %v, expected pass=%v: %s\", err, tc.ok, output)\n\t\t\t}\n\t\t})\n\t}\n}",
+      "sha256": "cecaf47f05d84d56162722e8cc87cf4a2c24879befdd7f7cd730975849547b04",
+      "startLine": 13,
+      "endLine": 56,
+      "assertLines": [
+        16,
+        21,
+        31,
+        37,
+        46,
+        52
+      ]
+    }
+  ],
   "profileSHA256": "15e39ee7d1ea1e23c2caa82c7fa07907bc8ae826847b1499a894308734780a89",
-  "gifSHA256": "e119de5e0467ac655bf995bc993090b4f3e29f3816bd9dbf7af78045c739b89b"
+  "gifSHA256": "6886ba80b908c0e8686dfbf163214f38e82c616d52b4561a90becb3d26b2b2bb"
 }

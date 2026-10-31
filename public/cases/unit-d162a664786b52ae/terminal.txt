@@ -2,6 +2,6 @@ go tool test2json -t -p github.com/newdarwindev/firm-payments/tools/requirements
 === RUN   TestSiteMarkdownDoesNotExecuteHTMLOrScriptURLs
 --- PASS: TestSiteMarkdownDoesNotExecuteHTMLOrScriptURLs (0.00s)
 PASS
-coverage: 0.7% of statements
+coverage: 0.6% of statements
 
 Exit status: 0

@@ -2,10 +2,10 @@
   "id": "functional-4bc1f03569d00c48",
   "suite": "functional",
   "name": "SQLFailureThenValidPayment",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "Service successfully handles a valid payment after an injected SQL failure rolls back.",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L375",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tests/functional/payments_test.go#L375",
   "package": "",
   "command": [
     "go",
@@ -1680,6 +1680,138 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "tests/functional/payments_test.go",
+      "label": "Selected test / case body",
+      "source": "\t\t\"SQLFailureThenValidPayment\": func(t *testing.T) {\n\t\t\trollbackCase(t)\n\t\t\texecSQL(t, \"DROP TRIGGER reject_second ON payments; DROP FUNCTION reject_second()\")\n\t\t\taccepted(t, transfer(\"1\"))\n\t\t\tcheckState(t, []int64{4999900, 50100, 200000}, []record{{1, 2, 100, \"transfer\"}})\n\t\t},",
+      "sha256": "397e1cfe73a49fc3a8dd780ab0741806cc1c50cfd34e6884d9caf05e24cb6855",
+      "startLine": 375,
+      "endLine": 380,
+      "assertLines": []
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · accepted",
+      "source": "func accepted(t *testing.T, b batch) { t.Helper(); expect(t, call(t, 0, encode(t, b)), 201, \"\") }",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 380,
+      "endLine": 380,
+      "assertLines": []
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · checkState",
+      "source": "func checkState(t *testing.T, balances []int64, payments []record) {\n\tt.Helper()\n\twant := state{Balances: balances, Payments: payments}\n\tif payments == nil {\n\t\twant.Payments = []record{}\n\t}\n\tif got := snapshot(t); !reflect.DeepEqual(got, want) {\n\t\tt.Fatalf(\"state %+v; want %+v\", got, want)\n\t}\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 312,
+      "endLine": 321,
+      "assertLines": [
+        319
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · execSQL",
+      "source": "func execSQL(t *testing.T, sql string) {\n\tt.Helper()\n\tctx, cancel := context.WithTimeout(t.Context(), 5*time.Second)\n\tdefer cancel()\n\tif _, err := suite.db.Exec(ctx, sql); err != nil {\n\t\tt.Fatal(err)\n\t}\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 266,
+      "endLine": 273,
+      "assertLines": [
+        271
+      ]
+    },
+    {
+      "path": "tests/functional/payments_test.go",
+      "label": "Referenced test helper (static call graph) · rollbackCase",
+      "source": "func rollbackCase(t *testing.T) {\n\tt.Helper()\n\texecSQL(t, `CREATE FUNCTION reject_second() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.description='force-failure' THEN RAISE EXCEPTION 'private injected SQL details'; END IF; RETURN NEW; END $$; CREATE TRIGGER reject_second BEFORE INSERT ON payments FOR EACH ROW EXECUTE FUNCTION reject_second()`)\n\tt.Cleanup(func() {\n\t\tctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)\n\t\tdefer cancel()\n\t\tif _, err := suite.db.Exec(ctx, \"DROP TRIGGER IF EXISTS reject_second ON payments; DROP FUNCTION IF EXISTS reject_second()\"); err != nil {\n\t\t\tt.Error(err)\n\t\t}\n\t})\n\tbefore := snapshot(t)\n\tb := transfer(\"1\")\n\tb.Payments = append(b.Payments, entry{\"2\", nair, \"force-failure\"})\n\tres := call(t, 0, encode(t, b))\n\texpect(t, res, 500, \"internal_error\")\n\tfor _, secret := range []string{\"private injected\", \"reject_second\", \"INSERT INTO\", \"SQLSTATE\"} {\n\t\tif strings.Contains(res.Body, secret) {\n\t\t\tt.Fatal(\"SQL detail exposed\")\n\t\t}\n\t}\n\tunchanged(t, before)\n}",
+      "sha256": "397e1cfe73a49fc3a8dd780ab0741806cc1c50cfd34e6884d9caf05e24cb6855",
+      "startLine": 505,
+      "endLine": 526,
+      "assertLines": [
+        512,
+        522
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · transfer",
+      "source": "func transfer(amount string) batch { return batch{payer, []entry{{amount, lopez, \"transfer\"}}} }",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 373,
+      "endLine": 373,
+      "assertLines": []
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · call",
+      "source": "func call(t *testing.T, index int, body string) response {\n\tt.Helper()\n\tres, err := request(t.Context(), \"http://\"+suite.apis[index].addr, http.MethodPost, \"/payments/bulk\", \"application/json\", body)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\treturn res\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 357,
+      "endLine": 364,
+      "assertLines": [
+        361
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · encode",
+      "source": "func encode(t *testing.T, b batch) string {\n\tt.Helper()\n\tdata, err := json.Marshal(b)\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\treturn string(data)\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 365,
+      "endLine": 372,
+      "assertLines": [
+        369
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · expect",
+      "source": "func expect(t *testing.T, got response, status int, code string) {\n\tt.Helper()\n\tif got.Status != status || got.Code != code || (status == 201 && got.Body != \"\") {\n\t\tt.Fatalf(\"response %+v; want %d/%s\", got, status, code)\n\t}\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 374,
+      "endLine": 379,
+      "assertLines": [
+        377
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · snapshot",
+      "source": "func snapshot(t *testing.T) state {\n\tt.Helper()\n\tctx, cancel := context.WithTimeout(t.Context(), 5*time.Second)\n\tdefer cancel()\n\ts := state{Balances: []int64{}, Payments: []record{}}\n\trows, err := suite.db.Query(ctx, \"SELECT balance_cents FROM firms ORDER BY id\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tfor rows.Next() {\n\t\tvar cents int64\n\t\tif err := rows.Scan(&cents); err != nil {\n\t\t\trows.Close()\n\t\t\tt.Fatal(err)\n\t\t}\n\t\ts.Balances = append(s.Balances, cents)\n\t}\n\trows.Close()\n\tif err := rows.Err(); err != nil {\n\t\tt.Fatal(err)\n\t}\n\trows, err = suite.db.Query(ctx, \"SELECT payer_firm_id,payee_firm_id,amount_cents,description FROM payments ORDER BY id\")\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tdefer rows.Close()\n\tfor rows.Next() {\n\t\tvar r record\n\t\tif err := rows.Scan(&r.Payer, &r.Payee, &r.Cents, &r.Description); err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t\ts.Payments = append(s.Payments, r)\n\t}\n\tif err := rows.Err(); err != nil {\n\t\tt.Fatal(err)\n\t}\n\treturn s\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 274,
+      "endLine": 311,
+      "assertLines": [
+        281,
+        287,
+        293,
+        297,
+        303,
+        308
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · unchanged",
+      "source": "func unchanged(t *testing.T, before state) {\n\tt.Helper()\n\tif got := snapshot(t); !reflect.DeepEqual(got, before) {\n\t\tt.Fatalf(\"rejected request changed state: before %+v; after %+v\", before, got)\n\t}\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 322,
+      "endLine": 327,
+      "assertLines": [
+        325
+      ]
+    },
+    {
+      "path": "tests/functional/harness_test.go",
+      "label": "Referenced test helper (static call graph) · request",
+      "source": "func request(ctx context.Context, base, method, path, media, body string) (response, error) {\n\treq, err := http.NewRequestWithContext(ctx, method, base+path, strings.NewReader(body))\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tif media != \"\" {\n\t\treq.Header.Set(\"Content-Type\", media)\n\t}\n\tres, err := suite.client.Do(req)\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tdefer func() { _ = res.Body.Close() }()\n\tdata, err := io.ReadAll(io.LimitReader(res.Body, 2<<20))\n\tif err != nil {\n\t\treturn response{}, err\n\t}\n\tvar failure struct {\n\t\tError struct {\n\t\t\tCode string `json:\"code\"`\n\t\t}\n\t}\n\tif res.StatusCode != 201 && res.StatusCode != 404 && res.StatusCode != 405 {\n\t\tif err := json.Unmarshal(data, &failure); err != nil {\n\t\t\treturn response{}, err\n\t\t}\n\t}\n\treturn response{res.StatusCode, string(data), failure.Error.Code}, nil\n}",
+      "sha256": "3015ee8f7a0a398008c496455e0aae6fd249336314dd32334555a83c614c0e06",
+      "startLine": 328,
+      "endLine": 356,
+      "assertLines": []
+    }
+  ],
   "profileSHA256": "c6bd4a5aa49bfa76814721444c665c14c970f6352955a67c35b3f8b98ce6f225",
-  "gifSHA256": "2c54cfa9b10bc4f1ba3a6882576d0ef3384cde3c27a9f19fbe0972658e856218"
+  "gifSHA256": "5ca4ab4caed139a6c0c2168a75d5baf479794f62c1a3ceef90a2187ad9c05f57"
 }

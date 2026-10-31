@@ -2,10 +2,10 @@
   "id": "unit-bdaf0c4e9c6f354b",
   "suite": "unit",
   "name": "TestCoverageUnionUsesStatementsNotAveragedPercentages",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/evidence/main_test.go#L71",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tools/evidence/main_test.go#L71",
   "package": "github.com/newdarwindev/firm-payments/tools/evidence",
   "command": [
     "go",
@@ -1313,6 +1313,25 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "tools/evidence/main_test.go",
+      "label": "Selected test / case body · TestCoverageUnionUsesStatementsNotAveragedPercentages",
+      "source": "func TestCoverageUnionUsesStatementsNotAveragedPercentages(t *testing.T) {\n\troot := t.TempDir()\n\tpaths := []string{}\n\tfor i, text := range []string{\"mode: atomic\\nexample/internal/a.go:1.1,2.1 9 1\\nexample/internal/a.go:3.1,4.1 1 0\\n\", \"mode: atomic\\nexample/internal/a.go:1.1,2.1 9 0\\nexample/internal/a.go:3.1,4.1 1 1\\n\", \"mode: atomic\\nexample/internal/a.go:1.1,2.1 9 2\\nexample/internal/a.go:3.1,4.1 1 0\\n\"} {\n\t\tp := filepath.Join(root, string(rune('a'+i))+\".out\")\n\t\tif err := os.WriteFile(p, []byte(text), 0o600); err != nil {\n\t\t\tt.Fatal(err)\n\t\t}\n\t\tpaths = append(paths, p)\n\t}\n\tout := filepath.Join(root, \"coverage\")\n\tif err := coverage(out, paths); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tdata, err := os.ReadFile(filepath.Join(out, \"summary.json\"))\n\tif err != nil {\n\t\tt.Fatal(err)\n\t}\n\tvar results []coverageResult\n\tif err := json.Unmarshal(data, &results); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif results[3].Percent != 100 || results[0].Percent != 90 || results[1].Percent != 10 {\n\t\tt.Fatal(results)\n\t}\n\tif err := os.WriteFile(paths[0], []byte(\"mode: atomic\\nfile 1 -1\\n\"), 0o600); err != nil {\n\t\tt.Fatal(err)\n\t}\n\tif err := coverage(out, paths); err == nil {\n\t\tt.Fatal(\"invalid counters accepted\")\n\t}\n}",
+      "sha256": "49f4bc5bd48a5a40fc78d28f1738e804cc5335d8ae89463d815b36ba0b506829",
+      "startLine": 71,
+      "endLine": 102,
+      "assertLines": [
+        77,
+        83,
+        87,
+        91,
+        94,
+        97,
+        100
+      ]
+    }
+  ],
   "profileSHA256": "150564ff2c543b92ffe6ad312b2b951b006b69edd287b3219108a7144f1fd065",
-  "gifSHA256": "4eb51dbf21cb640628fe465723e551e45c2252188f8abcfa103e61f87a04866c"
+  "gifSHA256": "9b1f3c2d62cab2964331e82498210b90e1e0adf9f44ca75ab39bd38e8e3b4cee"
 }

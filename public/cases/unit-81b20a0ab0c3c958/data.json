@@ -2,10 +2,10 @@
   "id": "unit-81b20a0ab0c3c958",
   "suite": "unit",
   "name": "TestParseCents",
-  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
   "status": "pass",
   "asserts": "",
-  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/money/money_test.go#L11",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/money/money_test.go#L11",
   "package": "github.com/newdarwindev/firm-payments/internal/money",
   "command": [
     "go",
@@ -185,6 +185,20 @@
       ]
     }
   ],
+  "assertions": [
+    {
+      "path": "internal/money/money_test.go",
+      "label": "Selected test / case body · TestParseCents",
+      "source": "func TestParseCents(t *testing.T) {\n\tfor _, tc := range []struct {\n\t\tinput string\n\t\twant  int64\n\t}{{\"6250\", 625000}, {\"5800.5\", 580050}, {\"1200.75\", 120075}, {\"0.01\", 1}, {\"0001.20\", 120}, {\"21474836.47\", 2147483647}, {strings.Repeat(\"0\", 100) + \"1\", 100}} {\n\t\tgot, err := money.ParseCents(tc.input)\n\t\tif err != nil || got != tc.want {\n\t\t\tt.Errorf(\"%q: %d, %v; want %d\", tc.input, got, err, tc.want)\n\t\t}\n\t}\n\tfor _, input := range []string{\"\", \"0\", \"0.00\", \"-1\", \"+1\", \"1.\", \".1\", \"1.001\", \"1e2\", \"NaN\", \" 1\", \"1\\n\", \"1,000\", \"１２\", \"21474836.48\", \"21474837\", strings.Repeat(\"9\", 100)} {\n\t\tif _, err := money.ParseCents(input); !errors.Is(err, money.ErrInvalidAmount) {\n\t\t\tt.Errorf(\"accepted %q: %v\", input, err)\n\t\t}\n\t}\n}",
+      "sha256": "419060d18b2c125e1d6742fca73263dabcd5d5b260581da407ad62254b50bb05",
+      "startLine": 11,
+      "endLine": 26,
+      "assertLines": [
+        18,
+        23
+      ]
+    }
+  ],
   "profileSHA256": "391a4e74c7b4c1ddcc61be700cf19057a99b74f6b16b828355050b1fd13d5710",
-  "gifSHA256": "9659f8019ca4c6ff0540be8d1f4b4869c17901adcf84be789345506ec530d4b2"
+  "gifSHA256": "6471d35324c9f06a31a602b128b68e1b030762bad7290b71241220e2572cde2e"
 }

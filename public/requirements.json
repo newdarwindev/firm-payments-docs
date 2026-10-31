@@ -1,0 +1,1892 @@
+{
+  "sha": "950b17fe1bc52dace1db4bba3a35007ba891d097",
+  "rows": [
+    {
+      "id": "cover",
+      "kind": "context",
+      "label": "Assignment context",
+      "note": "Assignment title and attribution. This is task context, not a test assertion.",
+      "page": 1,
+      "html": "<h1>Firm Payments: Build a bulk payment service</h1>\n<p>TaxDome · Technical Challenge</p>\n<p>Write a web service that receives bulk payment requests from a single firm.</p>\n<p>© TaxDome 2026. All rights reserved. · taxdome.com</p>\n",
+      "markdown": "# Firm Payments: Build a bulk payment service\n\nTaxDome · Technical Challenge\n\nWrite a web service that receives bulk payment requests from a single firm.\n\n© TaxDome 2026. All rights reserved. · taxdome.com",
+      "references": [
+        {
+          "Label": "assignment.pdf:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#L1"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L2"
+        },
+        {
+          "Label": "Original PDF · p.1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=1"
+        }
+      ],
+      "checks": null,
+      "artifacts": null,
+      "tests": []
+    },
+    {
+      "id": "goal",
+      "kind": "context",
+      "label": "Assignment context",
+      "note": "Business context for the service. The tests below exercise transfers between firms; they do not claim to model an accounting platform.",
+      "page": 2,
+      "html": "<h2>Goal</h2>\n<p>Imagine you are a backend engineer at a practice management platform for accounting firms, like TaxDome. Thousands of firms work on the platform, from solo preparers to practices with hundreds of accountants. Each firm has a balance with us, and the money its clients pay on invoices lands there.</p>\n<p>Firms also work with each other. A large practice sends overflow returns to solo preparers during tax season, a bookkeeping firm hands its clients' tax returns to a preparer, and a firm that brings in a client gets a referral fee. Firms settle these debts through their balances on the platform, so the same firm pays some firms and gets paid by others. Paying everyone one by one would be slow and painful, so we let a firm pay everyone it owes in bulk.</p>\n",
+      "markdown": "## Goal\n\nImagine you are a backend engineer at a practice management platform for accounting firms, like TaxDome. Thousands of firms work on the platform, from solo preparers to practices with hundreds of accountants. Each firm has a balance with us, and the money its clients pay on invoices lands there.\n\nFirms also work with each other. A large practice sends overflow returns to solo preparers during tax season, a bookkeeping firm hands its clients' tax returns to a preparer, and a firm that brings in a client gets a referral fee. Firms settle these debts through their balances on the platform, so the same firm pays some firms and gets paid by others. Paying everyone one by one would be slow and painful, so we let a firm pay everyone it owes in bulk.",
+      "references": [
+        {
+          "Label": "traceability.md:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/traceability.md#L1"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L11"
+        },
+        {
+          "Label": "Original PDF · p.2",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=2"
+        }
+      ],
+      "checks": null,
+      "artifacts": null,
+      "tests": []
+    },
+    {
+      "id": "mission",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "The payer must fund the gross batch total. Failed batches leave all previous state intact.",
+      "page": 2,
+      "html": "<h2>Your mission</h2>\n<p>Write a web service that receives bulk payment requests from a single firm and verifies that the request is valid: the paying firm must have enough funds on its balance for all the payments in the request. If it doesn't, the entire request is denied.</p>\n",
+      "markdown": "## Your mission\n\nWrite a web service that receives bulk payment requests from a single firm and verifies that the request is valid: the paying firm must have enough funds on its balance for all the payments in the request. If it doesn't, the entire request is denied.",
+      "references": [
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "validate.go:43",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/contracts/validate.go#L43"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L18"
+        },
+        {
+          "Label": "Original PDF · p.2",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=2"
+        }
+      ],
+      "checks": null,
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-737e3e9a8b441f32",
+          "name": "OriginalThreePaymentSample",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-1df3a3b6981c9d9c",
+          "name": "InsufficientFundsWholeBatch",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-a3ba4fd1dbc68bcc",
+          "name": "PayerOneCentBelowTotal",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-95aeb2e2ce5063cd",
+          "name": "PayerOneCentAboveTotal",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-45be0104681f2244",
+          "name": "GrossTotalIncludesEveryDuplicate",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-b61b5dc4e22e3ffb",
+          "name": "RejectionPreservesEarlierCommittedPayment",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "denied",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "Business denial uses HTTP 422 and commits no part of the batch.",
+      "page": 2,
+      "html": "<h3>422 DENIED</h3>\n<p>If the request is denied, return a 422 HTTP response.</p>\n",
+      "markdown": "### 422 DENIED\n\nIf the request is denied, return a 422 HTTP response.",
+      "references": [
+        {
+          "Label": "handler.go:21",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/httpapi/handler.go#L21"
+        },
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L23"
+        },
+        {
+          "Label": "Original PDF · p.2",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=2"
+        }
+      ],
+      "checks": null,
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-1df3a3b6981c9d9c",
+          "name": "InsufficientFundsWholeBatch",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-f987b4e66e6f5620",
+          "name": "UnknownRecipientWholeBatch",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-8f748fa6ad096784",
+          "name": "RecipientOverflowWholeBatch",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "created",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "HTTP 201 follows the database commit. Each entry has its own record; debits and credits reconcile exactly.",
+      "page": 2,
+      "html": "<h3>201 CREATED</h3>\n<p>Otherwise, add the payments to the database, debit the paying firm's balance, credit each receiving firm's balance, and return a 201 HTTP response.</p>\n",
+      "markdown": "### 201 CREATED\n\nOtherwise, add the payments to the database, debit the paying firm's balance, credit each receiving firm's balance, and return a 201 HTTP response.",
+      "references": [
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "handler.go:21",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/httpapi/handler.go#L21"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L28"
+        },
+        {
+          "Label": "Original PDF · p.2",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=2"
+        }
+      ],
+      "checks": null,
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        },
+        {
+          "Label": "service artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-737e3e9a8b441f32",
+          "name": "OriginalThreePaymentSample",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-63b0ada9fbd41fb9",
+          "name": "ExactBalance",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-ec5547a7de94ea92",
+          "name": "DuplicateEntriesRemainSeparate",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-853c53e7a2657ea6",
+          "name": "RollbackAfterFirstInsert",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "multiple-instances",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "Two independent API processes and two independent ledger processes share PostgreSQL; tests check overlapping, opposing and disjoint requests.",
+      "page": 2,
+      "html": "<h3>Take care to consider</h3>\n<p>Assume the server runs as multiple load-balanced instances.</p>\n",
+      "markdown": "### Take care to consider\n\nAssume the server runs as multiple load-balanced instances.",
+      "references": [
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "harness_test.go:88",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tests/functional/harness_test.go#L88"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L33"
+        },
+        {
+          "Label": "Original PDF · p.2",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=2"
+        }
+      ],
+      "checks": null,
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-979f0da351a4d102",
+          "name": "ConcurrentOverspend",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-806e881c9ad6365d",
+          "name": "ConcurrentOpposingTransfers",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-39b60aa163632bc4",
+          "name": "ConcurrentSharedRecipient",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-b4d930405d4c86ac",
+          "name": "ConcurrentExactlyFundedRequests",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-2863702ea987afe0",
+          "name": "ConcurrentOneBeyondFunding",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-5f02d36053cf22ec",
+          "name": "ConcurrentRecipientCapacity",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-7a6dc5a0ddd841b3",
+          "name": "ConcurrentDisjointTransfers",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-67de03dbbce2cd93",
+          "name": "ReciprocalOneCentBalances",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "relational-database",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "Real PostgreSQL schemas, constraints and atomic transactions are exercised; infrastructure assertions run before payment checks.",
+      "page": 2,
+      "html": "<p>Pretend you are using PostgreSQL, MySQL or a similar relational database.</p>\n",
+      "markdown": "Pretend you are using PostgreSQL, MySQL or a similar relational database.",
+      "references": [
+        {
+          "Label": "001_initial.sql:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/migrations/001_initial.sql#L1"
+        },
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "database.sql:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tests/database.sql#L1"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L38"
+        },
+        {
+          "Label": "Original PDF · p.2",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=2"
+        }
+      ],
+      "checks": [
+        {
+          "ID": "database",
+          "Title": "PostgreSQL schema, constraints and original seed",
+          "Status": "pass",
+          "Detail": "Schema/constraint SQL completed before the process acceptance sample.",
+          "RunURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417",
+          "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "artifacts": [
+        {
+          "Label": "service artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        },
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-853c53e7a2657ea6",
+          "name": "RollbackAfterFirstInsert",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-4bc1f03569d00c48",
+          "name": "SQLFailureThenValidPayment",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-bf6ddeb1959f2577",
+          "name": "LockDeadlineRollback",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "language",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "Implementation uses Go. CI builds both service executables for Linux amd64 and arm64.",
+      "page": 2,
+      "html": "<h3>Instructions · Language</h3>\n<p>Use one of: Ruby, Python, Go.</p>\n",
+      "markdown": "### Instructions · Language\n\nUse one of: Ruby, Python, Go.",
+      "references": [
+        {
+          "Label": "go.mod:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/go.mod#L1"
+        },
+        {
+          "Label": "main.go:16",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/cmd/payments-api/main.go#L16"
+        },
+        {
+          "Label": "main.go:19",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/cmd/ledger-service/main.go#L19"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L41"
+        },
+        {
+          "Label": "Original PDF · p.2",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=2"
+        }
+      ],
+      "checks": [
+        {
+          "ID": "distribution",
+          "Title": "Go service distribution builds",
+          "Status": "pass",
+          "Detail": "Both services were built for Linux amd64 and arm64.",
+          "RunURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417",
+          "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "artifacts": [
+        {
+          "Label": "service artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "tests": []
+    },
+    {
+      "id": "ai-logs",
+      "kind": "documented",
+      "label": "Documented + checked",
+      "note": "Codex was used. Exact-text, append, recovery and tamper checks protect the private conversation archive. The public site links the archive without republishing it.",
+      "page": 2,
+      "html": "<h3>AI &amp; WEB</h3>\n<p>You can use any AI tools — in this case please include unedited logs of your conversations with the LLM. Don't clean them up or summarize; the raw back-and-forth is exactly what we'd like to see.</p>\n",
+      "markdown": "### AI & WEB\n\nYou can use any AI tools — in this case please include unedited logs of your conversations with the LLM. Don't clean them up or summarize; the raw back-and-forth is exactly what we'd like to see.",
+      "references": [
+        {
+          "Label": "README.md:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/README.md#L1"
+        },
+        {
+          "Label": "dialog.go:245",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/internal/dialog/dialog.go#L245"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L46"
+        },
+        {
+          "Label": "Original PDF · p.2",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=2"
+        }
+      ],
+      "checks": [
+        {
+          "ID": "conversation",
+          "Title": "Original conversation preservation and dark PDF",
+          "Status": "pass",
+          "Detail": "Exporter cases, archive checksums and the successful PDF workflow verify the preserved snapshot.",
+          "RunURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221147790",
+          "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221147790/artifacts/13050545983"
+        }
+      ],
+      "artifacts": [
+        {
+          "Label": "conversation artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221147790/artifacts/13050545983"
+        }
+      ],
+      "tests": [
+        {
+          "id": "exporter-c98dfc08b963b05a",
+          "name": "TestSelectKeepsOriginalBytesAndCompleteRecords",
+          "suite": "exporter"
+        },
+        {
+          "id": "exporter-4133126bb0e8d00d",
+          "name": "TestBackupBuildAndTamperDetection",
+          "suite": "exporter"
+        },
+        {
+          "id": "exporter-4c9c8477e9416bf6",
+          "name": "TestRecoverInterruptedManifestWrite",
+          "suite": "exporter"
+        },
+        {
+          "id": "exporter-8294ce11ff238288",
+          "name": "TestPDFLogFailsClosed",
+          "suite": "exporter"
+        }
+      ]
+    },
+    {
+      "id": "libraries",
+      "kind": "documented",
+      "label": "Documented + checked",
+      "note": "Dependencies are declared and pinned. pgx is used for PostgreSQL. Library popularity is an engineering choice, not a claim made by an automated test.",
+      "page": 2,
+      "html": "<h3>Libraries</h3>\n<p>Prefer commonly used libraries whenever possible.</p>\n",
+      "markdown": "### Libraries\n\nPrefer commonly used libraries whenever possible.",
+      "references": [
+        {
+          "Label": "go.mod:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/go.mod#L1"
+        },
+        {
+          "Label": "go.sum:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/go.sum#L1"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L51"
+        },
+        {
+          "Label": "Original PDF · p.2",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=2"
+        }
+      ],
+      "checks": [
+        {
+          "ID": "security",
+          "Title": "Go dependency vulnerability checks",
+          "Status": "pass",
+          "Detail": "The recorded Go scan reported no applicable vulnerabilities; this is not a production security certification.",
+          "RunURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417",
+          "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "artifacts": [
+        {
+          "Label": "service artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "tests": []
+    },
+    {
+      "id": "request-format",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "Both source examples remain separate. JSON comments are preserved in the explanatory source and removed only in the labelled runnable derivative.",
+      "page": 3,
+      "html": "<h2>Request format</h2>\n<p>A bulk payment request is a JSON document. Here is an example, with each attribute explained in a comment (real requests carry no comments):</p>\n<pre><code class=\"language-jsonc\">{\n    // Identifies the firm that pays.\n    &quot;payer_firm_uuid&quot;: &quot;3f1c9a2e-7b4d-4c1e-9a55-2d8e6f0b7c41&quot;,\n    // Each entry is one payment to one firm.\n    &quot;payments&quot;: [\n        {\n            // Amount of the payment in US dollars, as a string, with at most\n            // 2 optional decimal places. Always positive.\n            &quot;amount&quot;: &quot;1200.75&quot;,\n            // Identifies the firm that receives the payment.\n            &quot;payee_firm_uuid&quot;: &quot;8b2e4c71-0d3a-4f6e-b1c9-5a7d2e9f4c10&quot;,\n            // Description of the payment.\n            &quot;description&quot;: &quot;Bookkeeping cleanup, 3 clients&quot;\n        },\n        {\n            &quot;amount&quot;: &quot;300&quot;,\n            &quot;payee_firm_uuid&quot;: &quot;e5f18b3c-2a9d-4c07-8e6b-1d4a7f9c3b25&quot;,\n            &quot;description&quot;: &quot;Referral fee, 2 clients&quot;\n        }\n    ]\n}\n</code></pre>\n",
+      "markdown": "## Request format\n\nA bulk payment request is a JSON document. Here is an example, with each attribute explained in a comment (real requests carry no comments):\n\n```jsonc\n{\n    // Identifies the firm that pays.\n    \"payer_firm_uuid\": \"3f1c9a2e-7b4d-4c1e-9a55-2d8e6f0b7c41\",\n    // Each entry is one payment to one firm.\n    \"payments\": [\n        {\n            // Amount of the payment in US dollars, as a string, with at most\n            // 2 optional decimal places. Always positive.\n            \"amount\": \"1200.75\",\n            // Identifies the firm that receives the payment.\n            \"payee_firm_uuid\": \"8b2e4c71-0d3a-4f6e-b1c9-5a7d2e9f4c10\",\n            // Description of the payment.\n            \"description\": \"Bookkeeping cleanup, 3 clients\"\n        },\n        {\n            \"amount\": \"300\",\n            \"payee_firm_uuid\": \"e5f18b3c-2a9d-4c07-8e6b-1d4a7f9c3b25\",\n            \"description\": \"Referral fee, 2 clients\"\n        }\n    ]\n}\n```",
+      "references": [
+        {
+          "Label": "request-format.jsonc:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/testdata/original/request-format.jsonc#L1"
+        },
+        {
+          "Label": "request-format.json:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/testdata/derived/request-format.json#L1"
+        },
+        {
+          "Label": "handler.go:21",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/httpapi/handler.go#L21"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L56"
+        },
+        {
+          "Label": "Original PDF · p.3",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=3"
+        }
+      ],
+      "checks": null,
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        },
+        {
+          "Label": "service artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-beb6faf1cd6fc5b6",
+          "name": "OriginalTwoPaymentExample",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-ac86a67f1147e19b",
+          "name": "RejectMalformedJSON",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-25a3a5437277ea8a",
+          "name": "RejectUnknownFields",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-a7dd6b053a705fd4",
+          "name": "RejectExtraJSONDocument",
+          "suite": "functional"
+        },
+        {
+          "id": "unit-ec27ec9256382ff4",
+          "name": "TestOriginalExamplesRemainDistinct",
+          "suite": "unit"
+        },
+        {
+          "id": "unit-68de0baaab5ccb74",
+          "name": "TestOriginalFixtureIntegrity",
+          "suite": "unit"
+        }
+      ]
+    },
+    {
+      "id": "request-payer",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "The payer identifier is checked through HTTP and resolved in PostgreSQL.",
+      "page": 3,
+      "html": "<h3>payer_firm_uuid</h3>\n<p>Identifies the firm that pays.</p>\n",
+      "markdown": "### payer_firm_uuid\n\nIdentifies the firm that pays.",
+      "references": [
+        {
+          "Label": "validate.go:43",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/contracts/validate.go#L43"
+        },
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L85"
+        },
+        {
+          "Label": "Original PDF · p.3",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=3"
+        }
+      ],
+      "checks": null,
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-16e3534ceac20c81",
+          "name": "UnknownPayer",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-117dc9968cca9c8a",
+          "name": "RejectInvalidUUID",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-af5ef40ab8e2dac7",
+          "name": "OneCentLeadingZerosAndUppercaseUUID",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "request-entries",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "Each entry becomes a separate payment, including repeated and identical recipients.",
+      "page": 3,
+      "html": "<h3>payments</h3>\n<p>Each entry is one payment to one firm.</p>\n",
+      "markdown": "### payments\n\nEach entry is one payment to one firm.",
+      "references": [
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L90"
+        },
+        {
+          "Label": "Original PDF · p.3",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=3"
+        }
+      ],
+      "checks": null,
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-737e3e9a8b441f32",
+          "name": "OriginalThreePaymentSample",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-ec5547a7de94ea92",
+          "name": "DuplicateEntriesRemainSeparate",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-1840fc88374217e7",
+          "name": "MaximumBatchAccepted",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-082f58d39dbccbf9",
+          "name": "ConcurrentRepeatedRecipientBatches",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "request-amount",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "The wire amount is a positive decimal string; arithmetic uses integer cents. Limits imposed by INTEGER storage are explicitly checked.",
+      "page": 3,
+      "html": "<h3>amount</h3>\n<p>Amount of the payment in US dollars, as a string, with at most 2 optional decimal places. Always positive.</p>\n",
+      "markdown": "### amount\n\nAmount of the payment in US dollars, as a string, with at most 2 optional decimal places. Always positive.",
+      "references": [
+        {
+          "Label": "money.go:14",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/money/money.go#L14"
+        },
+        {
+          "Label": "validate.go:43",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/contracts/validate.go#L43"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L95"
+        },
+        {
+          "Label": "Original PDF · p.3",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=3"
+        }
+      ],
+      "checks": null,
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        },
+        {
+          "Label": "service artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        },
+        {
+          "Label": "coverage artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050456288"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-bcc0ad45683f4623",
+          "name": "RejectNumericAmount",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-5e60f356c43b7103",
+          "name": "RejectInvalidAmounts",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-af5ef40ab8e2dac7",
+          "name": "OneCentLeadingZerosAndUppercaseUUID",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-2a63c75db811d8d5",
+          "name": "TenthsAndHundredthsAreExact",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-3b9dd1132acb005c",
+          "name": "CentCarryIsExact",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-1e57fbb4d9c031cc",
+          "name": "MaximumIntegerCentsAccepted",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-ab9973d088231866",
+          "name": "BatchTotalExactlyIntegerMaximum",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-62267021ded86473",
+          "name": "RejectBatchTotalOverflow",
+          "suite": "functional"
+        },
+        {
+          "id": "unit-81b20a0ab0c3c958",
+          "name": "TestParseCents",
+          "suite": "unit"
+        }
+      ]
+    },
+    {
+      "id": "request-payee",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "Recipient identifiers are validated, resolved and credited without losing concurrent updates.",
+      "page": 3,
+      "html": "<h3>payee_firm_uuid</h3>\n<p>Identifies the firm that receives the payment.</p>\n",
+      "markdown": "### payee_firm_uuid\n\nIdentifies the firm that receives the payment.",
+      "references": [
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "validate.go:43",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/contracts/validate.go#L43"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L100"
+        },
+        {
+          "Label": "Original PDF · p.3",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=3"
+        }
+      ],
+      "checks": null,
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-f987b4e66e6f5620",
+          "name": "UnknownRecipientWholeBatch",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-117dc9968cca9c8a",
+          "name": "RejectInvalidUUID",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-39b60aa163632bc4",
+          "name": "ConcurrentSharedRecipient",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "request-description",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "Descriptions remain data, including empty, Unicode and SQL-looking strings.",
+      "page": 3,
+      "html": "<h3>description</h3>\n<p>Description of the payment.</p>\n",
+      "markdown": "### description\n\nDescription of the payment.",
+      "references": [
+        {
+          "Label": "handler.go:21",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/httpapi/handler.go#L21"
+        },
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L105"
+        },
+        {
+          "Label": "Original PDF · p.3",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=3"
+        }
+      ],
+      "checks": null,
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-7f1620c211942327",
+          "name": "LiteralDescription",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-3a03eb603821a133",
+          "name": "EmptyDescription",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-d1c2c0b71770de59",
+          "name": "RejectMissingAndNullFields",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "database-tables",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "The two original business tables and their INTEGER/TEXT types are preserved. Added constraints and indexes are infrastructure decisions.",
+      "page": 3,
+      "html": "<h2>The platform's database</h2>\n<p>The database has two tables.</p>\n",
+      "markdown": "## The platform's database\n\nThe database has two tables.",
+      "references": [
+        {
+          "Label": "001_initial.sql:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/migrations/001_initial.sql#L1"
+        },
+        {
+          "Label": "database.sql:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tests/database.sql#L1"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L110"
+        },
+        {
+          "Label": "Original PDF · p.3",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=3"
+        }
+      ],
+      "checks": [
+        {
+          "ID": "database",
+          "Title": "PostgreSQL schema, constraints and original seed",
+          "Status": "pass",
+          "Detail": "Schema/constraint SQL completed before the process acceptance sample.",
+          "RunURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417",
+          "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "artifacts": [
+        {
+          "Label": "service artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "tests": [
+        {
+          "id": "unit-68de0baaab5ccb74",
+          "name": "TestOriginalFixtureIntegrity",
+          "suite": "unit"
+        }
+      ]
+    },
+    {
+      "id": "firms-id",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "INTEGER firm IDs are referenced by separate payment records.",
+      "page": 3,
+      "html": "<h3>firms · id</h3>\n<p><strong>Type:</strong> INTEGER. Unique internal identifier of the firm.</p>\n",
+      "markdown": "### firms · id\n\n**Type:** INTEGER. Unique internal identifier of the firm.",
+      "references": [
+        {
+          "Label": "001_initial.sql:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/migrations/001_initial.sql#L1"
+        },
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L115"
+        },
+        {
+          "Label": "Original PDF · p.3",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=3"
+        }
+      ],
+      "checks": [
+        {
+          "ID": "database",
+          "Title": "PostgreSQL schema, constraints and original seed",
+          "Status": "pass",
+          "Detail": "Schema/constraint SQL completed before the process acceptance sample.",
+          "RunURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417",
+          "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-737e3e9a8b441f32",
+          "name": "OriginalThreePaymentSample",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "firms-name",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "Original firm names and seed values are preserved by fixture checks.",
+      "page": 3,
+      "html": "<h3>firms · name</h3>\n<p><strong>Type:</strong> TEXT. Name of the firm.</p>\n",
+      "markdown": "### firms · name\n\n**Type:** TEXT. Name of the firm.",
+      "references": [
+        {
+          "Label": "001_initial.sql:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/migrations/001_initial.sql#L1"
+        },
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L120"
+        },
+        {
+          "Label": "Original PDF · p.3",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=3"
+        }
+      ],
+      "checks": [
+        {
+          "ID": "database",
+          "Title": "PostgreSQL schema, constraints and original seed",
+          "Status": "pass",
+          "Detail": "Schema/constraint SQL completed before the process acceptance sample.",
+          "RunURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417",
+          "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "artifacts": [
+        {
+          "Label": "service artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "tests": [
+        {
+          "id": "unit-68de0baaab5ccb74",
+          "name": "TestOriginalFixtureIntegrity",
+          "suite": "unit"
+        }
+      ]
+    },
+    {
+      "id": "firms-balance",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "Balances are INTEGER US cents, with exact debit/credit and overflow boundaries.",
+      "page": 3,
+      "html": "<h3>firms · balance_cents</h3>\n<p><strong>Type:</strong> INTEGER. Current balance of the firm, in US cents.</p>\n",
+      "markdown": "### firms · balance_cents\n\n**Type:** INTEGER. Current balance of the firm, in US cents.",
+      "references": [
+        {
+          "Label": "001_initial.sql:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/migrations/001_initial.sql#L1"
+        },
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L125"
+        },
+        {
+          "Label": "Original PDF · p.3",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=3"
+        }
+      ],
+      "checks": [
+        {
+          "ID": "database",
+          "Title": "PostgreSQL schema, constraints and original seed",
+          "Status": "pass",
+          "Detail": "Schema/constraint SQL completed before the process acceptance sample.",
+          "RunURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417",
+          "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-63b0ada9fbd41fb9",
+          "name": "ExactBalance",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-5fc061df767ffd58",
+          "name": "MaximumBalancePayerDebitsOneCent",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-e2aa479beb89e819",
+          "name": "RepeatedRecipientOneCentOverflow",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "firms-uuid",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "TEXT public identifiers are resolved to the correct internal firm IDs.",
+      "page": 3,
+      "html": "<h3>firms · uuid</h3>\n<p><strong>Type:</strong> TEXT. Public identifier of the firm, used in requests.</p>\n",
+      "markdown": "### firms · uuid\n\n**Type:** TEXT. Public identifier of the firm, used in requests.",
+      "references": [
+        {
+          "Label": "001_initial.sql:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/migrations/001_initial.sql#L1"
+        },
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L130"
+        },
+        {
+          "Label": "Original PDF · p.3",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=3"
+        }
+      ],
+      "checks": [
+        {
+          "ID": "database",
+          "Title": "PostgreSQL schema, constraints and original seed",
+          "Status": "pass",
+          "Detail": "Schema/constraint SQL completed before the process acceptance sample.",
+          "RunURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417",
+          "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-737e3e9a8b441f32",
+          "name": "OriginalThreePaymentSample",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-16e3534ceac20c81",
+          "name": "UnknownPayer",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-f987b4e66e6f5620",
+          "name": "UnknownRecipientWholeBatch",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "payments-id",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "Each source entry creates its own generated payment row.",
+      "page": 3,
+      "html": "<h3>payments · id</h3>\n<p><strong>Type:</strong> INTEGER. Unique identifier of the payment.</p>\n",
+      "markdown": "### payments · id\n\n**Type:** INTEGER. Unique identifier of the payment.",
+      "references": [
+        {
+          "Label": "001_initial.sql:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/migrations/001_initial.sql#L1"
+        },
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L135"
+        },
+        {
+          "Label": "Original PDF · p.3",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=3"
+        }
+      ],
+      "checks": [
+        {
+          "ID": "database",
+          "Title": "PostgreSQL schema, constraints and original seed",
+          "Status": "pass",
+          "Detail": "Schema/constraint SQL completed before the process acceptance sample.",
+          "RunURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417",
+          "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-ec5547a7de94ea92",
+          "name": "DuplicateEntriesRemainSeparate",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-025c90df1a641210",
+          "name": "ReplayIsNewPayment",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "payments-payer",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "Payment rows point to the paying firm; row directions reconcile with balances.",
+      "page": 3,
+      "html": "<h3>payments · payer_firm_id</h3>\n<p><strong>Type:</strong> INTEGER. id of the firms row that pays.</p>\n",
+      "markdown": "### payments · payer_firm_id\n\n**Type:** INTEGER. id of the firms row that pays.",
+      "references": [
+        {
+          "Label": "001_initial.sql:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/migrations/001_initial.sql#L1"
+        },
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L140"
+        },
+        {
+          "Label": "Original PDF · p.3",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=3"
+        }
+      ],
+      "checks": [
+        {
+          "ID": "database",
+          "Title": "PostgreSQL schema, constraints and original seed",
+          "Status": "pass",
+          "Detail": "Schema/constraint SQL completed before the process acceptance sample.",
+          "RunURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417",
+          "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-737e3e9a8b441f32",
+          "name": "OriginalThreePaymentSample",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-806e881c9ad6365d",
+          "name": "ConcurrentOpposingTransfers",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "payments-payee",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "Payment rows point to the receiving firm, including repeated recipients.",
+      "page": 3,
+      "html": "<h3>payments · payee_firm_id</h3>\n<p><strong>Type:</strong> INTEGER. id of the firms row that receives the payment.</p>\n",
+      "markdown": "### payments · payee_firm_id\n\n**Type:** INTEGER. id of the firms row that receives the payment.",
+      "references": [
+        {
+          "Label": "001_initial.sql:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/migrations/001_initial.sql#L1"
+        },
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L145"
+        },
+        {
+          "Label": "Original PDF · p.3",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=3"
+        }
+      ],
+      "checks": [
+        {
+          "ID": "database",
+          "Title": "PostgreSQL schema, constraints and original seed",
+          "Status": "pass",
+          "Detail": "Schema/constraint SQL completed before the process acceptance sample.",
+          "RunURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417",
+          "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-737e3e9a8b441f32",
+          "name": "OriginalThreePaymentSample",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-39b60aa163632bc4",
+          "name": "ConcurrentSharedRecipient",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "payments-amount",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "Payment records store exact INTEGER cents.",
+      "page": 3,
+      "html": "<h3>payments · amount_cents</h3>\n<p><strong>Type:</strong> INTEGER. Amount of the payment, in US cents.</p>\n",
+      "markdown": "### payments · amount_cents\n\n**Type:** INTEGER. Amount of the payment, in US cents.",
+      "references": [
+        {
+          "Label": "001_initial.sql:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/migrations/001_initial.sql#L1"
+        },
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L150"
+        },
+        {
+          "Label": "Original PDF · p.3",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=3"
+        }
+      ],
+      "checks": [
+        {
+          "ID": "database",
+          "Title": "PostgreSQL schema, constraints and original seed",
+          "Status": "pass",
+          "Detail": "Schema/constraint SQL completed before the process acceptance sample.",
+          "RunURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417",
+          "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-2a63c75db811d8d5",
+          "name": "TenthsAndHundredthsAreExact",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-ef9cb719435bc53a",
+          "name": "LargestWholeDollarAmount",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-1e57fbb4d9c031cc",
+          "name": "MaximumIntegerCentsAccepted",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "payments-description",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "TEXT descriptions are preserved unchanged in payment records.",
+      "page": 3,
+      "html": "<h3>payments · description</h3>\n<p><strong>Type:</strong> TEXT. Description of the payment.</p>\n",
+      "markdown": "### payments · description\n\n**Type:** TEXT. Description of the payment.",
+      "references": [
+        {
+          "Label": "001_initial.sql:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/migrations/001_initial.sql#L1"
+        },
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L155"
+        },
+        {
+          "Label": "Original PDF · p.3",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=3"
+        }
+      ],
+      "checks": [
+        {
+          "ID": "database",
+          "Title": "PostgreSQL schema, constraints and original seed",
+          "Status": "pass",
+          "Detail": "Schema/constraint SQL completed before the process acceptance sample.",
+          "RunURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417",
+          "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-7f1620c211942327",
+          "name": "LiteralDescription",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-3a03eb603821a133",
+          "name": "EmptyDescription",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "sample-seed",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "The original seed is applied unchanged to an owned disposable schema before each scenario.",
+      "page": 4,
+      "html": "<h2>Sample request</h2>\n<p>Seed the database with three firms:</p>\n<pre><code class=\"language-sql\">INSERT INTO firms (id, name, balance_cents, uuid)\nVALUES (1, 'Pinecrest CPA Group', 5000000, '3f1c9a2e-7b4d-4c1e-9a55-2d8e6f0b7c41'),\n             (2, 'Lopez Bookkeeping', 50000, '8b2e4c71-0d3a-4f6e-b1c9-5a7d2e9f4c10'),\n             (3, 'Nair Tax Services', 200000, 'e5f18b3c-2a9d-4c07-8e6b-1d4a7f9c3b25');\n</code></pre>\n",
+      "markdown": "## Sample request\n\nSeed the database with three firms:\n\n```sql\nINSERT INTO firms (id, name, balance_cents, uuid)\nVALUES (1, 'Pinecrest CPA Group', 5000000, '3f1c9a2e-7b4d-4c1e-9a55-2d8e6f0b7c41'),\n             (2, 'Lopez Bookkeeping', 50000, '8b2e4c71-0d3a-4f6e-b1c9-5a7d2e9f4c10'),\n             (3, 'Nair Tax Services', 200000, 'e5f18b3c-2a9d-4c07-8e6b-1d4a7f9c3b25');\n```",
+      "references": [
+        {
+          "Label": "seed.sql:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/testdata/original/seed.sql#L1"
+        },
+        {
+          "Label": "harness_test.go:257",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tests/functional/harness_test.go#L257"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L160"
+        },
+        {
+          "Label": "Original PDF · p.4",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=4"
+        }
+      ],
+      "checks": null,
+      "artifacts": [
+        {
+          "Label": "service artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        },
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "unit-68de0baaab5ccb74",
+          "name": "TestOriginalFixtureIntegrity",
+          "suite": "unit"
+        },
+        {
+          "id": "functional-737e3e9a8b441f32",
+          "name": "OriginalThreePaymentSample",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "sample-outcome",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "The three-payment sample produces exactly 3674875 / 170075 / 1405050 cents. Page 3 has a different example and different derived balances.",
+      "page": 4,
+      "html": "<p>Pinecrest pays Nair and Lopez. It can cover the $13,251.25 total, so the service returns 201. Afterwards Pinecrest has $36,748.75, Lopez has $1,700.75 and Nair has $14,050.50.</p>\n<table>\n<thead>\n<tr>\n<th>Firm</th>\n<th>Balance before</th>\n<th>Balance after</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Pinecrest CPA Group</td>\n<td>$50,000.00</td>\n<td>$36,748.75</td>\n</tr>\n<tr>\n<td>Lopez Bookkeeping</td>\n<td>$500.00</td>\n<td>$1,700.75</td>\n</tr>\n<tr>\n<td>Nair Tax Services</td>\n<td>$2,000.00</td>\n<td>$14,050.50</td>\n</tr>\n</tbody>\n</table>\n",
+      "markdown": "Pinecrest pays Nair and Lopez. It can cover the $13,251.25 total, so the service returns 201. Afterwards Pinecrest has $36,748.75, Lopez has $1,700.75 and Nair has $14,050.50.\n\n| Firm | Balance before | Balance after |\n| --- | --- | --- |\n| Pinecrest CPA Group | $50,000.00 | $36,748.75 |\n| Lopez Bookkeeping | $500.00 | $1,700.75 |\n| Nair Tax Services | $2,000.00 | $14,050.50 |",
+      "references": [
+        {
+          "Label": "expected-balances.csv:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/testdata/original/expected-balances.csv#L1"
+        },
+        {
+          "Label": "payments_test.go:457",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/tests/functional/payments_test.go#L457"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L172"
+        },
+        {
+          "Label": "Original PDF · p.4",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=4"
+        }
+      ],
+      "checks": null,
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        },
+        {
+          "Label": "service artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-737e3e9a8b441f32",
+          "name": "OriginalThreePaymentSample",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "sample-request",
+      "kind": "verified",
+      "label": "Verified by checks",
+      "note": "The unchanged request creates three exact records, including both payments to Nair.",
+      "page": 4,
+      "html": "<pre><code class=\"language-json\">{\n    &quot;payer_firm_uuid&quot;: &quot;3f1c9a2e-7b4d-4c1e-9a55-2d8e6f0b7c41&quot;,\n    &quot;payments&quot;: [\n        {\n            &quot;amount&quot;: &quot;6250&quot;,\n            &quot;payee_firm_uuid&quot;: &quot;e5f18b3c-2a9d-4c07-8e6b-1d4a7f9c3b25&quot;,\n            &quot;description&quot;: &quot;Overflow returns, August 2026&quot;\n        },\n        {\n            &quot;amount&quot;: &quot;5800.5&quot;,\n            &quot;payee_firm_uuid&quot;: &quot;e5f18b3c-2a9d-4c07-8e6b-1d4a7f9c3b25&quot;,\n            &quot;description&quot;: &quot;Amended returns, August 2026&quot;\n        },\n        {\n            &quot;amount&quot;: &quot;1200.75&quot;,\n            &quot;payee_firm_uuid&quot;: &quot;8b2e4c71-0d3a-4f6e-b1c9-5a7d2e9f4c10&quot;,\n            &quot;description&quot;: &quot;Bookkeeping cleanup, 3 clients&quot;\n        }\n    ]\n}\n</code></pre>\n",
+      "markdown": "```json\n{\n    \"payer_firm_uuid\": \"3f1c9a2e-7b4d-4c1e-9a55-2d8e6f0b7c41\",\n    \"payments\": [\n        {\n            \"amount\": \"6250\",\n            \"payee_firm_uuid\": \"e5f18b3c-2a9d-4c07-8e6b-1d4a7f9c3b25\",\n            \"description\": \"Overflow returns, August 2026\"\n        },\n        {\n            \"amount\": \"5800.5\",\n            \"payee_firm_uuid\": \"e5f18b3c-2a9d-4c07-8e6b-1d4a7f9c3b25\",\n            \"description\": \"Amended returns, August 2026\"\n        },\n        {\n            \"amount\": \"1200.75\",\n            \"payee_firm_uuid\": \"8b2e4c71-0d3a-4f6e-b1c9-5a7d2e9f4c10\",\n            \"description\": \"Bookkeeping cleanup, 3 clients\"\n        }\n    ]\n}\n```",
+      "references": [
+        {
+          "Label": "sample-request.json:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/testdata/original/sample-request.json#L1"
+        },
+        {
+          "Label": "service.go:28",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/internal/ledger/service.go#L28"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L181"
+        },
+        {
+          "Label": "Original PDF · p.4",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=4"
+        }
+      ],
+      "checks": null,
+      "artifacts": [
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-737e3e9a8b441f32",
+          "name": "OriginalThreePaymentSample",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "deliver-source",
+      "kind": "documented",
+      "label": "Documented + checked",
+      "note": "The implementation repository remains private; cloning and detailed artifacts require access. Distribution builds and real HTTP/container checks verify runnability. Reviewer access must be granted separately by the owner.",
+      "page": 5,
+      "html": "<h2>What to deliver · 1. Source code</h2>\n<p>A repository (GitHub, GitLab or similar, either public or shared with us) containing your service. We should be able to clone it, install it, run it, and send the sample requests to it. How you choose to verify the service is part of the design. What level of testing it needs is your call.</p>\n",
+      "markdown": "## What to deliver · 1. Source code\n\nA repository (GitHub, GitLab or similar, either public or shared with us) containing your service. We should be able to clone it, install it, run it, and send the sample requests to it. How you choose to verify the service is part of the design. What level of testing it needs is your call.",
+      "references": [
+        {
+          "Label": "README.md:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/README.md#L1"
+        },
+        {
+          "Label": "Dockerfile:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/Dockerfile#L1"
+        },
+        {
+          "Label": "compose.yaml:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/compose.yaml#L1"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L205"
+        },
+        {
+          "Label": "Original PDF · p.5",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=5"
+        }
+      ],
+      "checks": [
+        {
+          "ID": "distribution",
+          "Title": "Go service distribution builds",
+          "Status": "pass",
+          "Detail": "Both services were built for Linux amd64 and arm64.",
+          "RunURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417",
+          "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        },
+        {
+          "ID": "containers",
+          "Title": "Container build and sample acceptance",
+          "Status": "pass",
+          "Detail": "Both images built and the original sample produced the expected balances and rows.",
+          "RunURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417",
+          "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "artifacts": [
+        {
+          "Label": "service artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        },
+        {
+          "Label": "functional artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050610850"
+        }
+      ],
+      "tests": [
+        {
+          "id": "functional-737e3e9a8b441f32",
+          "name": "OriginalThreePaymentSample",
+          "suite": "functional"
+        },
+        {
+          "id": "functional-f1f2871ebe9926d9",
+          "name": "HealthAndReadiness",
+          "suite": "functional"
+        }
+      ]
+    },
+    {
+      "id": "deliver-history",
+      "kind": "documented",
+      "label": "Documented + checked",
+      "note": "Git history, tool-use explanation and original conversation archives are linked. Subjective review of the working process remains with the reviewer.",
+      "page": 5,
+      "html": "<h3>2. How you worked</h3>\n<p>Include your commit history. If you used AI tools, show us how you used them: exported chats, transcripts or prompt-and-response pairs from your sessions. Name the tools (Copilot, Cursor, Claude Code, aider or others) and say where each one fit into your workflow. Any tool is fine.</p>\n",
+      "markdown": "### 2. How you worked\n\nInclude your commit history. If you used AI tools, show us how you used them: exported chats, transcripts or prompt-and-response pairs from your sessions. Name the tools (Copilot, Cursor, Claude Code, aider or others) and say where each one fit into your workflow. Any tool is fine.",
+      "references": [
+        {
+          "Label": "README.md:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/README.md#L1"
+        },
+        {
+          "Label": "README.md:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/README.md#L1"
+        },
+        {
+          "Label": "AGENTS.md:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/AGENTS.md#L1"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L210"
+        },
+        {
+          "Label": "Original PDF · p.5",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=5"
+        }
+      ],
+      "checks": [
+        {
+          "ID": "conversation",
+          "Title": "Original conversation preservation and dark PDF",
+          "Status": "pass",
+          "Detail": "Exporter cases, archive checksums and the successful PDF workflow verify the preserved snapshot.",
+          "RunURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221147790",
+          "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221147790/artifacts/13050545983"
+        }
+      ],
+      "artifacts": [
+        {
+          "Label": "conversation artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221147790/artifacts/13050545983"
+        }
+      ],
+      "tests": [
+        {
+          "id": "exporter-4133126bb0e8d00d",
+          "name": "TestBackupBuildAndTamperDetection",
+          "suite": "exporter"
+        }
+      ]
+    },
+    {
+      "id": "deliver-readme",
+      "kind": "documented",
+      "label": "Documented + checked",
+      "note": "README covers approach, assumptions, operational limits, issues, improvements and reproducible verification. CI checks syntax and links; it cannot judge editorial quality.",
+      "page": 5,
+      "html": "<h3>3. README</h3>\n<p>Write it as if you were opening a pull request for your teammates to review. Cover: your solution and the approach you took, the issues you ran into, the assumptions you made, possible improvements, and how to run and verify it.</p>\n",
+      "markdown": "### 3. README\n\nWrite it as if you were opening a pull request for your teammates to review. Cover: your solution and the approach you took, the issues you ran into, the assumptions you made, possible improvements, and how to run and verify it.",
+      "references": [
+        {
+          "Label": "README.md:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/README.md#L1"
+        },
+        {
+          "Label": "acceptance.md:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/acceptance.md#L1"
+        },
+        {
+          "Label": "verification.md:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/verification.md#L1"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L215"
+        },
+        {
+          "Label": "Original PDF · p.5",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=5"
+        }
+      ],
+      "checks": [
+        {
+          "ID": "readme",
+          "Title": "README and contract validation",
+          "Status": "pass",
+          "Detail": "Successful Service CI ran Markdown, shell, workflow and OpenAPI checks. Editorial quality remains a human judgment.",
+          "RunURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417",
+          "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "artifacts": [
+        {
+          "Label": "service artifact",
+          "URL": "https://github.com/newdarwindev/firm-payments/actions/runs/41221149417/artifacts/13050401459"
+        }
+      ],
+      "tests": []
+    },
+    {
+      "id": "questions-intro",
+      "kind": "context",
+      "label": "Assignment context",
+      "note": "These are questions for the submitter. Automated checks cannot supply personal answers.",
+      "page": 5,
+      "html": "<h2>Two quick questions</h2>\n<p>At the end of the README, please also answer:</p>\n",
+      "markdown": "## Two quick questions\n\nAt the end of the README, please also answer:",
+      "references": [
+        {
+          "Label": "README.md:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/README.md#L1"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L220"
+        },
+        {
+          "Label": "Original PDF · p.5",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=5"
+        }
+      ],
+      "checks": null,
+      "artifacts": null,
+      "tests": []
+    },
+    {
+      "id": "time-question",
+      "kind": "manual",
+      "label": "Owner action pending",
+      "note": "Awaiting the user’s answer. No time category is inferred or fabricated.",
+      "page": 5,
+      "html": "<h3>How much time did you spend on this task?</h3>\n<ul>\n<li>Less than 3h</li>\n<li>3h to 6h</li>\n<li>More than 6h (how long?)</li>\n</ul>\n",
+      "markdown": "### How much time did you spend on this task?\n\n- Less than 3h\n- 3h to 6h\n- More than 6h (how long?)",
+      "references": [
+        {
+          "Label": "README.md:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/README.md#L1"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L225"
+        },
+        {
+          "Label": "Original PDF · p.5",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=5"
+        }
+      ],
+      "checks": null,
+      "artifacts": null,
+      "tests": []
+    },
+    {
+      "id": "pride-question",
+      "kind": "manual",
+      "label": "Owner action pending",
+      "note": "Awaiting the user’s answer. No subjective response is inferred or fabricated.",
+      "page": 5,
+      "html": "<h3>How proud are you of your work?</h3>\n<ul>\n<li>Very proud</li>\n<li>Fairly proud</li>\n<li>Good enough</li>\n<li>Somewhat disappointed</li>\n</ul>\n",
+      "markdown": "### How proud are you of your work?\n\n- Very proud\n- Fairly proud\n- Good enough\n- Somewhat disappointed",
+      "references": [
+        {
+          "Label": "README.md:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/README.md#L1"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L232"
+        },
+        {
+          "Label": "Original PDF · p.5",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=5"
+        }
+      ],
+      "checks": null,
+      "artifacts": null,
+      "tests": []
+    },
+    {
+      "id": "send-link",
+      "kind": "manual",
+      "label": "Owner action pending",
+      "note": "The repository URL is available. Sending it to reviewers and granting them access are owner actions; no reviewer message is sent automatically.",
+      "page": 5,
+      "html": "<p>When you're done, send us the link to the repository.</p>\n",
+      "markdown": "When you're done, send us the link to the repository.",
+      "references": [
+        {
+          "Label": "README.md:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/README.md#L1"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L240"
+        },
+        {
+          "Label": "Original PDF · p.5",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=5"
+        }
+      ],
+      "checks": null,
+      "artifacts": null,
+      "tests": []
+    },
+    {
+      "id": "no-perfect-solution",
+      "kind": "context",
+      "label": "Assignment context",
+      "note": "The assignment accepts incomplete submissions and asks for advance notice about extra time. This statement is context, not an automated acceptance criterion.",
+      "page": 5,
+      "html": "<h3>No “perfect” solution expected</h3>\n<p>We're interested in your thought process and your approach to the problem, and we'll consider every submission, even an incomplete one. If you'd like to take extra time to improve or “finish” your solution, let us know beforehand and we'll review the final version.</p>\n<p>© TaxDome 2026 · TaxDome Interview Flow · taxdome.com</p>\n",
+      "markdown": "### No “perfect” solution expected\n\nWe're interested in your thought process and your approach to the problem, and we'll consider every submission, even an incomplete one. If you'd like to take extra time to improve or “finish” your solution, let us know beforehand and we'll review the final version.\n\n© TaxDome 2026 · TaxDome Interview Flow · taxdome.com",
+      "references": [
+        {
+          "Label": "acceptance.md:1",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/acceptance.md#L1"
+        },
+        {
+          "Label": "Markdown source",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/site/assignment.md#L243"
+        },
+        {
+          "Label": "Original PDF · p.5",
+          "URL": "https://github.com/newdarwindev/firm-payments/blob/950b17fe1bc52dace1db4bba3a35007ba891d097/docs/source/assignment.pdf#page=5"
+        }
+      ],
+      "checks": null,
+      "artifacts": null,
+      "tests": []
+    }
+  ]
+}

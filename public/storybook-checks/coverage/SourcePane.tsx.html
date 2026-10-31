@@ -1,0 +1,175 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for SourcePane.tsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="prettify.css" />
+    <link rel="stylesheet" href="base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="index.html">All files</a> SourcePane.tsx</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>32/32</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>34/34</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>15/15</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>18/18</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line high'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a>
+<a name='L30'></a><a href='#L30'>30</a>
+<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">876x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6649547x</span>
+<span class="cline-any cline-yes">130675x</span>
+<span class="cline-any cline-yes">55027x</span>
+<span class="cline-any cline-yes">29497x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2317x</span>
+<span class="cline-any cline-yes">2317x</span>
+<span class="cline-any cline-yes">2317x</span>
+<span class="cline-any cline-yes">132694x</span>
+<span class="cline-any cline-yes">132694x</span>
+<span class="cline-any cline-yes">132694x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6235x</span>
+<span class="cline-any cline-yes">5119x</span>
+<span class="cline-any cline-yes">1187x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8756x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7856x</span>
+<span class="cline-any cline-yes">39025x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useEffect, useRef, useState } from 'react';
+import type { Block, Evidence } from './TestEvidence';
+export const githubLine = (sha: string, path: string, line: number) =&gt; `https://github.com/newdarwindev/firm-payments/blob/${sha}/${path}#L${line}`;
+export function lineState(blocks: Block[], line: number) {
+  const active = blocks.filter((block) =&gt; block.statements &gt; 0 &amp;&amp; block.startLine &lt;= line &amp;&amp; block.endLine &gt;= line &amp;&amp; !(block.endLine === line &amp;&amp; block.endColumn === 1));
+  if (!active.length) return 'neutral';
+  if (active.every((block) =&gt; block.count &gt; 0)) return 'covered';
+  return active.some((block) =&gt; block.count &gt; 0) ? 'mixed' : 'uncovered';
+}
+export function SourceLines({ source, start = 1, sha, path, blocks = [], assertLines = [], focusLine }: { focusLine?: number; source: string; start?: number; sha: string; path: string; blocks?: Block[]; assertLines?: number[] }) {
+  const container = useRef&lt;HTMLDivElement&gt;(null);
+  useEffect(() =&gt; { const line = container.current?.querySelector&lt;HTMLElement&gt;(`[data-line="${focusLine}"]`); if (line &amp;&amp; container.current) container.current.scrollTop = line.offsetTop; }, [source, focusLine]);
+  return &lt;div ref={container} className="code" tabIndex={0} aria-label={`Source code: ${path}`}&gt;&lt;pre&gt;{source.split('\n').map((text, index) =&gt; {
+    const line = start + index;
+    const state = assertLines.includes(line) ? 'assertion' : lineState(blocks, line);
+    return &lt;span className={`line ${state}`} data-line={line} key={line} title={state === 'assertion' ? 'Assertion call site; execution of this branch is not inferred' : `Statement coverage: ${state}`}&gt;&lt;a href={githubLine(sha, path, line)} target="_blank" rel="noreferrer" aria-label={`GitHub line ${line}`}&gt;{line}&lt;/a&gt;&lt;code&gt;{text || ' '}&lt;/code&gt;&lt;/span&gt;;
+  })}&lt;/pre&gt;&lt;/div&gt;;
+}
+export function CodePane({ evidence, initialFile, initialLine, onFileChange }: { evidence: Evidence; initialFile?: string; initialLine?: number; onFileChange?: (path: string) =&gt; void }) {
+  const [path, setPath] = useState(evidence.files.find((file) =&gt; file.path === initialFile)?.path ?? evidence.files[0]?.path ?? '');
+  const file = evidence.files.find((candidate) =&gt; candidate.path === path);
+  return &lt;section className="pane code-pane" aria-label="Covered implementation"&gt;&lt;header className="pane-heading"&gt;&lt;span&gt;03 / IMPLEMENTATION&lt;/span&gt;&lt;h2&gt;Covered code&lt;/h2&gt;&lt;/header&gt;
+    &lt;p className="legend"&gt;Green: covered · Red: uncovered · Amber: mixed blocks · Gray: uninstrumented. Line numbers open this revision on GitHub.&lt;/p&gt;
+    {file ? &lt;&gt;&lt;label&gt;Source file &lt;select aria-label="Source file" value={path} onChange={(event) =&gt; { setPath(event.target.value); onFileChange?.(event.target.value); }}&gt;{evidence.files.map((candidate) =&gt; &lt;option key={candidate.path} value={candidate.path}&gt;{candidate.path}&lt;/option&gt;)}&lt;/select&gt;&lt;/label&gt;
+      &lt;a href={githubLine(evidence.sha, file.path, 1)}&gt;Pinned implementation on GitHub ↗&lt;/a&gt;&lt;p className="hash"&gt;Source SHA256: {file.sha256}&lt;/p&gt;
+      &lt;SourceLines source={file.source} sha={evidence.sha} path={file.path} blocks={file.blocks} focusLine={path === initialFile &amp;&amp; initialLine ? initialLine : file.blocks.find((block) =&gt; block.count &gt; 0)?.startLine} /&gt;
+      &lt;details&gt;&lt;summary&gt;Exact statement blocks and execution counts&lt;/summary&gt;&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;Position&lt;/th&gt;&lt;th&gt;Statements&lt;/th&gt;&lt;th&gt;Count&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;{file.blocks.map((block) =&gt; &lt;tr key={`${block.startLine}:${block.startColumn}`}&gt;&lt;td&gt;{block.startLine}:{block.startColumn}–{block.endLine}:{block.endColumn}&lt;/td&gt;&lt;td&gt;{block.statements}&lt;/td&gt;&lt;td&gt;{block.count}&lt;/td&gt;&lt;/tr&gt;)}&lt;/tbody&gt;&lt;/table&gt;&lt;/details&gt;
+    &lt;/&gt; : &lt;p&gt;No instrumented Go statements in this test package.&lt;/p&gt;}
+  &lt;/section&gt;;
+}
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
+                at 2026-10-31T17:01:36.263Z
+            </div>
+        <script src="prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="sorter.js"></script>
+        <script src="block-navigation.js"></script>
+    </body>
+</html>
+    

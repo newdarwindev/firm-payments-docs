@@ -2,6 +2,6 @@ go tool test2json -t -p github.com/newdarwindev/firm-payments/tools/requirements
 === RUN   TestSiteArtifactIntegrityRejectsTamperingAndUnlistedFiles
 --- PASS: TestSiteArtifactIntegrityRejectsTamperingAndUnlistedFiles (0.00s)
 PASS
-coverage: 8.9% of statements
+coverage: 7.4% of statements
 
 Exit status: 0

@@ -1,0 +1,7 @@
+go tool test2json -t -p github.com/newdarwindev/firm-payments/docs/internal/dialog /home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/83f04d902701b3fe.test -test.v=test2json -test.count=1 -test.timeout=180s -test.run=^TestBackupBuildAndTamperDetection$ -test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/exporter-4133126bb0e8d00d/coverage.out
+=== RUN   TestBackupBuildAndTamperDetection
+--- PASS: TestBackupBuildAndTamperDetection (0.01s)
+PASS
+coverage: 69.7% of statements
+
+Exit status: 0

@@ -1,0 +1,9 @@
+go tool test2json -t -p github.com/newdarwindev/firm-payments/internal/money /home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/018c6289906c6693.test -test.v=test2json -test.count=1 -test.timeout=180s -test.run=^FuzzParseCents$/^seed#3$ -test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/unit-e8c114bf8a5f6b4d/coverage.out
+=== RUN   FuzzParseCents
+=== RUN   FuzzParseCents/seed#3
+--- PASS: FuzzParseCents/seed#3 (0.00s)
+--- PASS: FuzzParseCents (0.00s)
+PASS
+coverage: 77.3% of statements
+
+Exit status: 0

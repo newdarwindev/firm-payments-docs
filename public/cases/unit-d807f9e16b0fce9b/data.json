@@ -1,0 +1,310 @@
+{
+  "id": "unit-d807f9e16b0fce9b",
+  "suite": "unit",
+  "name": "TestPrepare/self_payment",
+  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "status": "pass",
+  "asserts": "",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/contracts/validate_test.go#L14",
+  "package": "github.com/newdarwindev/firm-payments/internal/contracts",
+  "command": [
+    "go",
+    "tool",
+    "test2json",
+    "-t",
+    "-p",
+    "github.com/newdarwindev/firm-payments/internal/contracts",
+    "/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/c34f76946a530588.test",
+    "-test.v=test2json",
+    "-test.count=1",
+    "-test.timeout=180s",
+    "-test.run=^TestPrepare$/^self_payment$",
+    "-test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/unit-d807f9e16b0fce9b/coverage.out"
+  ],
+  "build": [
+    "go",
+    "test",
+    "-c",
+    "-o",
+    "/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/c34f76946a530588.test",
+    "-cover",
+    "-covermode=atomic",
+    "."
+  ],
+  "binarySHA256": "75a4dcd1d59c2af5e2df99d36253a0a6a657274e66da84b6e26c1e7bad2e78d6",
+  "selected": "TestPrepare/self_payment",
+  "executed": [
+    "TestPrepare",
+    "TestPrepare/self_payment"
+  ],
+  "group": false,
+  "scope": "Go package test; includes parent setup and teardown. Unit tests may use test doubles. Full-suite race checks run separately.",
+  "total": 37,
+  "covered": 22,
+  "files": [
+    {
+      "path": "internal/contracts/errors.go",
+      "sha256": "e9d6ec4d7e030ea919c9aa732d645f8280feec00251bf0b864d832d5524e5a9f",
+      "source": "package contracts\n\nimport (\n\t\"context\"\n\t\"errors\"\n)\n\nvar (\n\tErrInvalidRequest    = errors.New(\"invalid payment request\")\n\tErrUnknownFirm       = errors.New(\"payer or recipient does not exist\")\n\tErrInsufficientFunds = errors.New(\"insufficient payer funds\")\n\tErrBalanceOverflow   = errors.New(\"recipient balance would exceed INTEGER cents\")\n\tErrUnavailable       = errors.New(\"ledger service unavailable\")\n\tErrInternal          = errors.New(\"internal payment failure\")\n)\n\ntype ErrorResponse struct {\n\tError ErrorDetail `json:\"error\"`\n}\ntype ErrorDetail struct {\n\tCode    string `json:\"code\"`\n\tMessage string `json:\"message\"`\n}\n\nfunc ErrorForCode(code string) error {\n\tswitch code {\n\tcase \"timeout\":\n\t\treturn context.DeadlineExceeded\n\tcase \"invalid_request\":\n\t\treturn ErrInvalidRequest\n\tcase \"unknown_firm\":\n\t\treturn ErrUnknownFirm\n\tcase \"insufficient_funds\":\n\t\treturn ErrInsufficientFunds\n\tcase \"balance_overflow\":\n\t\treturn ErrBalanceOverflow\n\tcase \"internal_error\":\n\t\treturn ErrInternal\n\tdefault:\n\t\treturn ErrUnavailable\n\t}\n}\n",
+      "blocks": [
+        {
+          "startLine": 26,
+          "startColumn": 2,
+          "endLine": 26,
+          "endColumn": 14,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 28,
+          "startColumn": 3,
+          "endLine": 28,
+          "endColumn": 34,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 30,
+          "startColumn": 3,
+          "endLine": 30,
+          "endColumn": 27,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 32,
+          "startColumn": 3,
+          "endLine": 32,
+          "endColumn": 24,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 34,
+          "startColumn": 3,
+          "endLine": 34,
+          "endColumn": 30,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 36,
+          "startColumn": 3,
+          "endLine": 36,
+          "endColumn": 28,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 38,
+          "startColumn": 3,
+          "endLine": 38,
+          "endColumn": 21,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 40,
+          "startColumn": 3,
+          "endLine": 40,
+          "endColumn": 24,
+          "statements": 1,
+          "count": 0
+        }
+      ]
+    },
+    {
+      "path": "internal/contracts/validate.go",
+      "sha256": "c8c6e922a0e4e8c3df4763e01dc3260bd413c1684364a87d32e820d140f87d94",
+      "source": "package contracts\n\nimport (\n\t\"fmt\"\n\t\"strings\"\n\n\t\"github.com/newdarwindev/firm-payments/internal/money\"\n)\n\nconst MaxPayments = 1000\nconst MaxBodyBytes int64 = 1 << 20\n\ntype PreparedPayment struct {\n\tPayeeUUID   string\n\tCents       int64\n\tDescription string\n}\ntype Batch struct {\n\tPayerUUID string\n\tPayments  []PreparedPayment\n\tTotal     int64\n\tCredits   map[string]int64\n}\n\nfunc canonicalUUID(s string) (string, bool) {\n\tif len(s) != 36 {\n\t\treturn \"\", false\n\t}\n\tfor i, c := range s {\n\t\tif i == 8 || i == 13 || i == 18 || i == 23 {\n\t\t\tif c != '-' {\n\t\t\t\treturn \"\", false\n\t\t\t}\n\t\t\tcontinue\n\t\t}\n\t\tif (c < '0' || c > '9') && (c < 'a' || c > 'f') && (c < 'A' || c > 'F') {\n\t\t\treturn \"\", false\n\t\t}\n\t}\n\treturn strings.ToLower(s), true\n}\n\nfunc Prepare(req BulkRequest) (Batch, error) {\n\tpayer, ok := canonicalUUID(req.PayerFirmUUID)\n\tif !ok {\n\t\treturn Batch{}, fmt.Errorf(\"%w: payer_firm_uuid must be a UUID\", ErrInvalidRequest)\n\t}\n\tif len(req.Payments) == 0 || len(req.Payments) > MaxPayments {\n\t\treturn Batch{}, fmt.Errorf(\"%w: require 1 to %d payments\", ErrInvalidRequest, MaxPayments)\n\t}\n\tbatch := Batch{PayerUUID: payer, Credits: make(map[string]int64)}\n\tfor _, payment := range req.Payments {\n\t\tpayee, ok := canonicalUUID(payment.PayeeFirmUUID)\n\t\tif !ok || payee == payer {\n\t\t\treturn Batch{}, fmt.Errorf(\"%w: recipients must be UUIDs different from the payer\", ErrInvalidRequest)\n\t\t}\n\t\tcents, err := money.ParseCents(payment.Amount)\n\t\tif err != nil {\n\t\t\treturn Batch{}, fmt.Errorf(\"%w: %w\", ErrInvalidRequest, err)\n\t\t}\n\t\tif batch.Total > money.MaxCents-cents {\n\t\t\treturn Batch{}, fmt.Errorf(\"%w: batch total exceeds INTEGER cents\", ErrInvalidRequest)\n\t\t}\n\t\tbatch.Total += cents\n\t\tbatch.Credits[payee] += cents\n\t\tbatch.Payments = append(batch.Payments, PreparedPayment{PayeeUUID: payee, Cents: cents, Description: payment.Description})\n\t}\n\treturn batch, nil\n}\n",
+      "blocks": [
+        {
+          "startLine": 26,
+          "startColumn": 2,
+          "endLine": 26,
+          "endColumn": 18,
+          "statements": 1,
+          "count": 5
+        },
+        {
+          "startLine": 27,
+          "startColumn": 3,
+          "endLine": 28,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 29,
+          "startColumn": 2,
+          "endLine": 29,
+          "endColumn": 22,
+          "statements": 1,
+          "count": 5
+        },
+        {
+          "startLine": 30,
+          "startColumn": 3,
+          "endLine": 30,
+          "endColumn": 46,
+          "statements": 1,
+          "count": 180
+        },
+        {
+          "startLine": 31,
+          "startColumn": 4,
+          "endLine": 31,
+          "endColumn": 16,
+          "statements": 1,
+          "count": 20
+        },
+        {
+          "startLine": 32,
+          "startColumn": 5,
+          "endLine": 33,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 34,
+          "startColumn": 4,
+          "endLine": 34,
+          "endColumn": 12,
+          "statements": 1,
+          "count": 20
+        },
+        {
+          "startLine": 36,
+          "startColumn": 3,
+          "endLine": 36,
+          "endColumn": 75,
+          "statements": 1,
+          "count": 160
+        },
+        {
+          "startLine": 37,
+          "startColumn": 4,
+          "endLine": 38,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 40,
+          "startColumn": 2,
+          "endLine": 40,
+          "endColumn": 33,
+          "statements": 1,
+          "count": 5
+        },
+        {
+          "startLine": 44,
+          "startColumn": 2,
+          "endLine": 45,
+          "endColumn": 9,
+          "statements": 2,
+          "count": 2
+        },
+        {
+          "startLine": 46,
+          "startColumn": 3,
+          "endLine": 47,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 48,
+          "startColumn": 2,
+          "endLine": 48,
+          "endColumn": 63,
+          "statements": 1,
+          "count": 2
+        },
+        {
+          "startLine": 49,
+          "startColumn": 3,
+          "endLine": 50,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 51,
+          "startColumn": 2,
+          "endLine": 52,
+          "endColumn": 39,
+          "statements": 2,
+          "count": 2
+        },
+        {
+          "startLine": 53,
+          "startColumn": 3,
+          "endLine": 54,
+          "endColumn": 28,
+          "statements": 2,
+          "count": 3
+        },
+        {
+          "startLine": 55,
+          "startColumn": 4,
+          "endLine": 56,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 1
+        },
+        {
+          "startLine": 57,
+          "startColumn": 3,
+          "endLine": 58,
+          "endColumn": 17,
+          "statements": 2,
+          "count": 2
+        },
+        {
+          "startLine": 59,
+          "startColumn": 4,
+          "endLine": 60,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 61,
+          "startColumn": 3,
+          "endLine": 61,
+          "endColumn": 41,
+          "statements": 1,
+          "count": 2
+        },
+        {
+          "startLine": 62,
+          "startColumn": 4,
+          "endLine": 63,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 64,
+          "startColumn": 3,
+          "endLine": 66,
+          "endColumn": 125,
+          "statements": 3,
+          "count": 2
+        },
+        {
+          "startLine": 68,
+          "startColumn": 2,
+          "endLine": 68,
+          "endColumn": 19,
+          "statements": 1,
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "profileSHA256": "35b23769911c9df9d50b3dfb79469fdf8a0bc8cfcaca98ef39ea891691906ad9",
+  "gifSHA256": "882f8719ded3f5c1a4c268e589bc8742ffadd1ce5a1154a8b3c8933fdb82521e"
+}

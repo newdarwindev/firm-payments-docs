@@ -1,0 +1,9 @@
+go tool test2json -t -p github.com/newdarwindev/firm-payments/tools/evidence /home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/b92f04025ce47388.test -test.v=test2json -test.count=1 -test.timeout=180s -test.run=^TestFunctionalEvidenceFailsClosed$/^missing$ -test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/unit-10a253aab833569a/coverage.out
+=== RUN   TestFunctionalEvidenceFailsClosed
+=== RUN   TestFunctionalEvidenceFailsClosed/missing
+--- PASS: TestFunctionalEvidenceFailsClosed/missing (0.00s)
+--- PASS: TestFunctionalEvidenceFailsClosed (0.00s)
+PASS
+coverage: 13.1% of statements
+
+Exit status: 0

@@ -1,0 +1,350 @@
+{
+  "id": "unit-c3dbc2b5277859ec",
+  "suite": "unit",
+  "name": "TestClientPreservesOutcomesWithoutRetry",
+  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "status": "pass",
+  "asserts": "",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/ledgerclient/client_test.go#L16",
+  "package": "github.com/newdarwindev/firm-payments/internal/ledgerclient",
+  "command": [
+    "go",
+    "tool",
+    "test2json",
+    "-t",
+    "-p",
+    "github.com/newdarwindev/firm-payments/internal/ledgerclient",
+    "/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/30e364b0f7d02fc2.test",
+    "-test.v=test2json",
+    "-test.count=1",
+    "-test.timeout=180s",
+    "-test.run=^TestClientPreservesOutcomesWithoutRetry$",
+    "-test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/unit-c3dbc2b5277859ec/coverage.out"
+  ],
+  "build": [
+    "go",
+    "test",
+    "-c",
+    "-o",
+    "/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/30e364b0f7d02fc2.test",
+    "-cover",
+    "-covermode=atomic",
+    "."
+  ],
+  "binarySHA256": "f50456c865b1ead07d01d53d7aa02b66c79ff99e91c141284fc9168c25b7c0e4",
+  "selected": "TestClientPreservesOutcomesWithoutRetry",
+  "executed": [
+    "TestClientPreservesOutcomesWithoutRetry"
+  ],
+  "group": false,
+  "scope": "Go package test; includes parent setup and teardown. Unit tests may use test doubles. Full-suite race checks run separately.",
+  "total": 46,
+  "covered": 26,
+  "files": [
+    {
+      "path": "internal/ledgerclient/client.go",
+      "sha256": "67333f1ee3d09e69876270ff4fb5fae0ccd3c21a8a2d9e44adc8353c0dd590e9",
+      "source": "// Package ledgerclient provides a bounded, non-retrying private HTTP client.\npackage ledgerclient\n\nimport (\n\t\"bytes\"\n\t\"context\"\n\t\"encoding/json\"\n\t\"errors\"\n\t\"fmt\"\n\t\"io\"\n\t\"net/http\"\n\t\"net/url\"\n\t\"strings\"\n\t\"time\"\n\n\t\"github.com/newdarwindev/firm-payments/internal/contracts\"\n)\n\ntype Client struct {\n\tbase string\n\thttp *http.Client\n}\n\nfunc New(base string) (*Client, error) {\n\tu, err := url.Parse(base)\n\tif err != nil || u.Host == \"\" || (u.Scheme != \"http\" && u.Scheme != \"https\") || u.RawQuery != \"\" || u.Fragment != \"\" || u.User != nil || (u.Path != \"\" && u.Path != \"/\") {\n\t\treturn nil, fmt.Errorf(\"invalid LEDGER_URL\")\n\t}\n\treturn &Client{base: strings.TrimSuffix(base, \"/\"), http: &http.Client{Timeout: 8 * time.Second, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}}, nil\n}\n\nfunc (c *Client) Ready(ctx context.Context) error {\n\treq, err := http.NewRequestWithContext(ctx, http.MethodGet, c.base+\"/readyz\", nil)\n\tif err != nil {\n\t\treturn err\n\t}\n\tres, err := c.http.Do(req)\n\tif err != nil {\n\t\treturn fmt.Errorf(\"%w: %w\", contracts.ErrUnavailable, err)\n\t}\n\tdefer func() { _ = res.Body.Close() }()\n\tif res.StatusCode != http.StatusOK {\n\t\treturn contracts.ErrUnavailable\n\t}\n\treturn nil\n}\n\nfunc (c *Client) Execute(ctx context.Context, payment contracts.BulkRequest) error {\n\tbody, err := json.Marshal(payment)\n\tif err != nil {\n\t\treturn err\n\t}\n\treq, err := http.NewRequestWithContext(ctx, http.MethodPost, c.base+\"/internal/payments/bulk\", bytes.NewReader(body))\n\tif err != nil {\n\t\treturn err\n\t}\n\treq.Header.Set(\"Content-Type\", \"application/json\")\n\tres, err := c.http.Do(req)\n\tif err != nil {\n\t\treturn fmt.Errorf(\"%w: %w\", contracts.ErrUnavailable, err)\n\t}\n\tdefer func() { _ = res.Body.Close() }()\n\tif res.StatusCode == http.StatusCreated {\n\t\treturn nil\n\t}\n\t// A valid error body cannot override the transport outcome (for example,\n\t// a proxy returning a 500 with a stale insufficient-funds body).\n\tif res.StatusCode != 422 && res.StatusCode != 500 && res.StatusCode != 503 && res.StatusCode != 504 {\n\t\treturn fmt.Errorf(\"%w: unexpected ledger status %d\", contracts.ErrUnavailable, res.StatusCode)\n\t}\n\tvar failure contracts.ErrorResponse\n\tif err := json.NewDecoder(io.LimitReader(res.Body, 64<<10)).Decode(&failure); err != nil {\n\t\treturn fmt.Errorf(\"%w: invalid ledger response\", contracts.ErrUnavailable)\n\t}\n\terr = contracts.ErrorForCode(failure.Error.Code)\n\tswitch res.StatusCode {\n\tcase 422:\n\t\tif !errors.Is(err, contracts.ErrInvalidRequest) && !errors.Is(err, contracts.ErrUnknownFirm) && !errors.Is(err, contracts.ErrInsufficientFunds) && !errors.Is(err, contracts.ErrBalanceOverflow) {\n\t\t\treturn contracts.ErrUnavailable\n\t\t}\n\tcase 500:\n\t\tif !errors.Is(err, contracts.ErrInternal) {\n\t\t\treturn contracts.ErrUnavailable\n\t\t}\n\tcase 503:\n\t\tif !errors.Is(err, contracts.ErrUnavailable) {\n\t\t\treturn contracts.ErrUnavailable\n\t\t}\n\tcase 504:\n\t\tif !errors.Is(err, context.DeadlineExceeded) {\n\t\t\treturn contracts.ErrUnavailable\n\t\t}\n\t}\n\treturn err\n}\n",
+      "blocks": [
+        {
+          "startLine": 25,
+          "startColumn": 2,
+          "endLine": 26,
+          "endColumn": 171,
+          "statements": 2,
+          "count": 8
+        },
+        {
+          "startLine": 27,
+          "startColumn": 3,
+          "endLine": 28,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 29,
+          "startColumn": 2,
+          "endLine": 29,
+          "endColumn": 157,
+          "statements": 1,
+          "count": 8
+        },
+        {
+          "startLine": 29,
+          "startColumn": 159,
+          "endLine": 29,
+          "endColumn": 191,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 33,
+          "startColumn": 2,
+          "endLine": 34,
+          "endColumn": 16,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 35,
+          "startColumn": 3,
+          "endLine": 36,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 37,
+          "startColumn": 2,
+          "endLine": 38,
+          "endColumn": 16,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 39,
+          "startColumn": 3,
+          "endLine": 40,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 41,
+          "startColumn": 2,
+          "endLine": 41,
+          "endColumn": 15,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 41,
+          "startColumn": 17,
+          "endLine": 41,
+          "endColumn": 39,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 42,
+          "startColumn": 2,
+          "endLine": 42,
+          "endColumn": 37,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 43,
+          "startColumn": 3,
+          "endLine": 44,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 45,
+          "startColumn": 2,
+          "endLine": 45,
+          "endColumn": 12,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 49,
+          "startColumn": 2,
+          "endLine": 50,
+          "endColumn": 16,
+          "statements": 2,
+          "count": 8
+        },
+        {
+          "startLine": 51,
+          "startColumn": 3,
+          "endLine": 52,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 53,
+          "startColumn": 2,
+          "endLine": 54,
+          "endColumn": 16,
+          "statements": 2,
+          "count": 8
+        },
+        {
+          "startLine": 55,
+          "startColumn": 3,
+          "endLine": 56,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 57,
+          "startColumn": 2,
+          "endLine": 59,
+          "endColumn": 16,
+          "statements": 3,
+          "count": 8
+        },
+        {
+          "startLine": 60,
+          "startColumn": 3,
+          "endLine": 61,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 62,
+          "startColumn": 2,
+          "endLine": 62,
+          "endColumn": 15,
+          "statements": 1,
+          "count": 8
+        },
+        {
+          "startLine": 62,
+          "startColumn": 17,
+          "endLine": 62,
+          "endColumn": 39,
+          "statements": 1,
+          "count": 8
+        },
+        {
+          "startLine": 63,
+          "startColumn": 2,
+          "endLine": 63,
+          "endColumn": 42,
+          "statements": 1,
+          "count": 8
+        },
+        {
+          "startLine": 64,
+          "startColumn": 3,
+          "endLine": 65,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 1
+        },
+        {
+          "startLine": 68,
+          "startColumn": 2,
+          "endLine": 68,
+          "endColumn": 102,
+          "statements": 1,
+          "count": 7
+        },
+        {
+          "startLine": 69,
+          "startColumn": 3,
+          "endLine": 70,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 2
+        },
+        {
+          "startLine": 71,
+          "startColumn": 2,
+          "endLine": 72,
+          "endColumn": 91,
+          "statements": 2,
+          "count": 5
+        },
+        {
+          "startLine": 73,
+          "startColumn": 3,
+          "endLine": 74,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 75,
+          "startColumn": 2,
+          "endLine": 76,
+          "endColumn": 24,
+          "statements": 2,
+          "count": 5
+        },
+        {
+          "startLine": 78,
+          "startColumn": 3,
+          "endLine": 78,
+          "endColumn": 196,
+          "statements": 1,
+          "count": 1
+        },
+        {
+          "startLine": 79,
+          "startColumn": 4,
+          "endLine": 80,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 82,
+          "startColumn": 3,
+          "endLine": 82,
+          "endColumn": 45,
+          "statements": 1,
+          "count": 2
+        },
+        {
+          "startLine": 83,
+          "startColumn": 4,
+          "endLine": 84,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 1
+        },
+        {
+          "startLine": 86,
+          "startColumn": 3,
+          "endLine": 86,
+          "endColumn": 48,
+          "statements": 1,
+          "count": 1
+        },
+        {
+          "startLine": 87,
+          "startColumn": 4,
+          "endLine": 88,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 90,
+          "startColumn": 3,
+          "endLine": 90,
+          "endColumn": 48,
+          "statements": 1,
+          "count": 1
+        },
+        {
+          "startLine": 91,
+          "startColumn": 4,
+          "endLine": 92,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 94,
+          "startColumn": 2,
+          "endLine": 94,
+          "endColumn": 12,
+          "statements": 1,
+          "count": 4
+        }
+      ]
+    }
+  ],
+  "profileSHA256": "8090f8c286e2265e8b12a1b79634438776c6dc3b94006c790e1d505c1fb8494a",
+  "gifSHA256": "1257cb14524081442fd8f7785c916a13cf1be2b204edc42b2445d8e403b22d85"
+}

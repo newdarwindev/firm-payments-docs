@@ -1,0 +1,1122 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>requirements-site: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/newdarwindev/firm-payments/tools/requirements-site/build.go (0.0%)</option>
+				
+				<option value="file1">github.com/newdarwindev/firm-payments/tools/requirements-site/evidence.go (5.5%)</option>
+				
+				<option value="file2">github.com/newdarwindev/firm-payments/tools/requirements-site/main.go (0.0%)</option>
+				
+				<option value="file3">github.com/newdarwindev/firm-payments/tools/requirements-site/verify.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package main
+
+import (
+        "bytes"
+        "encoding/json"
+        "errors"
+        "fmt"
+        "html/template"
+        "os"
+        "path/filepath"
+        "regexp"
+        "sort"
+        "strings"
+
+        "github.com/yuin/goldmark"
+        "github.com/yuin/goldmark/extension"
+)
+
+var rowMarker = regexp.MustCompile(`(?m)^&lt;!-- requirement: ([a-z0-9-]+) page: ([1-5]) --&gt;\n`)
+
+type testRef struct{ Suite, Name string }
+type reference struct{ Path, Symbol string }
+type mapping struct {
+        ID, Kind, Note    string
+        Tests             []testRef
+        References        []reference
+        Artifacts, Checks []string
+}
+type taskRow struct {
+        ID, Markdown string
+        Page, Line   int
+}
+type link struct{ Label, URL string }
+type row struct {
+        ID, Kind, Label, Note, Markdown string
+        HTML                            template.HTML
+        Page, Line                      int
+        Tests                           []result
+        References, Artifacts           []link
+        Checks                          []check
+}
+type view struct {
+        Title, Prefix, SHA, ShortSHA, Mode, VerifiedAt, BuildURL, SourceURL string
+        Coverage                                                            string
+        FunctionalCount                                                     int
+        Rows                                                                []row
+        Results                                                             []result
+        Checks                                                              []check
+        Artifacts                                                           []link
+        Transcription                                                       string
+}
+
+func parseRecital(text string) ([]taskRow, error) {
+        <span class="cov0" title="0">matches := rowMarker.FindAllStringSubmatchIndex(text, -1)
+        if len(matches) == 0 || strings.TrimSpace(text[:matches[0][0]]) != "" </span>{
+                <span class="cov0" title="0">return nil, errors.New("recital needs explicit requirement markers")
+</span>        }
+        <span class="cov0" title="0">seen := map[string]bool{}
+        rows := []taskRow{}
+        for i, m := range matches </span>{
+                <span class="cov0" title="0">id := text[m[2]:m[3]]
+                if seen[id] </span>{
+                        <span class="cov0" title="0">return nil, errors.New("duplicate requirement ID")
+</span>                }
+                <span class="cov0" title="0">seen[id] = true
+                end := len(text)
+                if i+1 &lt; len(matches) </span>{
+                        <span class="cov0" title="0">end = matches[i+1][0]
+</span>                }
+                <span class="cov0" title="0">body := strings.TrimSpace(text[m[1]:end])
+                if body == "" </span>{
+                        <span class="cov0" title="0">return nil, errors.New("empty recital row")
+</span>                }
+                <span class="cov0" title="0">rows = append(rows, taskRow{id, body, int(text[m[4]] - '0'), strings.Count(text[:m[1]], "\n") + 1})</span>
+        }
+        <span class="cov0" title="0">return rows, nil</span>
+}
+func loadRecital(root string) ([]taskRow, []mapping, string, error) {
+        <span class="cov0" title="0">b, err := os.ReadFile(filepath.Join(root, "site/assignment.md"))
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, nil, "", err
+</span>        }
+        <span class="cov0" title="0">rows, err := parseRecital(string(b))
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, nil, "", err
+</span>        }
+        <span class="cov0" title="0">var mappings []mapping
+        if err := readJSON(filepath.Join(root, "site/requirements.json"), &amp;mappings); err != nil </span>{
+                <span class="cov0" title="0">return nil, nil, "", err
+</span>        }
+        <span class="cov0" title="0">if len(rows) != len(mappings) </span>{
+                <span class="cov0" title="0">return nil, nil, "", errors.New("every recital row must have exactly one evidence mapping")
+</span>        }
+        <span class="cov0" title="0">for i, r := range rows </span>{
+                <span class="cov0" title="0">if mappings[i].ID != r.ID </span>{
+                        <span class="cov0" title="0">return nil, nil, "", errors.New("recital/map order or IDs differ")
+</span>                }
+                <span class="cov0" title="0">if mappings[i].Note == "" </span>{
+                        <span class="cov0" title="0">return nil, nil, "", errors.New("requirement explanation is missing")
+</span>                }
+                <span class="cov0" title="0">kind := mappings[i].Kind
+                if kind != "verified" &amp;&amp; kind != "documented" &amp;&amp; kind != "manual" &amp;&amp; kind != "context" </span>{
+                        <span class="cov0" title="0">return nil, nil, "", errors.New("unknown verification kind")
+</span>                }
+                <span class="cov0" title="0">if kind == "verified" &amp;&amp; len(mappings[i].Tests) == 0 &amp;&amp; len(mappings[i].Checks) == 0 </span>{
+                        <span class="cov0" title="0">return nil, nil, "", errors.New("verified row has no executable evidence")
+</span>                }
+        }
+        <span class="cov0" title="0">var source struct {
+                PDF, SHA256, Transcription string
+                Pages                      int
+</span>        }
+        <span class="cov0" title="0">if err := readJSON(filepath.Join(root, "site/source.json"), &amp;source); err != nil </span>{
+                <span class="cov0" title="0">return nil, nil, "", err
+</span>        }
+        <span class="cov0" title="0">if source.PDF != "docs/source/assignment.pdf" || source.Pages != 5 </span>{
+                <span class="cov0" title="0">return nil, nil, "", errors.New("unexpected assignment provenance")
+</span>        }
+        <span class="cov0" title="0">hash, err := fileHash(filepath.Join(root, source.PDF))
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, nil, "", err
+</span>        }
+        <span class="cov0" title="0">if hash != source.SHA256 </span>{
+                <span class="cov0" title="0">return nil, nil, "", errors.New("assignment PDF changed; re-audit the recital")
+</span>        }
+        <span class="cov0" title="0">for _, file := range []string{"testdata/original/request-format.jsonc", "testdata/original/seed.sql", "testdata/original/sample-request.json"} </span>{
+                <span class="cov0" title="0">example, err := os.ReadFile(filepath.Join(root, file))
+                if err != nil </span>{
+                        <span class="cov0" title="0">return nil, nil, "", err
+</span>                }
+                <span class="cov0" title="0">if !strings.Contains(string(b), strings.TrimSpace(string(example))) </span>{
+                        <span class="cov0" title="0">return nil, nil, "", fmt.Errorf("original example changed in recital: %s", file)
+</span>                }
+        }
+        <span class="cov0" title="0">return rows, mappings, source.Transcription, nil</span>
+}
+func build(root, input, out, revision string) error {
+        <span class="cov0" title="0">rows, mappings, transcription, err := loadRecital(root)
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">data, err := loadInputs(root, input, revision)
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">v := view{Title: "Assignment × evidence", Prefix: "", SHA: revision, ShortSHA: revision[:7], Mode: data.Evidence.Mode, VerifiedAt: data.Evidence.VerifiedAt, BuildURL: data.Evidence.Service.URL, SourceURL: repository + "/tree/" + revision, Coverage: fmt.Sprintf("%.2f", data.Coverage), Transcription: transcription, Results: data.Results}
+        if err := mapRows(root, revision, rows, mappings, data, &amp;v); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">for _, r := range data.Results </span>{
+                <span class="cov0" title="0">if r.Suite == "functional" </span>{
+                        <span class="cov0" title="0">v.FunctionalCount++
+</span>                }
+        }
+        <span class="cov0" title="0">for _, key := range []string{"service", "functional", "coverage", "conversation"} </span>{
+                <span class="cov0" title="0">a := data.Artifacts[key]
+                v.Artifacts = append(v.Artifacts, link{a.Name, a.URL})
+</span>        }
+        <span class="cov0" title="0">for _, c := range data.Checks </span>{
+                <span class="cov0" title="0">v.Checks = append(v.Checks, c)
+</span>        }
+        <span class="cov0" title="0">sort.Slice(v.Checks, func(i, j int) bool </span>{ <span class="cov0" title="0">return v.Checks[i].ID &lt; v.Checks[j].ID }</span>)
+        <span class="cov0" title="0">if err := os.MkdirAll(out, 0o755); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">entries, err := os.ReadDir(out)
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">if len(entries) != 0 </span>{
+                <span class="cov0" title="0">return errors.New("site output must be empty; refuse stale public files")
+</span>        }
+        <span class="cov0" title="0">tmpl, err := template.New("site").Funcs(template.FuncMap{"resultLink": func(r result) string </span>{ <span class="cov0" title="0">return "results/#" + r.Anchor }</span>}).Parse(siteTemplate)
+        <span class="cov0" title="0">if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">for _, page := range []struct{ name, title, template, prefix string }{{"index.html", "Assignment × evidence", "requirements", ""}, {"results/index.html", "Test results", "results", "../"}, {"build/index.html", "Build evidence", "build", "../"}} </span>{
+                <span class="cov0" title="0">v.Title = page.title
+                v.Prefix = page.prefix
+                if err := os.MkdirAll(filepath.Dir(filepath.Join(out, page.name)), 0o755); err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">file, err := os.Create(filepath.Join(out, page.name))
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">renderErr := tmpl.ExecuteTemplate(file, page.template, v)
+                closeErr := file.Close()
+                if err := errors.Join(renderErr, closeErr); err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+        }
+        <span class="cov0" title="0">for _, name := range []string{"style.css", "site.js"} </span>{
+                <span class="cov0" title="0">b, err := os.ReadFile(filepath.Join(root, "site/assets", name))
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">if err := os.MkdirAll(filepath.Join(out, "assets"), 0o755); err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">if err := os.WriteFile(filepath.Join(out, "assets", name), b, 0o644); err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+        }
+        <span class="cov0" title="0">b, err := os.ReadFile(filepath.Join(root, "site/assignment.md"))
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">if err := os.WriteFile(filepath.Join(out, "assignment.md"), b, 0o644); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        // Only selected report fields are serialized. Raw test output, conversations,
+        // source-code coverage HTML and binaries are deliberately outside the public payload.
+        <span class="cov0" title="0">for _, file := range []struct {
+                path  string
+                value any
+        }{{"results/results.json", data.Results}, {"verification.json", struct {
+                SourceSHA, Mode, VerifiedAt string
+                FunctionalCases             int
+                CoveragePercent             float64
+                Rows                        int
+                ServiceURL, ConversationURL string
+        }{revision, data.Evidence.Mode, data.Evidence.VerifiedAt, v.FunctionalCount, data.Coverage, len(rows), data.Evidence.Service.URL, data.Evidence.Conversation.URL}}} </span>{
+                <span class="cov0" title="0">if err := writePublicJSON(filepath.Join(out, file.path), file.value); err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+        }
+        <span class="cov0" title="0">if err := os.WriteFile(filepath.Join(out, ".nojekyll"), nil, 0o644); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">if err := writeSiteChecksums(out); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">return verifySite(out)</span>
+}
+func mapRows(root, revision string, rows []taskRow, mappings []mapping, data inputData, v *view) error {
+        <span class="cov0" title="0">for i, r := range rows </span>{
+                <span class="cov0" title="0">m := mappings[i]
+                rendered, err := renderMarkdown(r.Markdown)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">item := row{ID: r.ID, Kind: m.Kind, Note: m.Note, Markdown: r.Markdown, HTML: rendered, Page: r.Page, Line: r.Line}
+                item.Label = map[string]string{"verified": "Verified by checks", "documented": "Documented + checked", "manual": "Owner action pending", "context": "Assignment context"}[m.Kind]
+                for _, ref := range m.Tests </span>{
+                        <span class="cov0" title="0">var found []result
+                        for _, test := range data.Results </span>{
+                                <span class="cov0" title="0">if test.Suite == ref.Suite &amp;&amp; test.Name == ref.Name </span>{
+                                        <span class="cov0" title="0">found = append(found, test)
+</span>                                }
+                        }
+                        <span class="cov0" title="0">if len(found) != 1 || found[0].Status != "pass" </span>{
+                                <span class="cov0" title="0">return fmt.Errorf("missing, ambiguous or failed requirement test: %s:%s", ref.Suite, ref.Name)
+</span>                        }
+                        <span class="cov0" title="0">item.Tests = append(item.Tests, found[0])</span>
+                }
+                <span class="cov0" title="0">for _, ref := range m.References </span>{
+                        <span class="cov0" title="0">line, err := sourceLine(root, ref.Path, ref.Symbol)
+                        if err != nil </span>{
+                                <span class="cov0" title="0">return err
+</span>                        }
+                        <span class="cov0" title="0">item.References = append(item.References, link{filepath.Base(ref.Path) + fmt.Sprintf(":%d", line), sourceURL(revision, ref.Path, line)})</span>
+                }
+                <span class="cov0" title="0">item.References = append(item.References, link{"Markdown source", sourceURL(revision, "site/assignment.md", r.Line)}, link{fmt.Sprintf("Original PDF · p.%d", r.Page), repository + "/blob/" + revision + "/docs/source/assignment.pdf#page=" + fmt.Sprint(r.Page)})
+                for _, kind := range m.Artifacts </span>{
+                        <span class="cov0" title="0">a, ok := data.Artifacts[kind]
+                        if !ok </span>{
+                                <span class="cov0" title="0">return errors.New("mapping references unknown artifact")
+</span>                        }
+                        <span class="cov0" title="0">item.Artifacts = append(item.Artifacts, link{kind + " artifact", a.URL})</span>
+                }
+                <span class="cov0" title="0">for _, id := range m.Checks </span>{
+                        <span class="cov0" title="0">c, ok := data.Checks[id]
+                        if !ok || c.Status != "pass" </span>{
+                                <span class="cov0" title="0">return errors.New("mapping check is missing or failed")
+</span>                        }
+                        <span class="cov0" title="0">item.Checks = append(item.Checks, c)</span>
+                }
+                <span class="cov0" title="0">v.Rows = append(v.Rows, item)</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+func writePublicJSON(path string, value any) error {
+        <span class="cov0" title="0">b, err := json.MarshalIndent(value, "", "  ")
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">return os.WriteFile(path, append(b, '\n'), 0o644)</span>
+}
+func writeSiteChecksums(root string) error {
+        <span class="cov0" title="0">paths := []string{}
+        if err := filepath.WalkDir(root, func(path string, d os.DirEntry, err error) error </span>{
+                <span class="cov0" title="0">if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">if !d.IsDir() </span>{
+                        <span class="cov0" title="0">rel, err := filepath.Rel(root, path)
+                        if err != nil </span>{
+                                <span class="cov0" title="0">return err
+</span>                        }
+                        <span class="cov0" title="0">if rel != "SHA256SUMS" </span>{
+                                <span class="cov0" title="0">paths = append(paths, filepath.ToSlash(rel))
+</span>                        }
+                }
+                <span class="cov0" title="0">return nil</span>
+        }); err != nil {
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">sort.Strings(paths)
+        var b strings.Builder
+        for _, path := range paths </span>{
+                <span class="cov0" title="0">sum, err := fileHash(filepath.Join(root, path))
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">fmt.Fprintf(&amp;b, "%s  ./%s\n", sum, path)</span>
+        }
+        <span class="cov0" title="0">return os.WriteFile(filepath.Join(root, "SHA256SUMS"), []byte(b.String()), 0o644)</span>
+}
+
+func renderMarkdown(text string) (template.HTML, error) {
+        <span class="cov0" title="0">var rendered bytes.Buffer
+        markdown := goldmark.New(goldmark.WithExtensions(extension.Table, extension.Strikethrough, extension.TaskList))
+        if err := markdown.Convert([]byte(text), &amp;rendered); err != nil </span>{
+                <span class="cov0" title="0">return "", err
+</span>        }
+        <span class="cov0" title="0">return template.HTML(rendered.String()), nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package main
+
+import (
+        "bufio"
+        "crypto/sha256"
+        "encoding/hex"
+        "encoding/json"
+        "errors"
+        "fmt"
+        "go/ast"
+        "go/parser"
+        "go/token"
+        "io"
+        "os"
+        "path/filepath"
+        "regexp"
+        "sort"
+        "strconv"
+        "strings"
+)
+
+const repository = "https://github.com/newdarwindev/firm-payments"
+const module = "github.com/newdarwindev/firm-payments"
+
+var shaPattern = regexp.MustCompile(`^[a-f0-9]{40}$`)
+
+type artifact struct {
+        Kind, Name, URL, Directory string
+        ID                         int64
+}
+type workflow struct {
+        Name, URL, SHA, Conclusion string
+        ID                         int64
+}
+type evidence struct {
+        Mode, SHA, VerifiedAt string
+        Service, Conversation workflow
+        Artifacts             []artifact
+}
+type result struct {
+        Suite, Name, Package, Asserts, Status, SourceURL, ArtifactURL, Anchor string
+        Seconds                                                               float64
+}
+type inputData struct {
+        Evidence  evidence
+        Results   []result
+        Coverage  float64
+        Artifacts map[string]artifact
+        Checks    map[string]check
+}
+type check struct{ ID, Title, Status, Detail, RunURL, ArtifactURL string }
+
+func readJSON(path string, value any) error {
+        <span class="cov1" title="1">b, err := os.ReadFile(path)
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov1" title="1">return json.Unmarshal(b, value)</span>
+}
+func fileHash(path string) (string, error) {
+        <span class="cov0" title="0">f, err := os.Open(path)
+        if err != nil </span>{
+                <span class="cov0" title="0">return "", err
+</span>        }
+        <span class="cov0" title="0">defer func() </span>{ <span class="cov0" title="0">_ = f.Close() }</span>()
+        <span class="cov0" title="0">h := sha256.New()
+        if _, err := io.Copy(h, f); err != nil </span>{
+                <span class="cov0" title="0">return "", err
+</span>        }
+        <span class="cov0" title="0">return hex.EncodeToString(h.Sum(nil)), nil</span>
+}
+func verifyChecksums(root string) error {
+        <span class="cov0" title="0">b, err := os.ReadFile(filepath.Join(root, "SHA256SUMS"))
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">listed := map[string]bool{}
+        for _, line := range strings.Split(strings.TrimSpace(string(b)), "\n") </span>{
+                <span class="cov0" title="0">if len(line) &lt; 67 </span>{
+                        <span class="cov0" title="0">return errors.New("invalid checksum manifest")
+</span>                }
+                <span class="cov0" title="0">want, name := line[:64], strings.TrimPrefix(line[66:], "./")
+                if _, err := hex.DecodeString(want); err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">if !filepath.IsLocal(name) || listed[name] || strings.Contains(name, "\\") </span>{
+                        <span class="cov0" title="0">return errors.New("unsafe or duplicate artifact path")
+</span>                }
+                <span class="cov0" title="0">info, err := os.Lstat(filepath.Join(root, name))
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">if !info.Mode().IsRegular() </span>{
+                        <span class="cov0" title="0">return errors.New("artifact links are forbidden")
+</span>                }
+                <span class="cov0" title="0">got, err := fileHash(filepath.Join(root, name))
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">if got != want </span>{
+                        <span class="cov0" title="0">return fmt.Errorf("checksum mismatch: %s", name)
+</span>                }
+                <span class="cov0" title="0">listed[name] = true</span>
+        }
+        <span class="cov0" title="0">if len(listed) == 0 </span>{
+                <span class="cov0" title="0">return errors.New("empty checksum manifest")
+</span>        }
+        <span class="cov0" title="0">return filepath.WalkDir(root, func(path string, d os.DirEntry, err error) error </span>{
+                <span class="cov0" title="0">if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">if d.IsDir() </span>{
+                        <span class="cov0" title="0">return nil
+</span>                }
+                <span class="cov0" title="0">rel, err := filepath.Rel(root, path)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">if rel != "SHA256SUMS" &amp;&amp; !listed[filepath.ToSlash(rel)] </span>{
+                        <span class="cov0" title="0">return fmt.Errorf("unlisted artifact file: %s", rel)
+</span>                }
+                <span class="cov0" title="0">return nil</span>
+        })
+}
+func loadInputs(root, input, revision string) (inputData, error) {
+        <span class="cov1" title="1">data, err := loadProvenance(root, input, revision)
+        if err != nil </span>{
+                <span class="cov1" title="1">return data, err
+</span>        }
+        <span class="cov0" title="0">for _, load := range []func() error{
+                func() error </span>{ <span class="cov0" title="0">return loadFunctional(root, input, revision, &amp;data) }</span>,
+                func() error { <span class="cov0" title="0">return loadCoverage(input, &amp;data) }</span>,
+                func() error { <span class="cov0" title="0">return loadChecks(input, &amp;data) }</span>,
+        } {
+                <span class="cov0" title="0">if err := load(); err != nil </span>{
+                        <span class="cov0" title="0">return data, err
+</span>                }
+        }
+        <span class="cov0" title="0">return data, nil</span>
+}
+func loadProvenance(root, input, revision string) (inputData, error) {
+        <span class="cov1" title="1">var data inputData
+        if err := readJSON(filepath.Join(input, "evidence.json"), &amp;data.Evidence); err != nil </span>{
+                <span class="cov0" title="0">return data, err
+</span>        }
+        <span class="cov1" title="1">e := data.Evidence
+        if !shaPattern.MatchString(revision) || e.SHA != revision || (e.Mode != "hosted" &amp;&amp; e.Mode != "local") </span>{
+                <span class="cov0" title="0">return data, errors.New("evidence revision/mode mismatch")
+</span>        }
+        <span class="cov1" title="1">for _, w := range []workflow{e.Service, e.Conversation} </span>{
+                <span class="cov10" title="2">if w.SHA != revision || w.Conclusion != "success" || w.ID &lt;= 0 || !strings.HasPrefix(w.URL, repository+"/actions/runs/") </span>{
+                        <span class="cov1" title="1">return data, errors.New("both exact-revision workflows must have succeeded")
+</span>                }
+        }
+        <span class="cov0" title="0">data.Artifacts = map[string]artifact{}
+        allowed := map[string]bool{"service": true, "functional": true, "coverage": true, "conversation": true}
+        for _, a := range e.Artifacts </span>{
+                <span class="cov0" title="0">if !allowed[a.Kind] || data.Artifacts[a.Kind].Kind != "" || !filepath.IsLocal(a.Directory) || a.ID &lt;= 0 || !strings.HasPrefix(a.URL, repository+"/actions/runs/") </span>{
+                        <span class="cov0" title="0">return data, errors.New("invalid artifact provenance")
+</span>                }
+                <span class="cov0" title="0">if err := verifyChecksums(filepath.Join(input, a.Directory)); err != nil </span>{
+                        <span class="cov0" title="0">return data, fmt.Errorf("%s: %w", a.Kind, err)
+</span>                }
+                <span class="cov0" title="0">prefix := map[string]string{"service": "service-checks", "functional": "functional-tests", "coverage": "test-coverage", "conversation": "conversation-docs"}[a.Kind]
+                runID := e.Service.ID
+                if a.Kind == "conversation" </span>{
+                        <span class="cov0" title="0">runID = e.Conversation.ID
+</span>                }
+                <span class="cov0" title="0">expectedURL := fmt.Sprintf("%s/actions/runs/%d/artifacts/%d", repository, runID, a.ID)
+                if a.Name != prefix+"-"+revision || a.URL != expectedURL </span>{
+                        <span class="cov0" title="0">return data, errors.New("artifact name or run does not match source revision")
+</span>                }
+                <span class="cov0" title="0">data.Artifacts[a.Kind] = a</span>
+        }
+        <span class="cov0" title="0">if len(data.Artifacts) != 4 </span>{
+                <span class="cov0" title="0">return data, errors.New("all four evidence artifacts are required")
+</span>        }
+        <span class="cov0" title="0">return data, nil</span>
+}
+
+func loadFunctional(root, input, revision string, data *inputData) error {
+        <span class="cov0" title="0">var functional struct {
+                Revision      string `json:"revision"`
+                Passed, Total int
+                PackagePassed bool `json:"package_passed"`
+                Cases         []struct {
+                        Name, Asserts, Status string
+                        Seconds               float64
+</span>                }
+        }
+        <span class="cov0" title="0">if err := readJSON(filepath.Join(input, data.Artifacts["functional"].Directory, "results.json"), &amp;functional); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">var catalogue []struct{ Name, Asserts string }
+        if err := readJSON(filepath.Join(root, "testdata/functional-cases.json"), &amp;catalogue); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">if functional.Revision != revision || !functional.PackagePassed || functional.Passed != len(catalogue) || functional.Total != len(catalogue) || len(functional.Cases) != len(catalogue) </span>{
+                <span class="cov0" title="0">return errors.New("functional result set incomplete or stale")
+</span>        }
+        <span class="cov0" title="0">for i, c := range functional.Cases </span>{
+                <span class="cov0" title="0">if c.Name != catalogue[i].Name || c.Asserts != catalogue[i].Asserts || c.Status != "pass" </span>{
+                        <span class="cov0" title="0">return errors.New("functional catalogue/results mismatch")
+</span>                }
+                <span class="cov0" title="0">line, err := sourceLine(root, "tests/functional/payments_test.go", c.Name)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">data.Results = append(data.Results, result{Suite: "functional", Name: c.Name, Asserts: c.Asserts, Status: c.Status, Seconds: c.Seconds, SourceURL: sourceURL(revision, "tests/functional/payments_test.go", line), ArtifactURL: data.Artifacts["functional"].URL, Anchor: anchor("functional-" + c.Name)})</span>
+        }
+        <span class="cov0" title="0">for _, item := range []struct{ suite, kind, file string }{{"unit", "service", "unit-tests.jsonl"}, {"exporter", "conversation", "exporter-tests.jsonl"}} </span>{
+                <span class="cov0" title="0">a := data.Artifacts[item.kind]
+                records, err := readEvents(filepath.Join(input, a.Directory, item.file), item.suite, root, revision, a.URL)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">data.Results = append(data.Results, records...)</span>
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+func loadCoverage(input string, data *inputData) error {
+        <span class="cov0" title="0">var coverage []struct {
+                Name                string
+                Statements, Covered int64
+                Percent             float64
+</span>        }
+        <span class="cov0" title="0">if err := readJSON(filepath.Join(input, data.Artifacts["coverage"].Directory, "summary.json"), &amp;coverage); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">found := false
+        for _, c := range coverage </span>{
+                <span class="cov0" title="0">if c.Name == "application-union" </span>{
+                        <span class="cov0" title="0">if c.Statements &lt;= 0 || c.Covered &lt; 0 || c.Covered &gt; c.Statements </span>{
+                                <span class="cov0" title="0">return errors.New("invalid coverage counters")
+</span>                        }
+                        <span class="cov0" title="0">data.Coverage = 100 * float64(c.Covered) / float64(c.Statements)
+                        if delta := data.Coverage - c.Percent; delta &gt; 0.00001 || delta &lt; -0.00001 </span>{
+                                <span class="cov0" title="0">return errors.New("coverage percentage does not match counters")
+</span>                        }
+                        <span class="cov0" title="0">found = true</span>
+                }
+        }
+        <span class="cov0" title="0">if !found </span>{
+                <span class="cov0" title="0">return errors.New("application coverage is missing")
+</span>        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+func loadChecks(input string, data *inputData) error {
+        <span class="cov0" title="0">e := data.Evidence
+        data.Checks = map[string]check{}
+        require := func(kind, path, contains string) error </span>{
+                <span class="cov0" title="0">b, err := os.ReadFile(filepath.Join(input, data.Artifacts[kind].Directory, path))
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">if contains != "" &amp;&amp; !strings.Contains(string(b), contains) </span>{
+                        <span class="cov0" title="0">return fmt.Errorf("missing verification marker: %s", path)
+</span>                }
+                <span class="cov0" title="0">if len(b) == 0 </span>{
+                        <span class="cov0" title="0">return fmt.Errorf("empty evidence file: %s", path)
+</span>                }
+                <span class="cov0" title="0">return nil</span>
+        }
+        <span class="cov0" title="0">for _, entry := range []struct{ id, title, kind, path, marker, detail string }{
+                {"database", "PostgreSQL schema, constraints and original seed", "service", "database.log", "Original sample committed", "Schema/constraint SQL completed before the process acceptance sample."},
+                {"containers", "Container build and sample acceptance", "service", "container-status.txt", "acceptance passed", "Both images built and the original sample produced the expected balances and rows."},
+                {"readme", "README and contract validation", "service", "openapi.json", "\"errors\": 0", "Successful Service CI ran Markdown, shell, workflow and OpenAPI checks. Editorial quality remains a human judgment."},
+                {"security", "Go dependency vulnerability checks", "service", "vulnerabilities.log", "No vulnerabilities found.", "The recorded Go scan reported no applicable vulnerabilities; this is not a production security certification."},
+                {"conversation", "Original conversation preservation and dark PDF", "conversation", "conversation.tex", "use theme=ChatGPT-classical-dark", "Exporter cases, archive checksums and the successful PDF workflow verify the preserved snapshot."},
+</span>        } {
+                <span class="cov0" title="0">if err := require(entry.kind, entry.path, entry.marker); err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">run := e.Service.URL
+                if entry.kind == "conversation" </span>{
+                        <span class="cov0" title="0">run = e.Conversation.URL
+</span>                }
+                <span class="cov0" title="0">data.Checks[entry.id] = check{entry.id, entry.title, "pass", entry.detail, run, data.Artifacts[entry.kind].URL}</span>
+        }
+        <span class="cov0" title="0">for _, service := range []string{"payments-api", "ledger-service"} </span>{
+                <span class="cov0" title="0">for _, arch := range []string{"amd64", "arm64"} </span>{
+                        <span class="cov0" title="0">if err := require("service", "bin/"+service+"-linux-"+arch, ""); err != nil </span>{
+                                <span class="cov0" title="0">return err
+</span>                        }
+                }
+        }
+        <span class="cov0" title="0">data.Checks["distribution"] = check{"distribution", "Go service distribution builds", "pass", "Both services were built for Linux amd64 and arm64.", e.Service.URL, data.Artifacts["service"].URL}
+        return nil</span>
+}
+
+type goEvent struct {
+        Action, Package, Test, Output string
+        Elapsed                       float64
+}
+
+func readEvents(path, suite, root, revision, artifactURL string) ([]result, error) {
+        <span class="cov0" title="0">file, err := os.Open(path)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, err
+</span>        }
+        <span class="cov0" title="0">defer func() </span>{ <span class="cov0" title="0">_ = file.Close() }</span>()
+        <span class="cov0" title="0">scanner := bufio.NewScanner(file)
+        scanner.Buffer(make([]byte, 4096), 8&lt;&lt;20)
+        records := map[string]result{}
+        complete := map[string]bool{}
+        for scanner.Scan() </span>{
+                <span class="cov0" title="0">var e goEvent
+                if err := json.Unmarshal(scanner.Bytes(), &amp;e); err != nil </span>{
+                        <span class="cov0" title="0">return nil, err
+</span>                }
+                <span class="cov0" title="0">if e.Action == "fail" || (e.Test != "" &amp;&amp; e.Action == "skip") </span>{
+                        <span class="cov0" title="0">return nil, errors.New("failed or skipped evidence test")
+</span>                }
+                <span class="cov0" title="0">if e.Test == "" &amp;&amp; e.Action == "pass" </span>{
+                        <span class="cov0" title="0">complete[e.Package] = true
+</span>                }
+                <span class="cov0" title="0">if e.Test != "" &amp;&amp; e.Action == "pass" </span>{
+                        <span class="cov0" title="0">key := e.Package + "::" + e.Test
+                        if _, exists := records[key]; exists </span>{
+                                <span class="cov0" title="0">return nil, errors.New("duplicate result event")
+</span>                        }
+                        <span class="cov0" title="0">records[key] = result{Suite: suite, Name: e.Test, Package: e.Package, Status: "pass", Seconds: e.Elapsed, ArtifactURL: artifactURL, Anchor: anchor(suite + "-" + key)}</span>
+                }
+        }
+        <span class="cov0" title="0">if err := scanner.Err(); err != nil </span>{
+                <span class="cov0" title="0">return nil, err
+</span>        }
+        <span class="cov0" title="0">if len(records) == 0 </span>{
+                <span class="cov0" title="0">return nil, errors.New("empty test result stream")
+</span>        }
+        <span class="cov0" title="0">keys := make([]string, 0, len(records))
+        for key := range records </span>{
+                <span class="cov0" title="0">keys = append(keys, key)
+</span>        }
+        <span class="cov0" title="0">sort.Strings(keys)
+        out := []result{}
+        for _, key := range keys </span>{
+                <span class="cov0" title="0">r := records[key]
+                if !complete[r.Package] </span>{
+                        <span class="cov0" title="0">return nil, errors.New("test package has no successful completion")
+</span>                }
+                <span class="cov0" title="0">dir := strings.TrimPrefix(r.Package, module+"/")
+                if dir == r.Package || !filepath.IsLocal(dir) </span>{
+                        <span class="cov0" title="0">return nil, errors.New("unexpected test package")
+</span>                }
+                <span class="cov0" title="0">files, err := filepath.Glob(filepath.Join(root, dir, "*_test.go"))
+                if err != nil </span>{
+                        <span class="cov0" title="0">return nil, err
+</span>                }
+                <span class="cov0" title="0">symbol := strings.Split(r.Name, "/")[0]
+                for _, file := range files </span>{
+                        <span class="cov0" title="0">relative, err := filepath.Rel(root, file)
+                        if err != nil </span>{
+                                <span class="cov0" title="0">return nil, err
+</span>                        }
+                        <span class="cov0" title="0">line, err := sourceLine(root, relative, symbol)
+                        if err == nil </span>{
+                                <span class="cov0" title="0">r.SourceURL = sourceURL(revision, filepath.ToSlash(relative), line)
+                                break</span>
+                        }
+                }
+                <span class="cov0" title="0">if r.SourceURL == "" </span>{
+                        <span class="cov0" title="0">return nil, fmt.Errorf("test source not found: %s", key)
+</span>                }
+                <span class="cov0" title="0">out = append(out, r)</span>
+        }
+        <span class="cov0" title="0">return out, nil</span>
+}
+func anchor(s string) string {
+        <span class="cov0" title="0">var b strings.Builder
+        for _, r := range strings.ToLower(s) </span>{
+                <span class="cov0" title="0">if (r &gt;= 'a' &amp;&amp; r &lt;= 'z') || (r &gt;= '0' &amp;&amp; r &lt;= '9') </span>{
+                        <span class="cov0" title="0">b.WriteRune(r)
+</span>                } else {
+                        <span class="cov0" title="0">b.WriteByte('-')
+</span>                }
+        }
+        <span class="cov0" title="0">return strings.Trim(b.String(), "-")</span>
+}
+func sourceURL(revision, path string, line int) string {
+        <span class="cov0" title="0">return repository + "/blob/" + revision + "/" + filepath.ToSlash(path) + "#L" + strconv.Itoa(line)
+</span>}
+func sourceLine(root, path, symbol string) (int, error) {
+        <span class="cov0" title="0">if !filepath.IsLocal(path) </span>{
+                <span class="cov0" title="0">return 0, errors.New("source path escapes checkout")
+</span>        }
+        <span class="cov0" title="0">b, err := os.ReadFile(filepath.Join(root, path))
+        if err != nil </span>{
+                <span class="cov0" title="0">return 0, err
+</span>        }
+        <span class="cov0" title="0">if symbol == "" </span>{
+                <span class="cov0" title="0">return 1, nil
+</span>        }
+        <span class="cov0" title="0">if strings.HasPrefix(symbol, "text:") </span>{
+                <span class="cov0" title="0">for i, line := range strings.Split(string(b), "\n") </span>{
+                        <span class="cov0" title="0">if strings.Contains(line, strings.TrimPrefix(symbol, "text:")) </span>{
+                                <span class="cov0" title="0">return i + 1, nil
+</span>                        }
+                }
+                <span class="cov0" title="0">return 0, errors.New("text reference not found")</span>
+        }
+        <span class="cov0" title="0">if strings.HasSuffix(path, ".go") </span>{
+                <span class="cov0" title="0">fset := token.NewFileSet()
+                file, err := parser.ParseFile(fset, path, b, 0)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return 0, err
+</span>                }
+                <span class="cov0" title="0">line := 0
+                ast.Inspect(file, func(node ast.Node) bool </span>{
+                        <span class="cov0" title="0">switch n := node.(type) </span>{
+                        case *ast.FuncDecl:
+                                <span class="cov0" title="0">if n.Name.Name == symbol </span>{
+                                        <span class="cov0" title="0">line = fset.Position(n.Pos()).Line
+</span>                                }
+                        case *ast.KeyValueExpr:
+                                <span class="cov0" title="0">if key, ok := n.Key.(*ast.BasicLit); ok &amp;&amp; key.Kind == token.STRING </span>{
+                                        <span class="cov0" title="0">value, err := strconv.Unquote(key.Value)
+                                        if err == nil &amp;&amp; value == symbol </span>{
+                                                <span class="cov0" title="0">line = fset.Position(key.Pos()).Line
+</span>                                        }
+                                }
+                        }
+                        <span class="cov0" title="0">return true</span>
+                })
+                <span class="cov0" title="0">if line &gt; 0 </span>{
+                        <span class="cov0" title="0">return line, nil
+</span>                }
+        }
+        <span class="cov0" title="0">return 0, fmt.Errorf("source symbol not found: %s / %s", path, symbol)</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">// Command requirements-site builds a public, requirement-by-requirement evidence site.
+package main
+
+import (
+        "errors"
+        "flag"
+        "fmt"
+        "os"
+)
+
+func main() {
+        <span class="cov0" title="0">if err := run(os.Args[1:]); err != nil </span>{
+                <span class="cov0" title="0">fmt.Fprintln(os.Stderr, err)
+                os.Exit(1)
+</span>        }
+}
+func run(args []string) error {
+        <span class="cov0" title="0">f := flag.NewFlagSet("requirements-site", flag.ContinueOnError)
+        root := f.String("root", ".", "source checkout")
+        input := f.String("input", ".local/site-input", "verified artifact inputs")
+        out := f.String("out", "artifacts/requirements-site", "public output")
+        revision := f.String("revision", "", "expected source SHA")
+        artifact := f.Bool("check-artifact", false, "verify a complete artifact checksum inventory")
+        verify := f.Bool("verify", false, "only verify the public site")
+        if err := f.Parse(args); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">if *artifact </span>{
+                <span class="cov0" title="0">return verifyChecksums(*out)
+</span>        }
+        <span class="cov0" title="0">if *verify </span>{
+                <span class="cov0" title="0">return verifySite(*out)
+</span>        }
+        <span class="cov0" title="0">if *revision == "" </span>{
+                <span class="cov0" title="0">return errors.New("source revision is required")
+</span>        }
+        <span class="cov0" title="0">return build(*root, *input, *out, *revision)</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package main
+
+import (
+        "errors"
+        "fmt"
+        "io"
+        "net/url"
+        "os"
+        "path/filepath"
+        "regexp"
+        "strings"
+
+        "golang.org/x/net/html"
+)
+
+var publicFiles = map[string]bool{"index.html": true, "results/index.html": true, "build/index.html": true, "assets/style.css": true, "assets/site.js": true, "assignment.md": true, "verification.json": true, "results/results.json": true, ".nojekyll": true, "SHA256SUMS": true}
+
+// Extra files are accepted only from the generated UI/case inventory, with a narrow path/type boundary.
+func allowedPublicFiles(root string) (map[string]bool, error) {
+        <span class="cov0" title="0">allowed := map[string]bool{}
+        for path := range publicFiles </span>{
+                <span class="cov0" title="0">allowed[path] = true
+</span>        }
+        <span class="cov0" title="0">var extension struct {
+                SourceSHA string
+                CaseCount int
+                Files     []string
+</span>        }
+        <span class="cov0" title="0">path := filepath.Join(root, "extensions.json")
+        if _, err := os.Stat(path); os.IsNotExist(err) </span>{
+                <span class="cov0" title="0">return allowed, nil
+</span>        }
+        <span class="cov0" title="0">if err := readJSON(path, &amp;extension); err != nil </span>{
+                <span class="cov0" title="0">return nil, err
+</span>        }
+        <span class="cov0" title="0">if !shaPattern.MatchString(extension.SourceSHA) || extension.CaseCount &lt;= 0 || len(extension.Files) == 0 </span>{
+                <span class="cov0" title="0">return nil, errors.New("invalid extension provenance")
+</span>        }
+        <span class="cov0" title="0">var verification struct{ SourceSHA string }
+        if err := readJSON(filepath.Join(root, "verification.json"), &amp;verification); err != nil </span>{
+                <span class="cov0" title="0">return nil, err
+</span>        }
+        <span class="cov0" title="0">if verification.SourceSHA != extension.SourceSHA </span>{
+                <span class="cov0" title="0">return nil, errors.New("extension revision mismatch")
+</span>        }
+        <span class="cov0" title="0">pattern := regexp.MustCompile(`^(cases/(functional|unit|exporter)-[a-f0-9]{16}/(index\.html|data\.json|coverage\.(out|html)|terminal\.(gif|txt)|poster\.png)|(viewer|storybook|storybook-checks)/[A-Za-z0-9_@./+-]+\.(html|js|mjs|css|json|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|txt|xml|map))$`)
+        for _, file := range extension.Files </span>{
+                <span class="cov0" title="0">if !filepath.IsLocal(file) || strings.Contains(file, "..") || !pattern.MatchString(file) || allowed[file] </span>{
+                        <span class="cov0" title="0">return nil, fmt.Errorf("unsafe/duplicate extension file: %s", file)
+</span>                }
+                <span class="cov0" title="0">allowed[file] = true</span>
+        }
+        <span class="cov0" title="0">allowed["extensions.json"] = true
+        return allowed, nil</span>
+}
+
+type pageInfo struct {
+        IDs                                     map[string]bool
+        Links                                   []string
+        HasMain, HasTitle, HasViewport, HasLang bool
+}
+
+func inspectHTML(input io.Reader) (pageInfo, error) {
+        <span class="cov0" title="0">root, err := html.Parse(input)
+        if err != nil </span>{
+                <span class="cov0" title="0">return pageInfo{}, err
+</span>        }
+        <span class="cov0" title="0">p := pageInfo{IDs: map[string]bool{}}
+        var visit func(*html.Node) error
+        visit = func(n *html.Node) error </span>{
+                <span class="cov0" title="0">if n.Type == html.ElementNode </span>{
+                        <span class="cov0" title="0">if n.Data == "main" </span>{
+                                <span class="cov0" title="0">p.HasMain = true
+</span>                        }
+                        <span class="cov0" title="0">if n.Data == "title" &amp;&amp; n.FirstChild != nil </span>{
+                                <span class="cov0" title="0">p.HasTitle = true
+</span>                        }
+                        <span class="cov0" title="0">for _, a := range n.Attr </span>{
+                                <span class="cov0" title="0">switch a.Key </span>{
+                                case "id":
+                                        <span class="cov0" title="0">if p.IDs[a.Val] </span>{
+                                                <span class="cov0" title="0">return errors.New("duplicate HTML anchor")
+</span>                                        }
+                                        <span class="cov0" title="0">p.IDs[a.Val] = true</span>
+                                case "href", "src":
+                                        <span class="cov0" title="0">p.Links = append(p.Links, a.Val)</span>
+                                case "lang":
+                                        <span class="cov0" title="0">if n.Data == "html" &amp;&amp; a.Val == "en" </span>{
+                                                <span class="cov0" title="0">p.HasLang = true
+</span>                                        }
+                                case "name":
+                                        <span class="cov0" title="0">if n.Data == "meta" &amp;&amp; a.Val == "viewport" </span>{
+                                                <span class="cov0" title="0">p.HasViewport = true
+</span>                                        }
+                                }
+                        }
+                }
+                <span class="cov0" title="0">for child := n.FirstChild; child != nil; child = child.NextSibling </span>{
+                        <span class="cov0" title="0">if err := visit(child); err != nil </span>{
+                                <span class="cov0" title="0">return err
+</span>                        }
+                }
+                <span class="cov0" title="0">return nil</span>
+        }
+        <span class="cov0" title="0">return p, visit(root)</span>
+}
+func verifySite(root string) error {
+        <span class="cov0" title="0">allowed, err := allowedPublicFiles(root)
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">if err := filepath.WalkDir(root, func(path string, d os.DirEntry, err error) error </span>{
+                <span class="cov0" title="0">if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">if d.IsDir() </span>{
+                        <span class="cov0" title="0">return nil
+</span>                }
+                <span class="cov0" title="0">relative, err := filepath.Rel(root, path)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">if !allowed[filepath.ToSlash(relative)] </span>{
+                        <span class="cov0" title="0">return fmt.Errorf("file outside public allowlist: %s", relative)
+</span>                }
+                <span class="cov0" title="0">info, err := d.Info()
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">if !info.Mode().IsRegular() </span>{
+                        <span class="cov0" title="0">return errors.New("public file is not regular")
+</span>                }
+                <span class="cov0" title="0">return nil</span>
+        }); err != nil {
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">if err := verifyChecksums(root); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">pages := map[string]pageInfo{}
+        for file := range allowed </span>{
+                <span class="cov0" title="0">path := filepath.Join(root, file)
+                if _, err := os.Stat(path); err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">if !strings.HasSuffix(file, ".html") || strings.HasPrefix(file, "storybook/") || strings.HasPrefix(file, "storybook-checks/") || strings.HasSuffix(file, "/coverage.html") </span>{
+                        <span class="cov0" title="0">continue</span>
+                }
+                <span class="cov0" title="0">data, err := os.Open(path)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">p, parseErr := inspectHTML(data)
+                closeErr := data.Close()
+                if err := errors.Join(parseErr, closeErr); err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">if !p.HasMain || !p.HasTitle || !p.HasViewport || !p.HasLang </span>{
+                        <span class="cov0" title="0">return errors.New("page accessibility metadata missing")
+</span>                }
+                <span class="cov0" title="0">pages[file] = p</span>
+        }
+        <span class="cov0" title="0">return verifyPageLinks(pages, allowed)</span>
+}
+func verifyPageLinks(pages map[string]pageInfo, allowed map[string]bool) error {
+        <span class="cov0" title="0">for file, p := range pages </span>{
+                <span class="cov0" title="0">for _, href := range p.Links </span>{
+                        <span class="cov0" title="0">target, err := url.Parse(href)
+                        if err != nil </span>{
+                                <span class="cov0" title="0">return err
+</span>                        }
+                        <span class="cov0" title="0">if target.IsAbs() </span>{
+                                <span class="cov0" title="0">if target.Scheme != "https" || target.Host != "github.com" || !strings.HasPrefix(target.Path, "/newdarwindev/firm-payments/") </span>{
+                                        <span class="cov0" title="0">return fmt.Errorf("unexpected external destination: %s", target.Host)
+</span>                                }
+                                <span class="cov0" title="0">continue</span>
+                        }
+                        <span class="cov0" title="0">if target.Host != "" || strings.HasPrefix(target.Path, "/") </span>{
+                                <span class="cov0" title="0">return errors.New("site links must be base-path safe")
+</span>                        }
+                        <span class="cov0" title="0">local := filepath.Clean(filepath.Join(filepath.Dir(file), filepath.FromSlash(target.Path)))
+                        if target.Path == "" </span>{
+                                <span class="cov0" title="0">local = file
+</span>                        } else <span class="cov0" title="0">if strings.HasSuffix(target.Path, "/") || local == "." </span>{
+                                <span class="cov0" title="0">local = filepath.Join(local, "index.html")
+</span>                        }
+                        <span class="cov0" title="0">if !filepath.IsLocal(local) </span>{
+                                <span class="cov0" title="0">return errors.New("link escapes public root")
+</span>                        }
+                        <span class="cov0" title="0">local = filepath.ToSlash(local)
+                        if !allowed[local] </span>{
+                                <span class="cov0" title="0">return fmt.Errorf("broken internal file link: %s -&gt; %s", file, local)
+</span>                        }
+                        <span class="cov0" title="0">if target.Fragment != "" &amp;&amp; !pages[local].IDs[target.Fragment] </span>{
+                                <span class="cov0" title="0">return fmt.Errorf("broken internal anchor: %s -&gt; %s#%s", file, local, target.Fragment)
+</span>                        }
+                }
+        }
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

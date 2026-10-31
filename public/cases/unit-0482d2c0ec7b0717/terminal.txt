@@ -1,0 +1,9 @@
+go tool test2json -t -p github.com/newdarwindev/firm-payments/tools/requirements-site /home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/9311f7c937a2d2ef.test -test.v=test2json -test.count=1 -test.timeout=180s -test.run=^TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns$/^stale-source$ -test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/unit-0482d2c0ec7b0717/coverage.out
+=== RUN   TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns
+=== RUN   TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns/stale-source
+--- PASS: TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns/stale-source (0.00s)
+--- PASS: TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns (0.00s)
+PASS
+coverage: 2.0% of statements
+
+Exit status: 0

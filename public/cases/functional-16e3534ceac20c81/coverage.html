@@ -1,0 +1,751 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>ledger-service: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/newdarwindev/firm-payments/cmd/ledger-service/main.go (71.4%)</option>
+				
+				<option value="file1">github.com/newdarwindev/firm-payments/cmd/payments-api/main.go (66.7%)</option>
+				
+				<option value="file2">github.com/newdarwindev/firm-payments/internal/contracts/errors.go (25.0%)</option>
+				
+				<option value="file3">github.com/newdarwindev/firm-payments/internal/contracts/validate.go (72.4%)</option>
+				
+				<option value="file4">github.com/newdarwindev/firm-payments/internal/httpapi/handler.go (53.5%)</option>
+				
+				<option value="file5">github.com/newdarwindev/firm-payments/internal/ledger/service.go (45.5%)</option>
+				
+				<option value="file6">github.com/newdarwindev/firm-payments/internal/ledgerclient/client.go (43.5%)</option>
+				
+				<option value="file7">github.com/newdarwindev/firm-payments/internal/money/money.go (54.5%)</option>
+				
+				<option value="file8">github.com/newdarwindev/firm-payments/internal/server/server.go (72.7%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package main
+
+import (
+        "context"
+        "errors"
+        "fmt"
+        "log/slog"
+        "os"
+        "os/signal"
+        "syscall"
+        "time"
+
+        "github.com/jackc/pgx/v5/pgxpool"
+        "github.com/newdarwindev/firm-payments/internal/httpapi"
+        "github.com/newdarwindev/firm-payments/internal/ledger"
+        "github.com/newdarwindev/firm-payments/internal/server"
+)
+
+func main() {
+        <span class="cov10" title="2">if err := run(); err != nil </span>{
+                <span class="cov0" title="0">slog.Error("ledger-service stopped", "error", err)
+                os.Exit(1)
+</span>        }
+}
+func run() error {
+        <span class="cov10" title="2">dsn := os.Getenv("DATABASE_URL")
+        if dsn == "" </span>{
+                <span class="cov0" title="0">return errors.New("DATABASE_URL is required")
+</span>        }
+        <span class="cov10" title="2">ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+        defer stop()
+        pool, err := pgxpool.New(ctx, dsn)
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("configure database: %w", err)
+</span>        }
+        <span class="cov10" title="2">defer pool.Close()
+        startup, cancel := context.WithTimeout(ctx, 5*time.Second)
+        defer cancel()
+        if err := pool.Ping(startup); err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("connect database: %w", err)
+</span>        }
+        <span class="cov10" title="2">service := ledger.New(pool)
+        addr := os.Getenv("LISTEN_ADDR")
+        if addr == "" </span>{
+                <span class="cov0" title="0">addr = ":8081"
+</span>        }
+        <span class="cov10" title="2">return server.Serve(ctx, addr, httpapi.Handler("ledger-service", "/internal/payments/bulk", service, service.Ready))</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package main
+
+import (
+        "context"
+        "fmt"
+        "log/slog"
+        "os"
+        "os/signal"
+        "syscall"
+
+        "github.com/newdarwindev/firm-payments/internal/httpapi"
+        "github.com/newdarwindev/firm-payments/internal/ledgerclient"
+        "github.com/newdarwindev/firm-payments/internal/server"
+)
+
+func main() {
+        <span class="cov10" title="2">if err := run(); err != nil </span>{
+                <span class="cov0" title="0">slog.Error("payments-api stopped", "error", err)
+                os.Exit(1)
+</span>        }
+}
+func run() error {
+        <span class="cov10" title="2">client, err := ledgerclient.New(os.Getenv("LEDGER_URL"))
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("configure ledger: %w", err)
+</span>        }
+        <span class="cov10" title="2">addr := os.Getenv("LISTEN_ADDR")
+        if addr == "" </span>{
+                <span class="cov0" title="0">addr = ":8080"
+</span>        }
+        <span class="cov10" title="2">ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+        defer stop()
+        return server.Serve(ctx, addr, httpapi.Handler("payments-api", "/payments/bulk", client, client.Ready))</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package contracts
+
+import (
+        "context"
+        "errors"
+)
+
+var (
+        ErrInvalidRequest    = errors.New("invalid payment request")
+        ErrUnknownFirm       = errors.New("payer or recipient does not exist")
+        ErrInsufficientFunds = errors.New("insufficient payer funds")
+        ErrBalanceOverflow   = errors.New("recipient balance would exceed INTEGER cents")
+        ErrUnavailable       = errors.New("ledger service unavailable")
+        ErrInternal          = errors.New("internal payment failure")
+)
+
+type ErrorResponse struct {
+        Error ErrorDetail `json:"error"`
+}
+type ErrorDetail struct {
+        Code    string `json:"code"`
+        Message string `json:"message"`
+}
+
+func ErrorForCode(code string) error {
+        <span class="cov8" title="1">switch code </span>{
+        case "timeout":
+                <span class="cov0" title="0">return context.DeadlineExceeded</span>
+        case "invalid_request":
+                <span class="cov0" title="0">return ErrInvalidRequest</span>
+        case "unknown_firm":
+                <span class="cov8" title="1">return ErrUnknownFirm</span>
+        case "insufficient_funds":
+                <span class="cov0" title="0">return ErrInsufficientFunds</span>
+        case "balance_overflow":
+                <span class="cov0" title="0">return ErrBalanceOverflow</span>
+        case "internal_error":
+                <span class="cov0" title="0">return ErrInternal</span>
+        default:
+                <span class="cov0" title="0">return ErrUnavailable</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package contracts
+
+import (
+        "fmt"
+        "strings"
+
+        "github.com/newdarwindev/firm-payments/internal/money"
+)
+
+const MaxPayments = 1000
+const MaxBodyBytes int64 = 1 &lt;&lt; 20
+
+type PreparedPayment struct {
+        PayeeUUID   string
+        Cents       int64
+        Description string
+}
+type Batch struct {
+        PayerUUID string
+        Payments  []PreparedPayment
+        Total     int64
+        Credits   map[string]int64
+}
+
+func canonicalUUID(s string) (string, bool) {
+        <span class="cov4" title="6">if len(s) != 36 </span>{
+                <span class="cov0" title="0">return "", false
+</span>        }
+        <span class="cov4" title="6">for i, c := range s </span>{
+                <span class="cov10" title="216">if i == 8 || i == 13 || i == 18 || i == 23 </span>{
+                        <span class="cov6" title="24">if c != '-' </span>{
+                                <span class="cov0" title="0">return "", false
+</span>                        }
+                        <span class="cov6" title="24">continue</span>
+                }
+                <span class="cov9" title="192">if (c &lt; '0' || c &gt; '9') &amp;&amp; (c &lt; 'a' || c &gt; 'f') &amp;&amp; (c &lt; 'A' || c &gt; 'F') </span>{
+                        <span class="cov0" title="0">return "", false
+</span>                }
+        }
+        <span class="cov4" title="6">return strings.ToLower(s), true</span>
+}
+
+func Prepare(req BulkRequest) (Batch, error) {
+        <span class="cov2" title="3">payer, ok := canonicalUUID(req.PayerFirmUUID)
+        if !ok </span>{
+                <span class="cov0" title="0">return Batch{}, fmt.Errorf("%w: payer_firm_uuid must be a UUID", ErrInvalidRequest)
+</span>        }
+        <span class="cov2" title="3">if len(req.Payments) == 0 || len(req.Payments) &gt; MaxPayments </span>{
+                <span class="cov0" title="0">return Batch{}, fmt.Errorf("%w: require 1 to %d payments", ErrInvalidRequest, MaxPayments)
+</span>        }
+        <span class="cov2" title="3">batch := Batch{PayerUUID: payer, Credits: make(map[string]int64)}
+        for _, payment := range req.Payments </span>{
+                <span class="cov2" title="3">payee, ok := canonicalUUID(payment.PayeeFirmUUID)
+                if !ok || payee == payer </span>{
+                        <span class="cov0" title="0">return Batch{}, fmt.Errorf("%w: recipients must be UUIDs different from the payer", ErrInvalidRequest)
+</span>                }
+                <span class="cov2" title="3">cents, err := money.ParseCents(payment.Amount)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return Batch{}, fmt.Errorf("%w: %w", ErrInvalidRequest, err)
+</span>                }
+                <span class="cov2" title="3">if batch.Total &gt; money.MaxCents-cents </span>{
+                        <span class="cov0" title="0">return Batch{}, fmt.Errorf("%w: batch total exceeds INTEGER cents", ErrInvalidRequest)
+</span>                }
+                <span class="cov2" title="3">batch.Total += cents
+                batch.Credits[payee] += cents
+                batch.Payments = append(batch.Payments, PreparedPayment{PayeeUUID: payee, Cents: cents, Description: payment.Description})</span>
+        }
+        <span class="cov2" title="3">return batch, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">// Package httpapi exposes the shared public and private payment transport.
+package httpapi
+
+import (
+        "context"
+        "encoding/json"
+        "errors"
+        "io"
+        "log/slog"
+        "mime"
+        "net/http"
+        "time"
+
+        "github.com/newdarwindev/firm-payments/internal/contracts"
+)
+
+type Processor interface {
+        Execute(context.Context, contracts.BulkRequest) error
+}
+
+func Handler(service, route string, processor Processor, ready func(context.Context) error) http.Handler {
+        <span class="cov7" title="4">mux := http.NewServeMux()
+        mux.HandleFunc("GET /healthz", func(w http.ResponseWriter, _ *http.Request) </span>{
+                <span class="cov7" title="4">writeJSON(w, http.StatusOK, map[string]string{"status": "alive", "service": service})
+</span>        })
+        <span class="cov7" title="4">mux.HandleFunc("GET /readyz", func(w http.ResponseWriter, r *http.Request) </span>{
+                <span class="cov0" title="0">ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
+                defer cancel()
+                if err := ready(ctx); err != nil </span>{
+                        <span class="cov0" title="0">writeFailure(w, http.StatusServiceUnavailable, "unavailable", "dependency not ready")
+                        return
+</span>                }
+                <span class="cov0" title="0">writeJSON(w, http.StatusOK, map[string]string{"status": "ready"})</span>
+        })
+        <span class="cov7" title="4">mux.HandleFunc("POST "+route, func(w http.ResponseWriter, r *http.Request) </span>{
+                <span class="cov4" title="2">if header := r.Header.Get("Content-Type"); header != "" </span>{
+                        <span class="cov4" title="2">media, _, err := mime.ParseMediaType(header)
+                        if err != nil || media != "application/json" </span>{
+                                <span class="cov0" title="0">writeFailure(w, 415, "unsupported_media_type", "use application/json")
+                                return
+</span>                        }
+                }
+                <span class="cov4" title="2">r.Body = http.MaxBytesReader(w, r.Body, contracts.MaxBodyBytes)
+                decoder := json.NewDecoder(r.Body)
+                decoder.DisallowUnknownFields()
+                var wire wireRequest
+                if err := decoder.Decode(&amp;wire); err != nil </span>{
+                        <span class="cov0" title="0">decodeFailure(w, err)
+                        return
+</span>                }
+                <span class="cov4" title="2">var extra any
+                if err := decoder.Decode(&amp;extra); !errors.Is(err, io.EOF) </span>{
+                        <span class="cov0" title="0">if err == nil </span>{
+                                <span class="cov0" title="0">writeFailure(w, 400, "invalid_json", "exactly one JSON document is required")
+</span>                        } else {
+                                <span class="cov0" title="0">decodeFailure(w, err)
+</span>                        }
+                        <span class="cov0" title="0">return</span>
+                }
+                <span class="cov4" title="2">req, valid := wire.request()
+                if !valid </span>{
+                        <span class="cov0" title="0">writeFailure(w, 422, "invalid_request", "all request and payment fields are required")
+                        return
+</span>                }
+                <span class="cov4" title="2">if _, err := contracts.Prepare(req); err != nil </span>{
+                        <span class="cov0" title="0">writeFailure(w, 422, "invalid_request", err.Error())
+                        return
+</span>                }
+                <span class="cov4" title="2">ctx, cancel := context.WithTimeout(r.Context(), 6*time.Second)
+                defer cancel()
+                if err := processor.Execute(ctx, req); err != nil </span>{
+                        <span class="cov4" title="2">respondError(ctx, w, err)
+                        return
+</span>                }
+                <span class="cov0" title="0">w.WriteHeader(http.StatusCreated)</span>
+        })
+        <span class="cov7" title="4">return mux</span>
+}
+
+func decodeFailure(w http.ResponseWriter, err error) {
+        <span class="cov0" title="0">var tooLarge *http.MaxBytesError
+        if errors.As(err, &amp;tooLarge) </span>{
+                <span class="cov0" title="0">writeFailure(w, 413, "request_too_large", "request body exceeds 1 MiB")
+</span>        } else {
+                <span class="cov0" title="0">writeFailure(w, 400, "invalid_json", "request must match the JSON payment structure")
+</span>        }
+}
+
+func respondError(ctx context.Context, w http.ResponseWriter, err error) {
+        <span class="cov4" title="2">status, code, message := http.StatusInternalServerError, "internal_error", "payment could not be completed"
+        switch </span>{
+        case errors.Is(err, context.DeadlineExceeded):
+                <span class="cov0" title="0">status, code, message = 504, "timeout", "payment outcome may be uncertain; do not retry automatically"</span>
+        case errors.Is(err, context.Canceled):
+                <span class="cov0" title="0">status, code, message = 503, "unavailable", "request was cancelled; payment outcome may be uncertain"</span>
+        case errors.Is(err, contracts.ErrInvalidRequest):
+                <span class="cov0" title="0">status, code, message = 422, "invalid_request", contracts.ErrInvalidRequest.Error()</span>
+        case errors.Is(err, contracts.ErrUnknownFirm):
+                <span class="cov4" title="2">status, code, message = 422, "unknown_firm", contracts.ErrUnknownFirm.Error()</span>
+        case errors.Is(err, contracts.ErrInsufficientFunds):
+                <span class="cov0" title="0">status, code, message = 422, "insufficient_funds", contracts.ErrInsufficientFunds.Error()</span>
+        case errors.Is(err, contracts.ErrBalanceOverflow):
+                <span class="cov0" title="0">status, code, message = 422, "balance_overflow", contracts.ErrBalanceOverflow.Error()</span>
+        case errors.Is(err, contracts.ErrUnavailable):
+                <span class="cov0" title="0">status, code, message = 503, "unavailable", "ledger unavailable; a lost response can leave the payment outcome uncertain"</span>
+        default:
+                <span class="cov0" title="0">slog.ErrorContext(ctx, "payment failed", "error", err)</span>
+        }
+        <span class="cov4" title="2">writeFailure(w, status, code, message)</span>
+}
+func writeFailure(w http.ResponseWriter, status int, code, message string) {
+        <span class="cov4" title="2">writeJSON(w, status, contracts.ErrorResponse{Error: contracts.ErrorDetail{Code: code, Message: message}})
+</span>}
+func writeJSON(w http.ResponseWriter, status int, v any) {
+        <span class="cov10" title="6">w.Header().Set("Content-Type", "application/json")
+        w.WriteHeader(status)
+        if err := json.NewEncoder(w).Encode(v); err != nil </span>{
+                <span class="cov0" title="0">slog.Error("write response", "error", err)
+</span>        }
+}
+
+// Pointer fields distinguish an explicitly empty description from an absent field.
+type wireRequest struct {
+        Payer    *string        `json:"payer_firm_uuid"`
+        Payments *[]wirePayment `json:"payments"`
+}
+type wirePayment struct {
+        Amount      *string `json:"amount"`
+        Payee       *string `json:"payee_firm_uuid"`
+        Description *string `json:"description"`
+}
+
+func (w wireRequest) request() (contracts.BulkRequest, bool) {
+        <span class="cov4" title="2">if w.Payer == nil || w.Payments == nil </span>{
+                <span class="cov0" title="0">return contracts.BulkRequest{}, false
+</span>        }
+        <span class="cov4" title="2">req := contracts.BulkRequest{PayerFirmUUID: *w.Payer}
+        for _, p := range *w.Payments </span>{
+                <span class="cov4" title="2">if p.Amount == nil || p.Payee == nil || p.Description == nil </span>{
+                        <span class="cov0" title="0">return contracts.BulkRequest{}, false
+</span>                }
+                <span class="cov4" title="2">req.Payments = append(req.Payments, contracts.Payment{Amount: *p.Amount, PayeeFirmUUID: *p.Payee, Description: *p.Description})</span>
+        }
+        <span class="cov4" title="2">return req, true</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">// Package ledger owns the atomic PostgreSQL payment transaction.
+package ledger
+
+import (
+        "context"
+        "errors"
+        "fmt"
+        "log/slog"
+        "time"
+
+        "github.com/jackc/pgx/v5"
+        "github.com/jackc/pgx/v5/pgxpool"
+        "github.com/newdarwindev/firm-payments/internal/contracts"
+        "github.com/newdarwindev/firm-payments/internal/money"
+)
+
+type Service struct{ pool *pgxpool.Pool }
+
+func New(pool *pgxpool.Pool) *Service              { <span class="cov10" title="2">return &amp;Service{pool: pool} }</span>
+func (s *Service) Ready(ctx context.Context) error { <span class="cov0" title="0">return s.pool.Ping(ctx) }</span>
+
+type firm struct {
+        id      int32
+        uuid    string
+        balance int64
+}
+
+func (s *Service) Execute(ctx context.Context, req contracts.BulkRequest) error {
+        <span class="cov1" title="1">batch, err := contracts.Prepare(req)
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov1" title="1">uuids := []string{batch.PayerUUID}
+        for uuid := range batch.Credits </span>{
+                <span class="cov1" title="1">uuids = append(uuids, uuid)
+</span>        }
+        <span class="cov1" title="1">tx, err := s.pool.BeginTx(ctx, pgx.TxOptions{IsoLevel: pgx.ReadCommitted})
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("begin payment: %w", err)
+</span>        }
+        <span class="cov1" title="1">defer func() </span>{
+                <span class="cov1" title="1">cleanup, cancel := context.WithTimeout(context.WithoutCancel(ctx), 2*time.Second)
+                defer cancel()
+                if err := tx.Rollback(cleanup); err != nil &amp;&amp; !errors.Is(err, pgx.ErrTxClosed) </span>{
+                        <span class="cov0" title="0">slog.ErrorContext(cleanup, "payment rollback failed", "error", err)
+</span>                }
+        }()
+        // A single global row order protects overlapping batches across all instances.
+        <span class="cov1" title="1">rows, err := tx.Query(ctx, `SELECT id,uuid,balance_cents FROM firms WHERE uuid=ANY($1::text[]) ORDER BY id FOR UPDATE`, uuids)
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("lock firms: %w", err)
+</span>        }
+        <span class="cov1" title="1">var locked []firm
+        byUUID := make(map[string]firm, len(uuids))
+        for rows.Next() </span>{
+                <span class="cov1" title="1">var f firm
+                if err := rows.Scan(&amp;f.id, &amp;f.uuid, &amp;f.balance); err != nil </span>{
+                        <span class="cov0" title="0">rows.Close()
+                        return fmt.Errorf("read locked firm: %w", err)
+</span>                }
+                <span class="cov1" title="1">locked = append(locked, f)
+                byUUID[f.uuid] = f</span>
+        }
+        <span class="cov1" title="1">rows.Close()
+        if err := rows.Err(); err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("read firms: %w", err)
+</span>        }
+        <span class="cov1" title="1">if len(byUUID) != len(uuids) </span>{
+                <span class="cov1" title="1">return contracts.ErrUnknownFirm
+</span>        }
+        <span class="cov0" title="0">payer := byUUID[batch.PayerUUID]
+        if payer.balance &lt; batch.Total </span>{
+                <span class="cov0" title="0">return contracts.ErrInsufficientFunds
+</span>        }
+        <span class="cov0" title="0">for _, f := range locked </span>{
+                <span class="cov0" title="0">balance := f.balance
+                if f.uuid == batch.PayerUUID </span>{
+                        <span class="cov0" title="0">balance -= batch.Total
+</span>                } else {
+                        <span class="cov0" title="0">credit := batch.Credits[f.uuid]
+                        if balance &gt; money.MaxCents-credit </span>{
+                                <span class="cov0" title="0">return contracts.ErrBalanceOverflow
+</span>                        }
+                        <span class="cov0" title="0">balance += credit</span>
+                }
+                <span class="cov0" title="0">result, err := tx.Exec(ctx, `UPDATE firms SET balance_cents=$1 WHERE id=$2`, balance, f.id)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return fmt.Errorf("update balance: %w", err)
+</span>                }
+                <span class="cov0" title="0">if result.RowsAffected() != 1 </span>{
+                        <span class="cov0" title="0">return fmt.Errorf("%w: locked firm disappeared", contracts.ErrInternal)
+</span>                }
+        }
+        <span class="cov0" title="0">for _, p := range batch.Payments </span>{
+                <span class="cov0" title="0">if _, err := tx.Exec(ctx, `INSERT INTO payments(payer_firm_id,payee_firm_id,amount_cents,description) VALUES($1,$2,$3,$4)`, payer.id, byUUID[p.PayeeUUID].id, p.Cents, p.Description); err != nil </span>{
+                        <span class="cov0" title="0">return fmt.Errorf("insert payment: %w", err)
+</span>                }
+        }
+        <span class="cov0" title="0">if err := tx.Commit(ctx); err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("commit payment (outcome may be uncertain): %w", err)
+</span>        }
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">// Package ledgerclient provides a bounded, non-retrying private HTTP client.
+package ledgerclient
+
+import (
+        "bytes"
+        "context"
+        "encoding/json"
+        "errors"
+        "fmt"
+        "io"
+        "net/http"
+        "net/url"
+        "strings"
+        "time"
+
+        "github.com/newdarwindev/firm-payments/internal/contracts"
+)
+
+type Client struct {
+        base string
+        http *http.Client
+}
+
+func New(base string) (*Client, error) {
+        <span class="cov10" title="2">u, err := url.Parse(base)
+        if err != nil || u.Host == "" || (u.Scheme != "http" &amp;&amp; u.Scheme != "https") || u.RawQuery != "" || u.Fragment != "" || u.User != nil || (u.Path != "" &amp;&amp; u.Path != "/") </span>{
+                <span class="cov0" title="0">return nil, fmt.Errorf("invalid LEDGER_URL")
+</span>        }
+        <span class="cov10" title="2">return &amp;Client{base: strings.TrimSuffix(base, "/"), http: &amp;http.Client{Timeout: 8 * time.Second, CheckRedirect: func(*http.Request, []*http.Request) error </span>{ <span class="cov0" title="0">return http.ErrUseLastResponse }</span>}}, nil
+}
+
+func (c *Client) Ready(ctx context.Context) error {
+        <span class="cov0" title="0">req, err := http.NewRequestWithContext(ctx, http.MethodGet, c.base+"/readyz", nil)
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">res, err := c.http.Do(req)
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("%w: %w", contracts.ErrUnavailable, err)
+</span>        }
+        <span class="cov0" title="0">defer func() </span>{ <span class="cov0" title="0">_ = res.Body.Close() }</span>()
+        <span class="cov0" title="0">if res.StatusCode != http.StatusOK </span>{
+                <span class="cov0" title="0">return contracts.ErrUnavailable
+</span>        }
+        <span class="cov0" title="0">return nil</span>
+}
+
+func (c *Client) Execute(ctx context.Context, payment contracts.BulkRequest) error {
+        <span class="cov1" title="1">body, err := json.Marshal(payment)
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov1" title="1">req, err := http.NewRequestWithContext(ctx, http.MethodPost, c.base+"/internal/payments/bulk", bytes.NewReader(body))
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov1" title="1">req.Header.Set("Content-Type", "application/json")
+        res, err := c.http.Do(req)
+        if err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("%w: %w", contracts.ErrUnavailable, err)
+</span>        }
+        <span class="cov1" title="1">defer func() </span>{ <span class="cov1" title="1">_ = res.Body.Close() }</span>()
+        <span class="cov1" title="1">if res.StatusCode == http.StatusCreated </span>{
+                <span class="cov0" title="0">return nil
+</span>        }
+        // A valid error body cannot override the transport outcome (for example,
+        // a proxy returning a 500 with a stale insufficient-funds body).
+        <span class="cov1" title="1">if res.StatusCode != 422 &amp;&amp; res.StatusCode != 500 &amp;&amp; res.StatusCode != 503 &amp;&amp; res.StatusCode != 504 </span>{
+                <span class="cov0" title="0">return fmt.Errorf("%w: unexpected ledger status %d", contracts.ErrUnavailable, res.StatusCode)
+</span>        }
+        <span class="cov1" title="1">var failure contracts.ErrorResponse
+        if err := json.NewDecoder(io.LimitReader(res.Body, 64&lt;&lt;10)).Decode(&amp;failure); err != nil </span>{
+                <span class="cov0" title="0">return fmt.Errorf("%w: invalid ledger response", contracts.ErrUnavailable)
+</span>        }
+        <span class="cov1" title="1">err = contracts.ErrorForCode(failure.Error.Code)
+        switch res.StatusCode </span>{
+        case 422:
+                <span class="cov1" title="1">if !errors.Is(err, contracts.ErrInvalidRequest) &amp;&amp; !errors.Is(err, contracts.ErrUnknownFirm) &amp;&amp; !errors.Is(err, contracts.ErrInsufficientFunds) &amp;&amp; !errors.Is(err, contracts.ErrBalanceOverflow) </span>{
+                        <span class="cov0" title="0">return contracts.ErrUnavailable
+</span>                }
+        case 500:
+                <span class="cov0" title="0">if !errors.Is(err, contracts.ErrInternal) </span>{
+                        <span class="cov0" title="0">return contracts.ErrUnavailable
+</span>                }
+        case 503:
+                <span class="cov0" title="0">if !errors.Is(err, contracts.ErrUnavailable) </span>{
+                        <span class="cov0" title="0">return contracts.ErrUnavailable
+</span>                }
+        case 504:
+                <span class="cov0" title="0">if !errors.Is(err, context.DeadlineExceeded) </span>{
+                        <span class="cov0" title="0">return contracts.ErrUnavailable
+</span>                }
+        }
+        <span class="cov1" title="1">return err</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">// Package money parses USD amounts without floating-point arithmetic.
+package money
+
+import (
+        "errors"
+        "math"
+        "strings"
+)
+
+const MaxCents int64 = math.MaxInt32
+
+var ErrInvalidAmount = errors.New("amount must be positive US dollars with at most two decimal places and fit INTEGER cents")
+
+func ParseCents(amount string) (int64, error) {
+        <span class="cov10" title="3">whole, fraction, decimal := strings.Cut(amount, ".")
+        if whole == "" || (decimal &amp;&amp; (len(fraction) &lt; 1 || len(fraction) &gt; 2)) </span>{
+                <span class="cov0" title="0">return 0, ErrInvalidAmount
+</span>        }
+        <span class="cov10" title="3">var dollars int64
+        for _, digit := range whole </span>{
+                <span class="cov10" title="3">if digit &lt; '0' || digit &gt; '9' </span>{
+                        <span class="cov0" title="0">return 0, ErrInvalidAmount
+</span>                }
+                <span class="cov10" title="3">value := int64(digit - '0')
+                if dollars &gt; (MaxCents-value)/10 </span>{
+                        <span class="cov0" title="0">return 0, ErrInvalidAmount
+</span>                }
+                <span class="cov10" title="3">dollars = dollars*10 + value</span>
+        }
+        <span class="cov10" title="3">cents := dollars * 100
+        for i, digit := range fraction </span>{
+                <span class="cov0" title="0">if digit &lt; '0' || digit &gt; '9' </span>{
+                        <span class="cov0" title="0">return 0, ErrInvalidAmount
+</span>                }
+                <span class="cov0" title="0">value := int64(digit - '0')
+                if i == 0 </span>{
+                        <span class="cov0" title="0">value *= 10
+</span>                }
+                <span class="cov0" title="0">cents += value</span>
+        }
+        <span class="cov10" title="3">if cents &lt;= 0 || cents &gt; MaxCents </span>{
+                <span class="cov0" title="0">return 0, ErrInvalidAmount
+</span>        }
+        <span class="cov10" title="3">return cents, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">// Package server owns bounded HTTP startup and graceful shutdown.
+package server
+
+import (
+        "context"
+        "errors"
+        "net/http"
+        "time"
+)
+
+func Serve(ctx context.Context, addr string, handler http.Handler) error {
+        <span class="cov10" title="4">srv := &amp;http.Server{Addr: addr, Handler: handler, ReadHeaderTimeout: 5 * time.Second, ReadTimeout: 10 * time.Second, WriteTimeout: 10 * time.Second, IdleTimeout: 60 * time.Second}
+        done := make(chan error, 1)
+        go func() </span>{ <span class="cov10" title="4">done &lt;- srv.ListenAndServe() }</span>()
+        <span class="cov10" title="4">select </span>{
+        case err := &lt;-done:
+                <span class="cov0" title="0">if errors.Is(err, http.ErrServerClosed) </span>{
+                        <span class="cov0" title="0">return nil
+</span>                }
+                <span class="cov0" title="0">return err</span>
+        case &lt;-ctx.Done():
+                <span class="cov10" title="4">cleanup, cancel := context.WithTimeout(context.WithoutCancel(ctx), 5*time.Second)
+                defer cancel()
+                return srv.Shutdown(cleanup)</span>
+        }
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

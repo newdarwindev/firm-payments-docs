@@ -1,0 +1,7 @@
+go tool test2json -t -p github.com/newdarwindev/firm-payments/docs/internal/dialog /home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/83f04d902701b3fe.test -test.v=test2json -test.count=1 -test.timeout=180s -test.run=^TestRecoverInterruptedManifestWrite$ -test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/exporter-4c9c8477e9416bf6/coverage.out
+=== RUN   TestRecoverInterruptedManifestWrite
+--- PASS: TestRecoverInterruptedManifestWrite (0.00s)
+PASS
+coverage: 48.9% of statements
+
+Exit status: 0

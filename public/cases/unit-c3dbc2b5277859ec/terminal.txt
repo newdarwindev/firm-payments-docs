@@ -1,0 +1,7 @@
+go tool test2json -t -p github.com/newdarwindev/firm-payments/internal/ledgerclient /home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/30e364b0f7d02fc2.test -test.v=test2json -test.count=1 -test.timeout=180s -test.run=^TestClientPreservesOutcomesWithoutRetry$ -test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/unit-c3dbc2b5277859ec/coverage.out
+=== RUN   TestClientPreservesOutcomesWithoutRetry
+--- PASS: TestClientPreservesOutcomesWithoutRetry (0.00s)
+PASS
+coverage: 56.5% of statements
+
+Exit status: 0

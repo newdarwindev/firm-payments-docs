@@ -1,0 +1,21 @@
+go tool test2json -t -p github.com/newdarwindev/firm-payments/internal/contracts /home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/c34f76946a530588.test -test.v=test2json -test.count=1 -test.timeout=180s -test.run=^TestPrepare$ -test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/unit-77a21639f0b9f9da/coverage.out
+=== RUN   TestPrepare
+=== RUN   TestPrepare/bad_payer
+--- PASS: TestPrepare/bad_payer (0.00s)
+=== RUN   TestPrepare/bad_recipient
+--- PASS: TestPrepare/bad_recipient (0.00s)
+=== RUN   TestPrepare/self_payment
+--- PASS: TestPrepare/self_payment (0.00s)
+=== RUN   TestPrepare/empty
+--- PASS: TestPrepare/empty (0.00s)
+=== RUN   TestPrepare/too_many
+--- PASS: TestPrepare/too_many (0.00s)
+=== RUN   TestPrepare/bad_amount
+--- PASS: TestPrepare/bad_amount (0.00s)
+=== RUN   TestPrepare/total_overflow
+--- PASS: TestPrepare/total_overflow (0.00s)
+--- PASS: TestPrepare (0.00s)
+PASS
+coverage: 73.0% of statements
+
+Exit status: 0

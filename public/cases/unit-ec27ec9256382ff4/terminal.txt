@@ -1,0 +1,7 @@
+go tool test2json -t -p github.com/newdarwindev/firm-payments/tests /home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/59830ebc3a418411.test -test.v=test2json -test.count=1 -test.timeout=180s -test.run=^TestOriginalExamplesRemainDistinct$ -test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/unit-ec27ec9256382ff4/coverage.out
+=== RUN   TestOriginalExamplesRemainDistinct
+--- PASS: TestOriginalExamplesRemainDistinct (0.00s)
+PASS
+coverage: [no statements]
+
+Exit status: 0

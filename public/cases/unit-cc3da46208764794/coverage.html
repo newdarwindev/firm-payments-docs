@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>contracts: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/newdarwindev/firm-payments/internal/contracts/errors.go (0.0%)</option>
+				
+				<option value="file1">github.com/newdarwindev/firm-payments/internal/contracts/validate.go (75.9%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package contracts
+
+import (
+        "context"
+        "errors"
+)
+
+var (
+        ErrInvalidRequest    = errors.New("invalid payment request")
+        ErrUnknownFirm       = errors.New("payer or recipient does not exist")
+        ErrInsufficientFunds = errors.New("insufficient payer funds")
+        ErrBalanceOverflow   = errors.New("recipient balance would exceed INTEGER cents")
+        ErrUnavailable       = errors.New("ledger service unavailable")
+        ErrInternal          = errors.New("internal payment failure")
+)
+
+type ErrorResponse struct {
+        Error ErrorDetail `json:"error"`
+}
+type ErrorDetail struct {
+        Code    string `json:"code"`
+        Message string `json:"message"`
+}
+
+func ErrorForCode(code string) error {
+        <span class="cov0" title="0">switch code </span>{
+        case "timeout":
+                <span class="cov0" title="0">return context.DeadlineExceeded</span>
+        case "invalid_request":
+                <span class="cov0" title="0">return ErrInvalidRequest</span>
+        case "unknown_firm":
+                <span class="cov0" title="0">return ErrUnknownFirm</span>
+        case "insufficient_funds":
+                <span class="cov0" title="0">return ErrInsufficientFunds</span>
+        case "balance_overflow":
+                <span class="cov0" title="0">return ErrBalanceOverflow</span>
+        case "internal_error":
+                <span class="cov0" title="0">return ErrInternal</span>
+        default:
+                <span class="cov0" title="0">return ErrUnavailable</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package contracts
+
+import (
+        "fmt"
+        "strings"
+
+        "github.com/newdarwindev/firm-payments/internal/money"
+)
+
+const MaxPayments = 1000
+const MaxBodyBytes int64 = 1 &lt;&lt; 20
+
+type PreparedPayment struct {
+        PayeeUUID   string
+        Cents       int64
+        Description string
+}
+type Batch struct {
+        PayerUUID string
+        Payments  []PreparedPayment
+        Total     int64
+        Credits   map[string]int64
+}
+
+func canonicalUUID(s string) (string, bool) {
+        <span class="cov3" title="5">if len(s) != 36 </span>{
+                <span class="cov0" title="0">return "", false
+</span>        }
+        <span class="cov3" title="5">for i, c := range s </span>{
+                <span class="cov10" title="180">if i == 8 || i == 13 || i == 18 || i == 23 </span>{
+                        <span class="cov6" title="20">if c != '-' </span>{
+                                <span class="cov0" title="0">return "", false
+</span>                        }
+                        <span class="cov6" title="20">continue</span>
+                }
+                <span class="cov9" title="160">if (c &lt; '0' || c &gt; '9') &amp;&amp; (c &lt; 'a' || c &gt; 'f') &amp;&amp; (c &lt; 'A' || c &gt; 'F') </span>{
+                        <span class="cov0" title="0">return "", false
+</span>                }
+        }
+        <span class="cov3" title="5">return strings.ToLower(s), true</span>
+}
+
+func Prepare(req BulkRequest) (Batch, error) {
+        <span class="cov2" title="2">payer, ok := canonicalUUID(req.PayerFirmUUID)
+        if !ok </span>{
+                <span class="cov0" title="0">return Batch{}, fmt.Errorf("%w: payer_firm_uuid must be a UUID", ErrInvalidRequest)
+</span>        }
+        <span class="cov2" title="2">if len(req.Payments) == 0 || len(req.Payments) &gt; MaxPayments </span>{
+                <span class="cov0" title="0">return Batch{}, fmt.Errorf("%w: require 1 to %d payments", ErrInvalidRequest, MaxPayments)
+</span>        }
+        <span class="cov2" title="2">batch := Batch{PayerUUID: payer, Credits: make(map[string]int64)}
+        for _, payment := range req.Payments </span>{
+                <span class="cov2" title="3">payee, ok := canonicalUUID(payment.PayeeFirmUUID)
+                if !ok || payee == payer </span>{
+                        <span class="cov0" title="0">return Batch{}, fmt.Errorf("%w: recipients must be UUIDs different from the payer", ErrInvalidRequest)
+</span>                }
+                <span class="cov2" title="3">cents, err := money.ParseCents(payment.Amount)
+                if err != nil </span>{
+                        <span class="cov1" title="1">return Batch{}, fmt.Errorf("%w: %w", ErrInvalidRequest, err)
+</span>                }
+                <span class="cov2" title="2">if batch.Total &gt; money.MaxCents-cents </span>{
+                        <span class="cov0" title="0">return Batch{}, fmt.Errorf("%w: batch total exceeds INTEGER cents", ErrInvalidRequest)
+</span>                }
+                <span class="cov2" title="2">batch.Total += cents
+                batch.Credits[payee] += cents
+                batch.Payments = append(batch.Payments, PreparedPayment{PayeeUUID: payee, Cents: cents, Description: payment.Description})</span>
+        }
+        <span class="cov1" title="1">return batch, nil</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

@@ -1,0 +1,8 @@
+go tool test2json -t -p github.com/newdarwindev/firm-payments/tests/functional /home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/3c37d0e2e00b6a17.test -test.v=test2json -test.count=1 -test.timeout=180s -test.run=^TestFunctional$/^RejectionPreservesEarlierCommittedPayment$
+=== RUN   TestFunctional
+=== RUN   TestFunctional/RejectionPreservesEarlierCommittedPayment
+--- PASS: TestFunctional/RejectionPreservesEarlierCommittedPayment (0.02s)
+--- PASS: TestFunctional (0.02s)
+PASS
+
+Exit status: 0

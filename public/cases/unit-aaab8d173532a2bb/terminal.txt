@@ -1,0 +1,19 @@
+go tool test2json -t -p github.com/newdarwindev/firm-payments/tools/requirements-site /home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/9311f7c937a2d2ef.test -test.v=test2json -test.count=1 -test.timeout=180s -test.run=^TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns$ -test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/unit-aaab8d173532a2bb/coverage.out
+=== RUN   TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns
+=== RUN   TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns/stale-source
+--- PASS: TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns/stale-source (0.00s)
+=== RUN   TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns/stale-workflow
+--- PASS: TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns/stale-workflow (0.00s)
+=== RUN   TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns/failed-service
+--- PASS: TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns/failed-service (0.00s)
+=== RUN   TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns/cancelled-conversation
+--- PASS: TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns/cancelled-conversation (0.00s)
+=== RUN   TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns/missing-artifacts
+--- PASS: TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns/missing-artifacts (0.00s)
+=== RUN   TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns/unknown-mode
+--- PASS: TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns/unknown-mode (0.00s)
+--- PASS: TestSiteEvidenceRejectsStaleFailedAndIncompleteRuns (0.00s)
+PASS
+coverage: 3.4% of statements
+
+Exit status: 0

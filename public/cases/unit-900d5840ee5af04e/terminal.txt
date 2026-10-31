@@ -1,0 +1,9 @@
+go tool test2json -t -p github.com/newdarwindev/firm-payments/internal/contracts /home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/c34f76946a530588.test -test.v=test2json -test.count=1 -test.timeout=180s -test.run=^TestPrepare$/^too_many$ -test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/unit-900d5840ee5af04e/coverage.out
+=== RUN   TestPrepare
+=== RUN   TestPrepare/too_many
+--- PASS: TestPrepare/too_many (0.00s)
+--- PASS: TestPrepare (0.00s)
+PASS
+coverage: 59.5% of statements
+
+Exit status: 0

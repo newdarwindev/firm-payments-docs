@@ -1,0 +1,7 @@
+go tool test2json -t -p github.com/newdarwindev/firm-payments/tools/requirements-site /home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/9311f7c937a2d2ef.test -test.v=test2json -test.count=1 -test.timeout=180s -test.run=^TestSiteRecitalAndReferencesCoverOriginalTask$ -test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/unit-17332e7ed61d29a7/coverage.out
+=== RUN   TestSiteRecitalAndReferencesCoverOriginalTask
+--- PASS: TestSiteRecitalAndReferencesCoverOriginalTask (0.01s)
+PASS
+coverage: 12.7% of statements
+
+Exit status: 0

@@ -5,10 +5,10 @@
     "Package": "",
     "Asserts": "201 with empty body; original three rows, amounts, recipients and descriptions; balances 3674875 / 170075 / 1405050 cents.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L46",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L46",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-originalthreepaymentsample",
-    "Seconds": 0.02
+    "Seconds": 0.01
   },
   {
     "Suite": "functional",
@@ -16,8 +16,8 @@
     "Package": "",
     "Asserts": "201; separate two-payment example; exact rows and derived balances 4849925 / 170075 / 230000 cents.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L49",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L49",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-originaltwopaymentexample",
     "Seconds": 0.01
   },
@@ -27,8 +27,8 @@
     "Package": "",
     "Asserts": "Spending the entire payer balance succeeds, leaves zero and creates the exact payment row.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L52",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L52",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-exactbalance",
     "Seconds": 0.01
   },
@@ -38,8 +38,8 @@
     "Package": "",
     "Asserts": "Leading-zero one-cent amount and uppercase UUIDs succeed; exactly one cent moves.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L56",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L56",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-onecentleadingzerosanduppercaseuuid",
     "Seconds": 0.01
   },
@@ -49,8 +49,8 @@
     "Package": "",
     "Asserts": "Unicode and SQL-looking description text is stored unchanged; tables remain intact.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L63",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L63",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-literaldescription",
     "Seconds": 0.01
   },
@@ -60,8 +60,8 @@
     "Package": "",
     "Asserts": "An explicitly present empty description succeeds and is stored as an empty string.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L69",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L69",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-emptydescription",
     "Seconds": 0.01
   },
@@ -71,10 +71,10 @@
     "Package": "",
     "Asserts": "1000 one-cent entries succeed as 1000 separate rows with exact aggregate balances.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L75",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L75",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-maximumbatchaccepted",
-    "Seconds": 0.39
+    "Seconds": 0.2
   },
   {
     "Suite": "functional",
@@ -82,8 +82,8 @@
     "Package": "",
     "Asserts": "21474836.47 dollars succeeds when funded and recipient capacity permits; exact INTEGER balances and row.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L86",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L86",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-maximumintegercentsaccepted",
     "Seconds": 0.01
   },
@@ -93,8 +93,8 @@
     "Package": "",
     "Asserts": "An unaffordable multi-payment batch returns 422/insufficient_funds and leaves all balances and rows unchanged.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L91",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L91",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-insufficientfundswholebatch",
     "Seconds": 0.01
   },
@@ -104,8 +104,8 @@
     "Package": "",
     "Asserts": "Unknown payer returns 422/unknown_firm; no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L97",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L97",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-unknownpayer",
     "Seconds": 0.01
   },
@@ -115,8 +115,8 @@
     "Package": "",
     "Asserts": "A valid plus unknown recipient returns 422/unknown_firm; neither payment commits.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L98",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L98",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-unknownrecipientwholebatch",
     "Seconds": 0.01
   },
@@ -126,10 +126,10 @@
     "Package": "",
     "Asserts": "A recipient overflow returns 422/balance_overflow and rolls back every batch write.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L103",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L103",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-recipientoverflowwholebatch",
-    "Seconds": 0.02
+    "Seconds": 0.01
   },
   {
     "Suite": "functional",
@@ -137,8 +137,8 @@
     "Package": "",
     "Asserts": "Injected second-insert failure returns generic 500; balances and first insert roll back; SQL details stay private.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L109",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L109",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-rollbackafterfirstinsert",
     "Seconds": 0.01
   },
@@ -148,10 +148,10 @@
     "Package": "",
     "Asserts": "Malformed JSON returns 400/invalid_json; no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L110",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L110",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-rejectmalformedjson",
-    "Seconds": 0.01
+    "Seconds": 0
   },
   {
     "Suite": "functional",
@@ -159,8 +159,8 @@
     "Package": "",
     "Asserts": "Unknown root or payment fields return 400/invalid_json; no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L111",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L111",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-rejectunknownfields",
     "Seconds": 0.01
   },
@@ -170,8 +170,8 @@
     "Package": "",
     "Asserts": "Two JSON documents return 400/invalid_json; no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L117",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L117",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-rejectextrajsondocument",
     "Seconds": 0.01
   },
@@ -181,10 +181,10 @@
     "Package": "",
     "Asserts": "Numeric amount returns 400/invalid_json; no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L118",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L118",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-rejectnumericamount",
-    "Seconds": 0.01
+    "Seconds": 0
   },
   {
     "Suite": "functional",
@@ -192,10 +192,10 @@
     "Package": "",
     "Asserts": "Each required root/payment field omitted or null, null root and null payment entry return 422/invalid_request; no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L122",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L122",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-rejectmissingandnullfields",
-    "Seconds": 0.03
+    "Seconds": 0.02
   },
   {
     "Suite": "functional",
@@ -203,8 +203,8 @@
     "Package": "",
     "Asserts": "Empty array returns 422/invalid_request; no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L123",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L123",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-rejectemptybatch",
     "Seconds": 0.01
   },
@@ -214,8 +214,8 @@
     "Package": "",
     "Asserts": "Self-payment returns 422/invalid_request; no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L124",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L124",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-rejectselfpayment",
     "Seconds": 0.01
   },
@@ -225,10 +225,10 @@
     "Package": "",
     "Asserts": "Malformed and surrounding-whitespace payer or payee UUIDs return 422/invalid_request; no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L125",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L125",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-rejectinvaliduuid",
-    "Seconds": 0.02
+    "Seconds": 0.01
   },
   {
     "Suite": "functional",
@@ -236,10 +236,10 @@
     "Package": "",
     "Asserts": "0, 0.00, -0.00, -1, +1, .01, 1., 0.001, 1e2, surrounding whitespace, 21474836.48 and 21474837 return 422/invalid_request; no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L135",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L135",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-rejectinvalidamounts",
-    "Seconds": 0.03
+    "Seconds": 0.02
   },
   {
     "Suite": "functional",
@@ -247,10 +247,10 @@
     "Package": "",
     "Asserts": "Valid entries totalling INTEGER maximum plus one cent return 422/invalid_request; no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L140",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L140",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-rejectbatchtotaloverflow",
-    "Seconds": 0.01
+    "Seconds": 0
   },
   {
     "Suite": "functional",
@@ -258,10 +258,10 @@
     "Package": "",
     "Asserts": "1001 entries return 422/invalid_request; no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L145",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L145",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-rejecttoomanypayments",
-    "Seconds": 0.04
+    "Seconds": 0.02
   },
   {
     "Suite": "functional",
@@ -269,10 +269,10 @@
     "Package": "",
     "Asserts": "A body exactly one byte above 1 MiB returns 413/request_too_large; no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L152",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L152",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-rejectoversizedbody",
-    "Seconds": 0.05
+    "Seconds": 0.03
   },
   {
     "Suite": "functional",
@@ -280,8 +280,8 @@
     "Package": "",
     "Asserts": "Non-JSON supplied Content-Type returns 415/unsupported_media_type; no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L156",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L156",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-rejectunsupportedmediatype",
     "Seconds": 0.01
   },
@@ -291,10 +291,10 @@
     "Package": "",
     "Asserts": "JSON with charset and omitted Content-Type both accept valid requests with exact rows and balances.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L165",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L165",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-acceptedmediatypes",
-    "Seconds": 0.02
+    "Seconds": 0.01
   },
   {
     "Suite": "functional",
@@ -302,8 +302,8 @@
     "Package": "",
     "Asserts": "Both API and both ledger processes return 200 for liveness and readiness.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L175",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L175",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-healthandreadiness",
     "Seconds": 0.01
   },
@@ -313,10 +313,10 @@
     "Package": "",
     "Asserts": "GET payment route returns 405; unknown route returns 404; no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L176",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L176",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-methodandrouteboundary",
-    "Seconds": 0.01
+    "Seconds": 0
   },
   {
     "Suite": "functional",
@@ -324,8 +324,8 @@
     "Package": "",
     "Asserts": "Private route independently enforces 201 commit and 422 insufficient-funds rejection with exact persistent state.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L190",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L190",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-directprivateroute",
     "Seconds": 0.01
   },
@@ -335,10 +335,10 @@
     "Package": "",
     "Asserts": "12 requests across two API/two ledger processes yield exactly one success and eleven insufficient-funds denials; exact state and conserved total.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L205",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L205",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-concurrentoverspend",
-    "Seconds": 0.15
+    "Seconds": 0.11
   },
   {
     "Suite": "functional",
@@ -346,10 +346,10 @@
     "Package": "",
     "Asserts": "40 opposing requests all commit without deadlock; 40 reconciled rows, original balances and conserved total.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L212",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L212",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-concurrentopposingtransfers",
-    "Seconds": 0.19
+    "Seconds": 0.12
   },
   {
     "Suite": "functional",
@@ -357,10 +357,10 @@
     "Package": "",
     "Asserts": "40 requests from two payers credit one recipient without lost updates; exact balances, 40 reconciled rows and conserved total.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L230",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L230",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-concurrentsharedrecipient",
-    "Seconds": 0.14
+    "Seconds": 0.11
   },
   {
     "Suite": "functional",
@@ -368,10 +368,10 @@
     "Package": "",
     "Asserts": "Held PostgreSQL lock produces bounded 504 without writes; valid processing resumes after release.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L247",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L247",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-lockdeadlinerollback",
-    "Seconds": 6.04
+    "Seconds": 6.03
   },
   {
     "Suite": "functional",
@@ -379,43 +379,43 @@
     "Package": "",
     "Asserts": "Stopped ledger produces API 503 and readiness 503 while liveness stays 200; no writes; readiness recovers on restart.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L248",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L248",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-ledgerunavailable",
-    "Seconds": 1.09
+    "Seconds": 1.05
   },
   {
     "Suite": "functional",
     "Name": "LedgerRedirectNotFollowed",
     "Package": "",
-    "Asserts": "Controlled redirect produces 503; exactly one upstream call and zero redirect-target calls; no writes.",
+    "Asserts": "Real Nginx canonical redirect produces 503; exactly one proxy request, no follow or retry, and no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L249",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L249",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-ledgerredirectnotfollowed",
-    "Seconds": 2.08
+    "Seconds": 2.18
   },
   {
     "Suite": "functional",
     "Name": "LedgerMalformedResponse",
     "Package": "",
-    "Asserts": "Malformed upstream error produces 503; exactly one upstream call; no writes.",
+    "Asserts": "Real Nginx rate-limit HTML 503 is rejected as an invalid ledger error body; one attempted call after setup, no retry, and no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L250",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L250",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-ledgermalformedresponse",
-    "Seconds": 2.08
+    "Seconds": 2.16
   },
   {
     "Suite": "functional",
     "Name": "LedgerTimeoutNoRetry",
     "Package": "",
-    "Asserts": "Stalled upstream produces bounded 504; exactly one upstream call; no writes.",
+    "Asserts": "A real PostgreSQL row lock blocks the ledger until its deadline; 504/timeout within nine seconds and no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L251",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L251",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-ledgertimeoutnoretry",
-    "Seconds": 8.08
+    "Seconds": 6.02
   },
   {
     "Suite": "functional",
@@ -423,8 +423,8 @@
     "Package": "",
     "Asserts": "Two identical successful requests create two payment rows and execute two transfers.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L252",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L252",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-replayisnewpayment",
     "Seconds": 0.02
   },
@@ -434,8 +434,8 @@
     "Package": "",
     "Asserts": "A zero-cent payer cannot send one cent; 422; no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L258",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L258",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-zerobalancepayer",
     "Seconds": 0.01
   },
@@ -445,8 +445,8 @@
     "Package": "",
     "Asserts": "A zero-cent recipient receives one cent with exact debit and credit.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L262",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L262",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-zerobalancerecipient",
     "Seconds": 0.01
   },
@@ -456,8 +456,8 @@
     "Package": "",
     "Asserts": "Payer balance one cent below batch total rejects the entire batch.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L267",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L267",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-payeronecentbelowtotal",
     "Seconds": 0.01
   },
@@ -467,8 +467,8 @@
     "Package": "",
     "Asserts": "Payer balance one cent above batch total accepts it and leaves one cent.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L273",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L273",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-payeronecentabovetotal",
     "Seconds": 0.01
   },
@@ -478,8 +478,8 @@
     "Package": "",
     "Asserts": "Identical entries create separate rows and two credits; no deduplication.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L280",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L280",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-duplicateentriesremainseparate",
     "Seconds": 0.01
   },
@@ -489,8 +489,8 @@
     "Package": "",
     "Asserts": "Individually affordable duplicate entries that are jointly unaffordable reject the complete batch.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L286",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L286",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-grosstotalincludeseveryduplicate",
     "Seconds": 0.01
   },
@@ -500,8 +500,8 @@
     "Package": "",
     "Asserts": "Combined repeated-recipient credits reach exactly 2147483647 cents with separate rows.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L292",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L292",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-repeatedrecipientexactcapacity",
     "Seconds": 0.01
   },
@@ -511,10 +511,10 @@
     "Package": "",
     "Asserts": "Individually safe repeated-recipient credits whose aggregate exceeds capacity by one cent reject the complete batch.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L299",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L299",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-repeatedrecipientonecentoverflow",
-    "Seconds": 0.02
+    "Seconds": 0.01
   },
   {
     "Suite": "functional",
@@ -522,8 +522,8 @@
     "Package": "",
     "Asserts": "A recipient already at INTEGER maximum cannot receive one cent; no writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L305",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L305",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-fullrecipientrejectsonecent",
     "Seconds": 0.01
   },
@@ -533,8 +533,8 @@
     "Package": "",
     "Asserts": "Payer at INTEGER maximum sends one cent without overflow.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L309",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L309",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-maximumbalancepayerdebitsonecent",
     "Seconds": 0.01
   },
@@ -544,8 +544,8 @@
     "Package": "",
     "Asserts": "21474836 dollars transfers 2147483600 cents and leaves 47 cents from a maximum-funded payer.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L314",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L314",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-largestwholedollaramount",
     "Seconds": 0.01
   },
@@ -555,8 +555,8 @@
     "Package": "",
     "Asserts": "Multiple entries summing to INTEGER maximum succeed with exact rows and balances.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L319",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L319",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-batchtotalexactlyintegermaximum",
     "Seconds": 0.01
   },
@@ -566,8 +566,8 @@
     "Package": "",
     "Asserts": "0.1 plus 0.2 plus 0.30 transfers exactly 60 cents without rounding loss.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L326",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L326",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-tenthsandhundredthsareexact",
     "Seconds": 0.01
   },
@@ -577,8 +577,8 @@
     "Package": "",
     "Asserts": "0.99 plus 0.01 transfers exactly 100 cents.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L332",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L332",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-centcarryisexact",
     "Seconds": 0.01
   },
@@ -588,8 +588,8 @@
     "Package": "",
     "Asserts": "256 leading zeroes before 1.25 preserve the exact 125-cent amount.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L338",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L338",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-longleadingzeroamount",
     "Seconds": 0.01
   },
@@ -599,8 +599,8 @@
     "Package": "",
     "Asserts": "Invalid first, middle or final entry rejects the whole batch without writes.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L342",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L342",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-invalidentryateveryposition",
     "Seconds": 0.01
   },
@@ -610,10 +610,10 @@
     "Package": "",
     "Asserts": "A valid entry plus self-payment rejects both.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L350",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L350",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-selfpaymentalongsidevalidpayment",
-    "Seconds": 0.01
+    "Seconds": 0
   },
   {
     "Suite": "functional",
@@ -621,10 +621,10 @@
     "Package": "",
     "Asserts": "Case differences cannot bypass self-payment rejection.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L355",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L355",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-uppercaseselfpayment",
-    "Seconds": 0.01
+    "Seconds": 0
   },
   {
     "Suite": "functional",
@@ -632,10 +632,10 @@
     "Package": "",
     "Asserts": "Reordering entries preserves balances while stored rows follow submitted order.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L360",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L360",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-paymentorderpreservestotals",
-    "Seconds": 0.02
+    "Seconds": 0.01
   },
   {
     "Suite": "functional",
@@ -643,8 +643,8 @@
     "Package": "",
     "Asserts": "A rejected later batch leaves the earlier committed payment and balances intact.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L370",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L370",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-rejectionpreservesearliercommittedpayment",
     "Seconds": 0.01
   },
@@ -654,10 +654,10 @@
     "Package": "",
     "Asserts": "Service successfully handles a valid payment after an injected SQL failure rolls back.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L375",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L375",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-sqlfailurethenvalidpayment",
-    "Seconds": 0.02
+    "Seconds": 0.01
   },
   {
     "Suite": "functional",
@@ -665,10 +665,10 @@
     "Package": "",
     "Asserts": "20 concurrent one-cent requests against 20 cents all succeed and leave zero; rows reconcile and total is conserved.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L381",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L381",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-concurrentexactlyfundedrequests",
-    "Seconds": 0.12
+    "Seconds": 0.07
   },
   {
     "Suite": "functional",
@@ -676,10 +676,10 @@
     "Package": "",
     "Asserts": "21 competing one-cent requests against 20 cents yield 20 successes and one denial; exact balances and rows.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L382",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L382",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-concurrentonebeyondfunding",
-    "Seconds": 0.08
+    "Seconds": 0.05
   },
   {
     "Suite": "functional",
@@ -687,10 +687,10 @@
     "Package": "",
     "Asserts": "Competing two-entry batches commit only whole affordable batches with separate rows, exact aggregate credits and conserved total.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L383",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L383",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-concurrentrepeatedrecipientbatches",
-    "Seconds": 0.04
+    "Seconds": 0.03
   },
   {
     "Suite": "functional",
@@ -698,10 +698,10 @@
     "Package": "",
     "Asserts": "Competing credits stop exactly at recipient capacity; rejected batches debit neither payer; rows reconcile.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L394",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L394",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-concurrentrecipientcapacity",
-    "Seconds": 0.04
+    "Seconds": 0.02
   },
   {
     "Suite": "functional",
@@ -709,10 +709,10 @@
     "Package": "",
     "Asserts": "Concurrent disjoint firm sets all commit with exact balances, reconciled rows and conserved total.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L411",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L411",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-concurrentdisjointtransfers",
-    "Seconds": 0.12
+    "Seconds": 0.08
   },
   {
     "Suite": "functional",
@@ -720,10 +720,10 @@
     "Package": "",
     "Asserts": "Two firms starting with one cent exchange concurrent one-cent transfers without deadlock or creating money.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L430",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L430",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-reciprocalonecentbalances",
-    "Seconds": 0.02
+    "Seconds": 0.01
   },
   {
     "Suite": "functional",
@@ -731,10 +731,10 @@
     "Package": "",
     "Asserts": "A valid body padded to exactly 1 MiB succeeds with exact persistent state.",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/functional/payments_test.go#L449",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012256368",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/functional/payments_test.go#L449",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042306717",
     "Anchor": "functional-bodyexactlyatlimit",
-    "Seconds": 0.06
+    "Seconds": 0.03
   },
   {
     "Suite": "unit",
@@ -742,8 +742,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/contracts",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/contracts/validate_test.go#L14",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/contracts/validate_test.go#L14",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-contracts--testprepare",
     "Seconds": 0
   },
@@ -753,8 +753,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/contracts",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/contracts/validate_test.go#L14",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/contracts/validate_test.go#L14",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-contracts--testprepare-bad-amount",
     "Seconds": 0
   },
@@ -764,8 +764,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/contracts",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/contracts/validate_test.go#L14",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/contracts/validate_test.go#L14",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-contracts--testprepare-bad-payer",
     "Seconds": 0
   },
@@ -775,8 +775,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/contracts",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/contracts/validate_test.go#L14",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/contracts/validate_test.go#L14",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-contracts--testprepare-bad-recipient",
     "Seconds": 0
   },
@@ -786,8 +786,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/contracts",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/contracts/validate_test.go#L14",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/contracts/validate_test.go#L14",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-contracts--testprepare-empty",
     "Seconds": 0
   },
@@ -797,8 +797,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/contracts",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/contracts/validate_test.go#L14",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/contracts/validate_test.go#L14",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-contracts--testprepare-self-payment",
     "Seconds": 0
   },
@@ -808,8 +808,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/contracts",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/contracts/validate_test.go#L14",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/contracts/validate_test.go#L14",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-contracts--testprepare-too-many",
     "Seconds": 0
   },
@@ -819,8 +819,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/contracts",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/contracts/validate_test.go#L14",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/contracts/validate_test.go#L14",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-contracts--testprepare-total-overflow",
     "Seconds": 0
   },
@@ -830,8 +830,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/httpapi",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/httpapi/handler_test.go#L57",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/httpapi/handler_test.go#L57",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-httpapi--testfailuremappingandreadiness",
     "Seconds": 0
   },
@@ -841,10 +841,10 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/httpapi",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/httpapi/handler_test.go#L25",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/httpapi/handler_test.go#L25",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-httpapi--testrequestboundary",
-    "Seconds": 0.05
+    "Seconds": 0.04
   },
   {
     "Suite": "unit",
@@ -852,8 +852,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/httpapi",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/httpapi/handler_test.go#L25",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/httpapi/handler_test.go#L25",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-httpapi--testrequestboundary-invalid-cents",
     "Seconds": 0
   },
@@ -863,8 +863,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/httpapi",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/httpapi/handler_test.go#L25",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/httpapi/handler_test.go#L25",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-httpapi--testrequestboundary-malformed",
     "Seconds": 0
   },
@@ -874,8 +874,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/httpapi",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/httpapi/handler_test.go#L25",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/httpapi/handler_test.go#L25",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-httpapi--testrequestboundary-media",
     "Seconds": 0
   },
@@ -885,8 +885,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/httpapi",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/httpapi/handler_test.go#L25",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/httpapi/handler_test.go#L25",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-httpapi--testrequestboundary-missing-description",
     "Seconds": 0
   },
@@ -896,8 +896,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/httpapi",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/httpapi/handler_test.go#L25",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/httpapi/handler_test.go#L25",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-httpapi--testrequestboundary-multiple-documents",
     "Seconds": 0
   },
@@ -907,8 +907,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/httpapi",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/httpapi/handler_test.go#L25",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/httpapi/handler_test.go#L25",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-httpapi--testrequestboundary-null",
     "Seconds": 0
   },
@@ -918,8 +918,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/httpapi",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/httpapi/handler_test.go#L25",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/httpapi/handler_test.go#L25",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-httpapi--testrequestboundary-number-amount",
     "Seconds": 0
   },
@@ -929,10 +929,10 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/httpapi",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/httpapi/handler_test.go#L25",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/httpapi/handler_test.go#L25",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-httpapi--testrequestboundary-too-large",
-    "Seconds": 0.04
+    "Seconds": 0.03
   },
   {
     "Suite": "unit",
@@ -940,8 +940,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/httpapi",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/httpapi/handler_test.go#L25",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/httpapi/handler_test.go#L25",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-httpapi--testrequestboundary-unknown-field",
     "Seconds": 0
   },
@@ -951,8 +951,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/httpapi",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/httpapi/handler_test.go#L25",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/httpapi/handler_test.go#L25",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-httpapi--testrequestboundary-valid",
     "Seconds": 0
   },
@@ -962,10 +962,10 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/ledgerclient",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/ledgerclient/client_test.go#L16",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/ledgerclient/client_test.go#L16",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-ledgerclient--testclientpreservesoutcomeswithoutretry",
-    "Seconds": 0.02
+    "Seconds": 0.01
   },
   {
     "Suite": "unit",
@@ -973,8 +973,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/ledgerclient",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/ledgerclient/client_test.go#L44",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/ledgerclient/client_test.go#L44",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-ledgerclient--testredirectandcancellation",
     "Seconds": 0.02
   },
@@ -984,8 +984,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/money",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/money/money_test.go#L28",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/money/money_test.go#L28",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-money--fuzzparsecents",
     "Seconds": 0
   },
@@ -995,8 +995,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/money",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/money/money_test.go#L28",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/money/money_test.go#L28",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-money--fuzzparsecents-seed-0",
     "Seconds": 0
   },
@@ -1006,8 +1006,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/money",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/money/money_test.go#L28",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/money/money_test.go#L28",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-money--fuzzparsecents-seed-1",
     "Seconds": 0
   },
@@ -1017,8 +1017,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/money",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/money/money_test.go#L28",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/money/money_test.go#L28",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-money--fuzzparsecents-seed-2",
     "Seconds": 0
   },
@@ -1028,8 +1028,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/money",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/money/money_test.go#L28",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/money/money_test.go#L28",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-money--fuzzparsecents-seed-3",
     "Seconds": 0
   },
@@ -1039,8 +1039,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/money",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/money/money_test.go#L28",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/money/money_test.go#L28",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-money--fuzzparsecents-seed-4",
     "Seconds": 0
   },
@@ -1050,8 +1050,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/money",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/money/money_test.go#L28",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/money/money_test.go#L28",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-money--fuzzparsecents-seed-5",
     "Seconds": 0
   },
@@ -1061,8 +1061,8 @@
     "Package": "github.com/newdarwindev/firm-payments/internal/money",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/internal/money/money_test.go#L11",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/money/money_test.go#L11",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-internal-money--testparsecents",
     "Seconds": 0
   },
@@ -1072,8 +1072,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tests",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/fixtures_test.go#L14",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/fixtures_test.go#L14",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tests--testoriginalexamplesremaindistinct",
     "Seconds": 0
   },
@@ -1083,8 +1083,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tests",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/fixtures_test.go#L41",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/fixtures_test.go#L41",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tests--testoriginalfixtureintegrity",
     "Seconds": 0
   },
@@ -1094,10 +1094,10 @@
     "Package": "github.com/newdarwindev/firm-payments/tests",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/gates_test.go#L59",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/gates_test.go#L59",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tests--testpagespublicationprovenance",
-    "Seconds": 0.04
+    "Seconds": 0.03
   },
   {
     "Suite": "unit",
@@ -1105,8 +1105,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tests",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/gates_test.go#L59",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/gates_test.go#L59",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tests--testpagespublicationprovenance-invalid-commit",
     "Seconds": 0.01
   },
@@ -1116,8 +1116,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tests",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/gates_test.go#L59",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/gates_test.go#L59",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tests--testpagespublicationprovenance-matching",
     "Seconds": 0.01
   },
@@ -1127,8 +1127,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tests",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/gates_test.go#L59",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/gates_test.go#L59",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tests--testpagespublicationprovenance-redirected-site",
     "Seconds": 0.01
   },
@@ -1138,8 +1138,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tests",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/gates_test.go#L59",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/gates_test.go#L59",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tests--testpagespublicationprovenance-stale",
     "Seconds": 0.01
   },
@@ -1149,8 +1149,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tests",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/gates_test.go#L59",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/gates_test.go#L59",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tests--testpagespublicationprovenance-wrong-repository",
     "Seconds": 0.01
   },
@@ -1160,8 +1160,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tests",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/gates_test.go#L13",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/gates_test.go#L13",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tests--testprepushrejectsunverifiedtree",
     "Seconds": 0.03
   },
@@ -1171,8 +1171,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tests",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/gates_test.go#L13",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/gates_test.go#L13",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tests--testprepushrejectsunverifiedtree-matching",
     "Seconds": 0.01
   },
@@ -1182,10 +1182,10 @@
     "Package": "github.com/newdarwindev/firm-payments/tests",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/gates_test.go#L13",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/gates_test.go#L13",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tests--testprepushrejectsunverifiedtree-missing",
-    "Seconds": 0.01
+    "Seconds": 0.02
   },
   {
     "Suite": "unit",
@@ -1193,8 +1193,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tests",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tests/gates_test.go#L13",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/gates_test.go#L13",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tests--testprepushrejectsunverifiedtree-stale",
     "Seconds": 0.01
   },
@@ -1204,8 +1204,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/evidence",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/evidence/main_test.go#L103",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/evidence/main_test.go#L103",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-evidence--testcataloguerejectsduplicatesandmissingassertions",
     "Seconds": 0
   },
@@ -1215,10 +1215,10 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/evidence",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/evidence/main_test.go#L71",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/evidence/main_test.go#L71",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-evidence--testcoverageunionusesstatementsnotaveragedpercentages",
-    "Seconds": 0
+    "Seconds": 0.06
   },
   {
     "Suite": "unit",
@@ -1226,8 +1226,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/evidence",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/evidence/main_test.go#L24",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/evidence/main_test.go#L24",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-evidence--testfunctionalevidencefailsclosed",
     "Seconds": 0
   },
@@ -1237,8 +1237,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/evidence",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/evidence/main_test.go#L24",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/evidence/main_test.go#L24",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-evidence--testfunctionalevidencefailsclosed-failed",
     "Seconds": 0
   },
@@ -1248,8 +1248,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/evidence",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/evidence/main_test.go#L24",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/evidence/main_test.go#L24",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-evidence--testfunctionalevidencefailsclosed-missing",
     "Seconds": 0
   },
@@ -1259,8 +1259,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/evidence",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/evidence/main_test.go#L24",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/evidence/main_test.go#L24",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-evidence--testfunctionalevidencefailsclosed-missing-package-result",
     "Seconds": 0
   },
@@ -1270,8 +1270,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/evidence",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/evidence/main_test.go#L24",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/evidence/main_test.go#L24",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-evidence--testfunctionalevidencefailsclosed-passed",
     "Seconds": 0
   },
@@ -1281,8 +1281,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/evidence",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/evidence/main_test.go#L24",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/evidence/main_test.go#L24",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-evidence--testfunctionalevidencefailsclosed-skipped",
     "Seconds": 0
   },
@@ -1292,10 +1292,21 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/evidence",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/evidence/main_test.go#L50",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/evidence/main_test.go#L50",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-evidence--testreportescapesinputandretainsfailure",
     "Seconds": 0
+  },
+  {
+    "Suite": "unit",
+    "Name": "TestPublicExtensionRejectsRawConversationAndRevisionMismatch",
+    "Package": "github.com/newdarwindev/firm-payments/tools/requirements-site",
+    "Asserts": "",
+    "Status": "pass",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/requirements-site/main_test.go#L210",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
+    "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-requirements-site--testpublicextensionrejectsrawconversationandrevisionmismatch",
+    "Seconds": 0.01
   },
   {
     "Suite": "unit",
@@ -1303,8 +1314,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/requirements-site",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/requirements-site/main_test.go#L65",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/requirements-site/main_test.go#L65",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-requirements-site--testsiteartifactintegrityrejectstamperingandunlistedfiles",
     "Seconds": 0
   },
@@ -1314,10 +1325,10 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/requirements-site",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/requirements-site/main_test.go#L180",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/requirements-site/main_test.go#L180",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-requirements-site--testsiteevidencerejectsstalefailedandincompleteruns",
-    "Seconds": 0.01
+    "Seconds": 0
   },
   {
     "Suite": "unit",
@@ -1325,8 +1336,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/requirements-site",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/requirements-site/main_test.go#L180",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/requirements-site/main_test.go#L180",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-requirements-site--testsiteevidencerejectsstalefailedandincompleteruns-cancelled-conversation",
     "Seconds": 0
   },
@@ -1336,8 +1347,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/requirements-site",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/requirements-site/main_test.go#L180",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/requirements-site/main_test.go#L180",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-requirements-site--testsiteevidencerejectsstalefailedandincompleteruns-failed-service",
     "Seconds": 0
   },
@@ -1347,8 +1358,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/requirements-site",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/requirements-site/main_test.go#L180",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/requirements-site/main_test.go#L180",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-requirements-site--testsiteevidencerejectsstalefailedandincompleteruns-missing-artifacts",
     "Seconds": 0
   },
@@ -1358,8 +1369,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/requirements-site",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/requirements-site/main_test.go#L180",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/requirements-site/main_test.go#L180",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-requirements-site--testsiteevidencerejectsstalefailedandincompleteruns-stale-source",
     "Seconds": 0
   },
@@ -1369,8 +1380,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/requirements-site",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/requirements-site/main_test.go#L180",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/requirements-site/main_test.go#L180",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-requirements-site--testsiteevidencerejectsstalefailedandincompleteruns-stale-workflow",
     "Seconds": 0
   },
@@ -1380,8 +1391,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/requirements-site",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/requirements-site/main_test.go#L180",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/requirements-site/main_test.go#L180",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-requirements-site--testsiteevidencerejectsstalefailedandincompleteruns-unknown-mode",
     "Seconds": 0
   },
@@ -1391,8 +1402,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/requirements-site",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/requirements-site/main_test.go#L138",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/requirements-site/main_test.go#L138",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-requirements-site--testsiteinternallinksandpublicallowlistfailclosed",
     "Seconds": 0.01
   },
@@ -1402,8 +1413,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/requirements-site",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/requirements-site/main_test.go#L107",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/requirements-site/main_test.go#L107",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-requirements-site--testsitemarkdowndoesnotexecutehtmlorscripturls",
     "Seconds": 0
   },
@@ -1413,10 +1424,10 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/requirements-site",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/requirements-site/main_test.go#L28",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/requirements-site/main_test.go#L28",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-requirements-site--testsiterecitalandreferencescoveroriginaltask",
-    "Seconds": 0.07
+    "Seconds": 0.04
   },
   {
     "Suite": "unit",
@@ -1424,8 +1435,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/requirements-site",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/requirements-site/main_test.go#L58",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/requirements-site/main_test.go#L58",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-requirements-site--testsiterecitalrejectsduplicateandemptyrows",
     "Seconds": 0
   },
@@ -1435,8 +1446,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/requirements-site",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/requirements-site/main_test.go#L84",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/requirements-site/main_test.go#L84",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-requirements-site--testsiteresultstreamrequirespassingpackageandnoskippedtests",
     "Seconds": 0
   },
@@ -1446,8 +1457,8 @@
     "Package": "github.com/newdarwindev/firm-payments/tools/requirements-site",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/tools/requirements-site/main_test.go#L164",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066/artifacts/13012875137",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tools/requirements-site/main_test.go#L164",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903/artifacts/13042181869",
     "Anchor": "unit-github-com-newdarwindev-firm-payments-tools-requirements-site--testsitesourcereferencesresolvemethodsandnamedcases",
     "Seconds": 0.01
   },
@@ -1457,10 +1468,10 @@
     "Package": "github.com/newdarwindev/firm-payments/docs/internal/dialog",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/docs/internal/dialog/dialog_test.go#L33",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961095/artifacts/13012356310",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/docs/internal/dialog/dialog_test.go#L33",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870754/artifacts/13041729632",
     "Anchor": "exporter-github-com-newdarwindev-firm-payments-docs-internal-dialog--testbackupbuildandtamperdetection",
-    "Seconds": 0.02
+    "Seconds": 0.01
   },
   {
     "Suite": "exporter",
@@ -1468,8 +1479,8 @@
     "Package": "github.com/newdarwindev/firm-payments/docs/internal/dialog",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/docs/internal/dialog/dialog_test.go#L121",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961095/artifacts/13012356310",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/docs/internal/dialog/dialog_test.go#L121",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870754/artifacts/13041729632",
     "Anchor": "exporter-github-com-newdarwindev-firm-payments-docs-internal-dialog--testpdflogfailsclosed",
     "Seconds": 0
   },
@@ -1479,8 +1490,8 @@
     "Package": "github.com/newdarwindev/firm-payments/docs/internal/dialog",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/docs/internal/dialog/dialog_test.go#L121",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961095/artifacts/13012356310",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/docs/internal/dialog/dialog_test.go#L121",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870754/artifacts/13041729632",
     "Anchor": "exporter-github-com-newdarwindev-firm-payments-docs-internal-dialog--testpdflogfailsclosed-complete",
     "Seconds": 0
   },
@@ -1490,8 +1501,8 @@
     "Package": "github.com/newdarwindev/firm-payments/docs/internal/dialog",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/docs/internal/dialog/dialog_test.go#L121",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961095/artifacts/13012356310",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/docs/internal/dialog/dialog_test.go#L121",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870754/artifacts/13041729632",
     "Anchor": "exporter-github-com-newdarwindev-firm-payments-docs-internal-dialog--testpdflogfailsclosed-empty",
     "Seconds": 0
   },
@@ -1501,8 +1512,8 @@
     "Package": "github.com/newdarwindev/firm-payments/docs/internal/dialog",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/docs/internal/dialog/dialog_test.go#L121",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961095/artifacts/13012356310",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/docs/internal/dialog/dialog_test.go#L121",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870754/artifacts/13041729632",
     "Anchor": "exporter-github-com-newdarwindev-firm-payments-docs-internal-dialog--testpdflogfailsclosed-horizontal-overflow",
     "Seconds": 0
   },
@@ -1512,8 +1523,8 @@
     "Package": "github.com/newdarwindev/firm-payments/docs/internal/dialog",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/docs/internal/dialog/dialog_test.go#L121",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961095/artifacts/13012356310",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/docs/internal/dialog/dialog_test.go#L121",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870754/artifacts/13041729632",
     "Anchor": "exporter-github-com-newdarwindev-firm-payments-docs-internal-dialog--testpdflogfailsclosed-missing-glyph",
     "Seconds": 0
   },
@@ -1523,8 +1534,8 @@
     "Package": "github.com/newdarwindev/firm-payments/docs/internal/dialog",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/docs/internal/dialog/dialog_test.go#L121",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961095/artifacts/13012356310",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/docs/internal/dialog/dialog_test.go#L121",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870754/artifacts/13041729632",
     "Anchor": "exporter-github-com-newdarwindev-firm-payments-docs-internal-dialog--testpdflogfailsclosed-vertical-overflow",
     "Seconds": 0
   },
@@ -1534,8 +1545,8 @@
     "Package": "github.com/newdarwindev/firm-payments/docs/internal/dialog",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/docs/internal/dialog/dialog_test.go#L94",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961095/artifacts/13012356310",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/docs/internal/dialog/dialog_test.go#L94",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870754/artifacts/13041729632",
     "Anchor": "exporter-github-com-newdarwindev-firm-payments-docs-internal-dialog--testrecoverinterruptedmanifestwrite",
     "Seconds": 0
   },
@@ -1545,8 +1556,8 @@
     "Package": "github.com/newdarwindev/firm-payments/docs/internal/dialog",
     "Asserts": "",
     "Status": "pass",
-    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/bd252f504e289f53cbc901fcc039b9d1cf90c8d8/docs/internal/dialog/dialog_test.go#L17",
-    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961095/artifacts/13012356310",
+    "SourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/docs/internal/dialog/dialog_test.go#L17",
+    "ArtifactURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870754/artifacts/13041729632",
     "Anchor": "exporter-github-com-newdarwindev-firm-payments-docs-internal-dialog--testselectkeepsoriginalbytesandcompleterecords",
     "Seconds": 0
   }

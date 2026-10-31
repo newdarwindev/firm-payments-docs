@@ -1,0 +1,7 @@
+go tool test2json -t -p github.com/newdarwindev/firm-payments/docs/internal/dialog /home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/83f04d902701b3fe.test -test.v=test2json -test.count=1 -test.timeout=180s -test.run=^TestSelectKeepsOriginalBytesAndCompleteRecords$ -test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/exporter-c98dfc08b963b05a/coverage.out
+=== RUN   TestSelectKeepsOriginalBytesAndCompleteRecords
+--- PASS: TestSelectKeepsOriginalBytesAndCompleteRecords (0.00s)
+PASS
+coverage: 10.1% of statements
+
+Exit status: 0

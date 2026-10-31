@@ -1,0 +1,442 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>dialog: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/newdarwindev/firm-payments/docs/internal/dialog/dialog.go (3.7%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">// Package dialog preserves conversation records and generates a literal-text PDF source.
+package dialog
+
+import (
+        "bytes"
+        "crypto/sha256"
+        "encoding/hex"
+        "encoding/json"
+        "errors"
+        "fmt"
+        "os"
+        "path/filepath"
+        "sort"
+        "strings"
+        "syscall"
+        "time"
+)
+
+type Record struct {
+        Type    string `json:"type"`
+        Payload struct {
+                Type    string `json:"type"`
+                Role    string `json:"role"`
+                Channel string `json:"channel"`
+                Content []struct {
+                        Type string `json:"type"`
+                        Text string `json:"text"`
+                } `json:"content"`
+        } `json:"payload"`
+}
+
+type Entry struct {
+        File         string `json:"file"`
+        SHA256       string `json:"sha256"`
+        Bytes        int    `json:"bytes"`
+        Records      int    `json:"records"`
+        SourceSHA256 string `json:"source_sha256"`
+        SourceBytes  int    `json:"source_bytes"`
+        CapturedAt   string `json:"captured_at"`
+}
+
+type Manifest struct {
+        Schema int     `json:"schema"`
+        Scope  string  `json:"scope"`
+        Files  []Entry `json:"files"`
+}
+
+type Message struct {
+        Role   string `json:"role"`
+        Text   string `json:"text"`
+        Source string `json:"source"`
+        Record int    `json:"record"`
+}
+
+func hash(b []byte) string { <span class="cov0" title="0">x := sha256.Sum256(b); return hex.EncodeToString(x[:]) }</span>
+
+// Select preserves each original complete conversation/tool JSONL record byte-for-byte.
+// Runtime metadata, configuration and private reasoning are not conversation exports.
+func Select(source []byte) ([]byte, int, error) {
+        <span class="cov0" title="0">var out bytes.Buffer
+        count := 0
+        lines := bytes.SplitAfter(source, []byte("\n"))
+        for i, line := range lines </span>{
+                <span class="cov0" title="0">if len(line) == 0 </span>{
+                        <span class="cov0" title="0">continue</span>
+                }
+                <span class="cov0" title="0">if line[len(line)-1] != '\n' </span>{
+                        <span class="cov0" title="0">break</span>
+                } // source writer may be midway through its last record
+                <span class="cov0" title="0">var rec Record
+                if err := json.Unmarshal(line, &amp;rec); err != nil </span>{
+                        <span class="cov0" title="0">return nil, 0, fmt.Errorf("record %d: %w", i+1, err)
+</span>                }
+                <span class="cov0" title="0">if rec.Type != "response_item" </span>{
+                        <span class="cov0" title="0">continue</span>
+                }
+                <span class="cov0" title="0">p := rec.Payload
+                keep := p.Type == "message" &amp;&amp; (p.Role == "user" || p.Role == "assistant") &amp;&amp; p.Channel != "analysis"
+                switch p.Type </span>{
+                case "function_call", "function_call_output", "custom_tool_call", "custom_tool_call_output":
+                        <span class="cov0" title="0">keep = true</span>
+                }
+                <span class="cov0" title="0">if keep </span>{
+                        <span class="cov0" title="0">out.Write(line)
+                        count++
+</span>                }
+        }
+        <span class="cov0" title="0">return out.Bytes(), count, nil</span>
+}
+
+func atomicWrite(name string, b []byte) error {
+        <span class="cov0" title="0">if err := os.MkdirAll(filepath.Dir(name), 0o755); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">f, err := os.CreateTemp(filepath.Dir(name), ".export-*")
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">tmp := f.Name()
+        defer func() </span>{ <span class="cov0" title="0">_ = os.Remove(tmp) }</span>()
+        <span class="cov0" title="0">if _, err := f.Write(b); err != nil </span>{
+                <span class="cov0" title="0">_ = f.Close()
+                return err
+</span>        }
+        <span class="cov0" title="0">if err := f.Sync(); err != nil </span>{
+                <span class="cov0" title="0">_ = f.Close()
+                return err
+</span>        }
+        <span class="cov0" title="0">if err := f.Close(); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">if err := os.Chmod(tmp, 0o644); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">return os.Rename(tmp, name)</span>
+}
+
+// Sync exports only explicitly registered sessions; it never scans unrelated dialogue.
+func Sync(repo string) error {
+        <span class="cov0" title="0">lock, err := os.OpenFile(filepath.Join(repo, ".local", "dialog-sync.lock"), os.O_CREATE|os.O_RDWR, 0o600)
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">defer func() </span>{ <span class="cov0" title="0">_ = lock.Close() }</span>()
+        <span class="cov0" title="0">if err := syscall.Flock(int(lock.Fd()), syscall.LOCK_EX); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">defer func() </span>{ <span class="cov0" title="0">_ = syscall.Flock(int(lock.Fd()), syscall.LOCK_UN) }</span>()
+        <span class="cov0" title="0">list, err := os.ReadFile(filepath.Join(repo, ".local", "conversation-sources"))
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">dir := filepath.Join(repo, "docs", "conversations")
+        m := Manifest{Schema: 1, Scope: "Original user/assistant and tool response_item records; no rewriting. Runtime/configuration records excluded."}
+        old := Manifest{}
+        if b, err := os.ReadFile(filepath.Join(dir, "manifest.json")); err == nil </span>{
+                <span class="cov0" title="0">if err := json.Unmarshal(b, &amp;old); err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+        }
+        <span class="cov0" title="0">entries := map[string]Entry{}
+        for _, e := range old.Files </span>{
+                <span class="cov0" title="0">entries[e.File] = e
+</span>        }
+        <span class="cov0" title="0">found := false
+        for _, source := range strings.Split(strings.TrimSpace(string(list)), "\n") </span>{
+                <span class="cov0" title="0">if source == "" </span>{
+                        <span class="cov0" title="0">continue</span>
+                }
+                <span class="cov0" title="0">found = true
+                b, err := os.ReadFile(source)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">raw, count, err := Select(b)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">if count == 0 </span>{
+                        <span class="cov0" title="0">return fmt.Errorf("no conversation records in %s", source)
+</span>                }
+                <span class="cov0" title="0">name := filepath.Base(source)
+                if !strings.HasSuffix(name, ".jsonl") </span>{
+                        <span class="cov0" title="0">return errors.New("source must be a JSONL session")
+</span>                }
+                <span class="cov0" title="0">relative := "raw/" + name
+                previous, err := os.ReadFile(filepath.Join(dir, relative))
+                if err != nil &amp;&amp; !errors.Is(err, os.ErrNotExist) </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">if !bytes.HasPrefix(raw, previous) </span>{
+                        <span class="cov0" title="0">return fmt.Errorf("source history changed: %s; preserve old export and investigate", name)
+</span>                }
+                <span class="cov0" title="0">existing, recorded := entries[relative]
+                if bytes.Equal(previous, raw) &amp;&amp; recorded &amp;&amp; existing.SHA256 == hash(raw) &amp;&amp; existing.Bytes == len(raw) &amp;&amp; existing.Records == count </span>{
+                        <span class="cov0" title="0">continue</span>
+                }
+                <span class="cov0" title="0">if !bytes.Equal(previous, raw) </span>{
+                        <span class="cov0" title="0">if err := atomicWrite(filepath.Join(dir, relative), raw); err != nil </span>{
+                                <span class="cov0" title="0">return err
+</span>                        }
+                }
+                <span class="cov0" title="0">entries[relative] = Entry{File: relative, SHA256: hash(raw), Bytes: len(raw), Records: count, SourceSHA256: hash(b), SourceBytes: len(b), CapturedAt: time.Now().UTC().Format(time.RFC3339)}</span>
+        }
+        <span class="cov0" title="0">if !found </span>{
+                <span class="cov0" title="0">return errors.New("no registered project sessions")
+</span>        }
+        <span class="cov0" title="0">for _, e := range entries </span>{
+                <span class="cov0" title="0">m.Files = append(m.Files, e)
+</span>        }
+        <span class="cov0" title="0">sort.Slice(m.Files, func(i, j int) bool </span>{ <span class="cov0" title="0">return m.Files[i].File &lt; m.Files[j].File }</span>)
+        <span class="cov0" title="0">out, err := json.MarshalIndent(m, "", "  ")
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">return atomicWrite(filepath.Join(dir, "manifest.json"), append(out, '\n'))</span>
+}
+
+// Verify checks every exported file, checksum and declared record count.
+func Verify(dir string) (Manifest, error) {
+        <span class="cov0" title="0">var m Manifest
+        b, err := os.ReadFile(filepath.Join(dir, "manifest.json"))
+        if err != nil </span>{
+                <span class="cov0" title="0">return m, err
+</span>        }
+        <span class="cov0" title="0">if err := json.Unmarshal(b, &amp;m); err != nil </span>{
+                <span class="cov0" title="0">return m, err
+</span>        }
+        <span class="cov0" title="0">if m.Schema != 1 || len(m.Files) == 0 </span>{
+                <span class="cov0" title="0">return m, errors.New("missing conversation manifest entries")
+</span>        }
+        <span class="cov0" title="0">seen := map[string]bool{}
+        for _, e := range m.Files </span>{
+                <span class="cov0" title="0">if filepath.Dir(e.File) != "raw" || filepath.Base(e.File) != strings.TrimPrefix(e.File, "raw/") </span>{
+                        <span class="cov0" title="0">return m, errors.New("unsafe manifest path")
+</span>                }
+                <span class="cov0" title="0">if seen[e.File] </span>{
+                        <span class="cov0" title="0">return m, errors.New("duplicate manifest entry")
+</span>                }
+                <span class="cov0" title="0">seen[e.File] = true
+                raw, err := os.ReadFile(filepath.Join(dir, e.File))
+                if err != nil </span>{
+                        <span class="cov0" title="0">return m, err
+</span>                }
+                <span class="cov0" title="0">selected, count, err := Select(raw)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return m, err
+</span>                }
+                <span class="cov0" title="0">if e.SHA256 != hash(raw) || e.Bytes != len(raw) || e.Records != count || !bytes.Equal(selected, raw) </span>{
+                        <span class="cov0" title="0">return m, fmt.Errorf("integrity mismatch: %s", e.File)
+</span>                }
+        }
+        <span class="cov0" title="0">actual, err := filepath.Glob(filepath.Join(dir, "raw", "*.jsonl"))
+        if err != nil </span>{
+                <span class="cov0" title="0">return m, err
+</span>        }
+        <span class="cov0" title="0">if len(actual) != len(m.Files) </span>{
+                <span class="cov0" title="0">return m, errors.New("unmanifested raw export")
+</span>        }
+        <span class="cov0" title="0">return m, nil</span>
+}
+
+// Build leaves message text untouched and feeds it to TeX as verbatim file input.
+// Dialogue cannot inject LaTeX commands, even when it contains TeX terminators.
+func Build(dir, out string) error {
+        <span class="cov0" title="0">m, err := Verify(dir)
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">if err := os.MkdirAll(filepath.Join(out, "messages"), 0o755); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">var messages []Message
+        for _, e := range m.Files </span>{
+                <span class="cov0" title="0">raw, err := os.ReadFile(filepath.Join(dir, e.File))
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">for i, line := range bytes.Split(bytes.TrimSuffix(raw, []byte("\n")), []byte("\n")) </span>{
+                        <span class="cov0" title="0">var rec Record
+                        if err := json.Unmarshal(line, &amp;rec); err != nil </span>{
+                                <span class="cov0" title="0">return err
+</span>                        }
+                        <span class="cov0" title="0">p := rec.Payload
+                        if p.Type != "message" </span>{
+                                <span class="cov0" title="0">continue</span>
+                        }
+                        <span class="cov0" title="0">var text strings.Builder
+                        for _, c := range p.Content </span>{
+                                <span class="cov0" title="0">switch c.Type </span>{
+                                case "input_text", "output_text", "text":
+                                        <span class="cov0" title="0">text.WriteString(c.Text)</span>
+                                default:
+                                        <span class="cov0" title="0">return fmt.Errorf("unsupported message content %q; export retained, PDF build stopped", c.Type)</span>
+                                }
+                        }
+                        <span class="cov0" title="0">messages = append(messages, Message{Role: p.Role, Text: text.String(), Source: e.File, Record: i + 1})</span>
+                }
+        }
+        <span class="cov0" title="0">if len(messages) == 0 </span>{
+                <span class="cov0" title="0">return errors.New("no dialogue messages")
+</span>        }
+        <span class="cov0" title="0">b, err := json.MarshalIndent(messages, "", "  ")
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">if err := atomicWrite(filepath.Join(out, "dialogue.json"), append(b, '\n')); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">fonts := "\\RequirePackage{fontspec}\n\\setmainfont{DejaVu Serif}\n\\setsansfont{DejaVu Sans}\n\\setmonofont{DejaVu Sans Mono}\n"
+        if err := atomicWrite(filepath.Join(out, "fonts.tex"), []byte(fonts)); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">var tex strings.Builder
+        tex.WriteString("\\documentclass[english,use theme=ChatGPT-classical-dark,load-custom-font-file=fonts.tex]{Q-and-A}\n\\usepackage{fvextra}\n\\setmainfont{DejaVu Serif}\n\\setsansfont{DejaVu Sans}\n\\setmonofont{DejaVu Sans Mono}\n\\SetLogoCode[Q]{\\textbf{User}}\n\\SetLogoCode[A]{\\textbf{Codex}}\n\\begin{document}\n\\section*{Project conversation}\nOriginal dialogue text; tool records are included in the companion raw JSONL archive.\\par\n")
+        for i, msg := range messages </span>{
+                <span class="cov0" title="0">name := fmt.Sprintf("messages/%06d.txt", i+1)
+                if err := atomicWrite(filepath.Join(out, name), []byte(msg.Text)); err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">env := "QA_A"
+                if msg.Role == "user" </span>{
+                        <span class="cov0" title="0">env = "QA_Q"
+</span>                }
+                <span class="cov0" title="0">fmt.Fprintf(&amp;tex, "\\begin{%s}\n\\VerbatimInput[fontsize=\\footnotesize,breaklines=true,breakanywhere=true]{%s}\n\\end{%s}\n", env, name, env)</span>
+        }
+        <span class="cov0" title="0">tex.WriteString("\\end{document}\n")
+        if err := atomicWrite(filepath.Join(out, "conversation.tex"), []byte(tex.String())); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">return atomicWrite(filepath.Join(out, "index.html"), []byte("&lt;!doctype html&gt;&lt;html lang=\"en\"&gt;&lt;meta charset=\"utf-8\"&gt;&lt;title&gt;Conversation build&lt;/title&gt;&lt;h1&gt;Conversation build&lt;/h1&gt;&lt;ul&gt;&lt;li&gt;&lt;a href=\"conversation.pdf\"&gt;Q-and-A PDF&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=\"conversation.tex\"&gt;LaTeX source&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=\"dialogue.json\"&gt;Exact dialogue text and provenance&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=\"raw-exports.zip\"&gt;Raw conversation and tool records&lt;/a&gt;&lt;/li&gt;&lt;li&gt;&lt;a href=\"manifest.json\"&gt;Integrity manifest&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/html&gt;\n"))</span>
+}
+
+// CheckPDFLog rejects layout/glyph failures and incomplete compiler output.
+func CheckPDFLog(name string) error {
+        <span class="cov10" title="2">b, err := os.ReadFile(name)
+        if err != nil </span>{
+                <span class="cov1" title="1">return err
+</span>        }
+        <span class="cov1" title="1">text := string(b)
+        for _, failure := range []string{"Missing character:", "Overfull \\hbox", "Overfull \\vbox"} </span>{
+                <span class="cov10" title="2">if strings.Contains(text, failure) </span>{
+                        <span class="cov1" title="1">return fmt.Errorf("PDF quality check failed: %s", failure)
+</span>                }
+        }
+        <span class="cov0" title="0">if !strings.Contains(text, "Output written on conversation.pdf") </span>{
+                <span class="cov0" title="0">return errors.New("PDF log has no successful output marker")
+</span>        }
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

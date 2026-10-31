@@ -1,0 +1,8 @@
+go tool test2json -t -p github.com/newdarwindev/firm-payments/internal/httpapi /home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/1e51f7ae8228a333.test -test.v=test2json -test.count=1 -test.timeout=180s -test.run=^TestFailureMappingAndReadiness$ -test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/unit-ef1513aea19aa46b/coverage.out
+=== RUN   TestFailureMappingAndReadiness
+2026/10/31 12:20:45 ERROR payment failed error="private SQL details"
+--- PASS: TestFailureMappingAndReadiness (0.00s)
+PASS
+coverage: 66.2% of statements
+
+Exit status: 0

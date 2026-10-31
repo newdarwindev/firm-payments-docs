@@ -1,0 +1,9 @@
+go tool test2json -t -p github.com/newdarwindev/firm-payments/tests /home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/59830ebc3a418411.test -test.v=test2json -test.count=1 -test.timeout=180s -test.run=^TestPagesPublicationProvenance$/^stale$ -test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/unit-473ac4867bd52477/coverage.out
+=== RUN   TestPagesPublicationProvenance
+=== RUN   TestPagesPublicationProvenance/stale
+--- PASS: TestPagesPublicationProvenance/stale (0.01s)
+--- PASS: TestPagesPublicationProvenance (0.01s)
+PASS
+coverage: [no statements]
+
+Exit status: 0

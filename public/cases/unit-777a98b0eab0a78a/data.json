@@ -1,0 +1,439 @@
+{
+  "id": "unit-777a98b0eab0a78a",
+  "suite": "unit",
+  "name": "TestRequestBoundary/media",
+  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "status": "pass",
+  "asserts": "",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/internal/httpapi/handler_test.go#L25",
+  "package": "github.com/newdarwindev/firm-payments/internal/httpapi",
+  "command": [
+    "go",
+    "tool",
+    "test2json",
+    "-t",
+    "-p",
+    "github.com/newdarwindev/firm-payments/internal/httpapi",
+    "/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/1e51f7ae8228a333.test",
+    "-test.v=test2json",
+    "-test.count=1",
+    "-test.timeout=180s",
+    "-test.run=^TestRequestBoundary$/^media$",
+    "-test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/unit-777a98b0eab0a78a/coverage.out"
+  ],
+  "build": [
+    "go",
+    "test",
+    "-c",
+    "-o",
+    "/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/1e51f7ae8228a333.test",
+    "-cover",
+    "-covermode=atomic",
+    "."
+  ],
+  "binarySHA256": "96d98823f10266c1a87af470da8ccc55ee566b992786d2989931be874f636bff",
+  "selected": "TestRequestBoundary/media",
+  "executed": [
+    "TestRequestBoundary",
+    "TestRequestBoundary/media"
+  ],
+  "group": false,
+  "scope": "Go package test; includes parent setup and teardown. Unit tests may use test doubles. Full-suite race checks run separately.",
+  "total": 71,
+  "covered": 14,
+  "files": [
+    {
+      "path": "internal/httpapi/handler.go",
+      "sha256": "88735bc861d5de82104c8490b718c51e031bf771dfeed4404af95002bb2b5313",
+      "source": "// Package httpapi exposes the shared public and private payment transport.\npackage httpapi\n\nimport (\n\t\"context\"\n\t\"encoding/json\"\n\t\"errors\"\n\t\"io\"\n\t\"log/slog\"\n\t\"mime\"\n\t\"net/http\"\n\t\"time\"\n\n\t\"github.com/newdarwindev/firm-payments/internal/contracts\"\n)\n\ntype Processor interface {\n\tExecute(context.Context, contracts.BulkRequest) error\n}\n\nfunc Handler(service, route string, processor Processor, ready func(context.Context) error) http.Handler {\n\tmux := http.NewServeMux()\n\tmux.HandleFunc(\"GET /healthz\", func(w http.ResponseWriter, _ *http.Request) {\n\t\twriteJSON(w, http.StatusOK, map[string]string{\"status\": \"alive\", \"service\": service})\n\t})\n\tmux.HandleFunc(\"GET /readyz\", func(w http.ResponseWriter, r *http.Request) {\n\t\tctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)\n\t\tdefer cancel()\n\t\tif err := ready(ctx); err != nil {\n\t\t\twriteFailure(w, http.StatusServiceUnavailable, \"unavailable\", \"dependency not ready\")\n\t\t\treturn\n\t\t}\n\t\twriteJSON(w, http.StatusOK, map[string]string{\"status\": \"ready\"})\n\t})\n\tmux.HandleFunc(\"POST \"+route, func(w http.ResponseWriter, r *http.Request) {\n\t\tif header := r.Header.Get(\"Content-Type\"); header != \"\" {\n\t\t\tmedia, _, err := mime.ParseMediaType(header)\n\t\t\tif err != nil || media != \"application/json\" {\n\t\t\t\twriteFailure(w, 415, \"unsupported_media_type\", \"use application/json\")\n\t\t\t\treturn\n\t\t\t}\n\t\t}\n\t\tr.Body = http.MaxBytesReader(w, r.Body, contracts.MaxBodyBytes)\n\t\tdecoder := json.NewDecoder(r.Body)\n\t\tdecoder.DisallowUnknownFields()\n\t\tvar wire wireRequest\n\t\tif err := decoder.Decode(&wire); err != nil {\n\t\t\tdecodeFailure(w, err)\n\t\t\treturn\n\t\t}\n\t\tvar extra any\n\t\tif err := decoder.Decode(&extra); !errors.Is(err, io.EOF) {\n\t\t\tif err == nil {\n\t\t\t\twriteFailure(w, 400, \"invalid_json\", \"exactly one JSON document is required\")\n\t\t\t} else {\n\t\t\t\tdecodeFailure(w, err)\n\t\t\t}\n\t\t\treturn\n\t\t}\n\t\treq, valid := wire.request()\n\t\tif !valid {\n\t\t\twriteFailure(w, 422, \"invalid_request\", \"all request and payment fields are required\")\n\t\t\treturn\n\t\t}\n\t\tif _, err := contracts.Prepare(req); err != nil {\n\t\t\twriteFailure(w, 422, \"invalid_request\", err.Error())\n\t\t\treturn\n\t\t}\n\t\tctx, cancel := context.WithTimeout(r.Context(), 6*time.Second)\n\t\tdefer cancel()\n\t\tif err := processor.Execute(ctx, req); err != nil {\n\t\t\trespondError(ctx, w, err)\n\t\t\treturn\n\t\t}\n\t\tw.WriteHeader(http.StatusCreated)\n\t})\n\treturn mux\n}\n\nfunc decodeFailure(w http.ResponseWriter, err error) {\n\tvar tooLarge *http.MaxBytesError\n\tif errors.As(err, &tooLarge) {\n\t\twriteFailure(w, 413, \"request_too_large\", \"request body exceeds 1 MiB\")\n\t} else {\n\t\twriteFailure(w, 400, \"invalid_json\", \"request must match the JSON payment structure\")\n\t}\n}\n\nfunc respondError(ctx context.Context, w http.ResponseWriter, err error) {\n\tstatus, code, message := http.StatusInternalServerError, \"internal_error\", \"payment could not be completed\"\n\tswitch {\n\tcase errors.Is(err, context.DeadlineExceeded):\n\t\tstatus, code, message = 504, \"timeout\", \"payment outcome may be uncertain; do not retry automatically\"\n\tcase errors.Is(err, context.Canceled):\n\t\tstatus, code, message = 503, \"unavailable\", \"request was cancelled; payment outcome may be uncertain\"\n\tcase errors.Is(err, contracts.ErrInvalidRequest):\n\t\tstatus, code, message = 422, \"invalid_request\", contracts.ErrInvalidRequest.Error()\n\tcase errors.Is(err, contracts.ErrUnknownFirm):\n\t\tstatus, code, message = 422, \"unknown_firm\", contracts.ErrUnknownFirm.Error()\n\tcase errors.Is(err, contracts.ErrInsufficientFunds):\n\t\tstatus, code, message = 422, \"insufficient_funds\", contracts.ErrInsufficientFunds.Error()\n\tcase errors.Is(err, contracts.ErrBalanceOverflow):\n\t\tstatus, code, message = 422, \"balance_overflow\", contracts.ErrBalanceOverflow.Error()\n\tcase errors.Is(err, contracts.ErrUnavailable):\n\t\tstatus, code, message = 503, \"unavailable\", \"ledger unavailable; a lost response can leave the payment outcome uncertain\"\n\tdefault:\n\t\tslog.ErrorContext(ctx, \"payment failed\", \"error\", err)\n\t}\n\twriteFailure(w, status, code, message)\n}\nfunc writeFailure(w http.ResponseWriter, status int, code, message string) {\n\twriteJSON(w, status, contracts.ErrorResponse{Error: contracts.ErrorDetail{Code: code, Message: message}})\n}\nfunc writeJSON(w http.ResponseWriter, status int, v any) {\n\tw.Header().Set(\"Content-Type\", \"application/json\")\n\tw.WriteHeader(status)\n\tif err := json.NewEncoder(w).Encode(v); err != nil {\n\t\tslog.Error(\"write response\", \"error\", err)\n\t}\n}\n\n// Pointer fields distinguish an explicitly empty description from an absent field.\ntype wireRequest struct {\n\tPayer    *string        `json:\"payer_firm_uuid\"`\n\tPayments *[]wirePayment `json:\"payments\"`\n}\ntype wirePayment struct {\n\tAmount      *string `json:\"amount\"`\n\tPayee       *string `json:\"payee_firm_uuid\"`\n\tDescription *string `json:\"description\"`\n}\n\nfunc (w wireRequest) request() (contracts.BulkRequest, bool) {\n\tif w.Payer == nil || w.Payments == nil {\n\t\treturn contracts.BulkRequest{}, false\n\t}\n\treq := contracts.BulkRequest{PayerFirmUUID: *w.Payer}\n\tfor _, p := range *w.Payments {\n\t\tif p.Amount == nil || p.Payee == nil || p.Description == nil {\n\t\t\treturn contracts.BulkRequest{}, false\n\t\t}\n\t\treq.Payments = append(req.Payments, contracts.Payment{Amount: *p.Amount, PayeeFirmUUID: *p.Payee, Description: *p.Description})\n\t}\n\treturn req, true\n}\n",
+      "blocks": [
+        {
+          "startLine": 22,
+          "startColumn": 2,
+          "endLine": 23,
+          "endColumn": 78,
+          "statements": 2,
+          "count": 1
+        },
+        {
+          "startLine": 24,
+          "startColumn": 3,
+          "endLine": 25,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 26,
+          "startColumn": 2,
+          "endLine": 26,
+          "endColumn": 77,
+          "statements": 1,
+          "count": 1
+        },
+        {
+          "startLine": 27,
+          "startColumn": 3,
+          "endLine": 29,
+          "endColumn": 36,
+          "statements": 3,
+          "count": 0
+        },
+        {
+          "startLine": 30,
+          "startColumn": 4,
+          "endLine": 32,
+          "endColumn": 1,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 33,
+          "startColumn": 3,
+          "endLine": 33,
+          "endColumn": 68,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 35,
+          "startColumn": 2,
+          "endLine": 35,
+          "endColumn": 77,
+          "statements": 1,
+          "count": 1
+        },
+        {
+          "startLine": 36,
+          "startColumn": 3,
+          "endLine": 36,
+          "endColumn": 59,
+          "statements": 1,
+          "count": 1
+        },
+        {
+          "startLine": 37,
+          "startColumn": 4,
+          "endLine": 38,
+          "endColumn": 49,
+          "statements": 2,
+          "count": 1
+        },
+        {
+          "startLine": 39,
+          "startColumn": 5,
+          "endLine": 41,
+          "endColumn": 1,
+          "statements": 2,
+          "count": 1
+        },
+        {
+          "startLine": 43,
+          "startColumn": 3,
+          "endLine": 47,
+          "endColumn": 47,
+          "statements": 5,
+          "count": 0
+        },
+        {
+          "startLine": 48,
+          "startColumn": 4,
+          "endLine": 50,
+          "endColumn": 1,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 51,
+          "startColumn": 3,
+          "endLine": 52,
+          "endColumn": 61,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 53,
+          "startColumn": 4,
+          "endLine": 53,
+          "endColumn": 18,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 54,
+          "startColumn": 5,
+          "endLine": 55,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 56,
+          "startColumn": 5,
+          "endLine": 57,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 58,
+          "startColumn": 4,
+          "endLine": 58,
+          "endColumn": 10,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 60,
+          "startColumn": 3,
+          "endLine": 61,
+          "endColumn": 13,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 62,
+          "startColumn": 4,
+          "endLine": 64,
+          "endColumn": 1,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 65,
+          "startColumn": 3,
+          "endLine": 65,
+          "endColumn": 51,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 66,
+          "startColumn": 4,
+          "endLine": 68,
+          "endColumn": 1,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 69,
+          "startColumn": 3,
+          "endLine": 71,
+          "endColumn": 53,
+          "statements": 3,
+          "count": 0
+        },
+        {
+          "startLine": 72,
+          "startColumn": 4,
+          "endLine": 74,
+          "endColumn": 1,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 75,
+          "startColumn": 3,
+          "endLine": 75,
+          "endColumn": 36,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 77,
+          "startColumn": 2,
+          "endLine": 77,
+          "endColumn": 12,
+          "statements": 1,
+          "count": 1
+        },
+        {
+          "startLine": 81,
+          "startColumn": 2,
+          "endLine": 82,
+          "endColumn": 31,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 83,
+          "startColumn": 3,
+          "endLine": 84,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 85,
+          "startColumn": 3,
+          "endLine": 86,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 90,
+          "startColumn": 2,
+          "endLine": 91,
+          "endColumn": 9,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 93,
+          "startColumn": 3,
+          "endLine": 93,
+          "endColumn": 105,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 95,
+          "startColumn": 3,
+          "endLine": 95,
+          "endColumn": 104,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 97,
+          "startColumn": 3,
+          "endLine": 97,
+          "endColumn": 86,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 99,
+          "startColumn": 3,
+          "endLine": 99,
+          "endColumn": 80,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 101,
+          "startColumn": 3,
+          "endLine": 101,
+          "endColumn": 92,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 103,
+          "startColumn": 3,
+          "endLine": 103,
+          "endColumn": 88,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 105,
+          "startColumn": 3,
+          "endLine": 105,
+          "endColumn": 124,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 107,
+          "startColumn": 3,
+          "endLine": 107,
+          "endColumn": 57,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 109,
+          "startColumn": 2,
+          "endLine": 109,
+          "endColumn": 40,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 112,
+          "startColumn": 2,
+          "endLine": 113,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 1
+        },
+        {
+          "startLine": 115,
+          "startColumn": 2,
+          "endLine": 117,
+          "endColumn": 53,
+          "statements": 3,
+          "count": 1
+        },
+        {
+          "startLine": 118,
+          "startColumn": 3,
+          "endLine": 119,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 134,
+          "startColumn": 2,
+          "endLine": 134,
+          "endColumn": 41,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 135,
+          "startColumn": 3,
+          "endLine": 136,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 137,
+          "startColumn": 2,
+          "endLine": 138,
+          "endColumn": 32,
+          "statements": 2,
+          "count": 0
+        },
+        {
+          "startLine": 139,
+          "startColumn": 3,
+          "endLine": 139,
+          "endColumn": 64,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 140,
+          "startColumn": 4,
+          "endLine": 141,
+          "endColumn": 1,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 142,
+          "startColumn": 3,
+          "endLine": 142,
+          "endColumn": 130,
+          "statements": 1,
+          "count": 0
+        },
+        {
+          "startLine": 144,
+          "startColumn": 2,
+          "endLine": 144,
+          "endColumn": 18,
+          "statements": 1,
+          "count": 0
+        }
+      ]
+    }
+  ],
+  "profileSHA256": "48b4ac84880c1303984cbface82fc35340637694423128ffcd025a385e659d23",
+  "gifSHA256": "6a5a9639e066d39f8d2cecd7f9ab6b6e393a493355188ba0803e135c4d5b84a3"
+}

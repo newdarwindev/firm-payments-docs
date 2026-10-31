@@ -1,0 +1,18 @@
+mode: atomic
+github.com/newdarwindev/firm-payments/internal/money/money.go:15.2,16.74 2 1
+github.com/newdarwindev/firm-payments/internal/money/money.go:17.3,18.1 1 1
+github.com/newdarwindev/firm-payments/internal/money/money.go:19.2,20.30 2 0
+github.com/newdarwindev/firm-payments/internal/money/money.go:21.3,21.33 1 0
+github.com/newdarwindev/firm-payments/internal/money/money.go:22.4,23.1 1 0
+github.com/newdarwindev/firm-payments/internal/money/money.go:24.3,25.36 2 0
+github.com/newdarwindev/firm-payments/internal/money/money.go:26.4,27.1 1 0
+github.com/newdarwindev/firm-payments/internal/money/money.go:28.3,28.31 1 0
+github.com/newdarwindev/firm-payments/internal/money/money.go:30.2,31.33 2 0
+github.com/newdarwindev/firm-payments/internal/money/money.go:32.3,32.33 1 0
+github.com/newdarwindev/firm-payments/internal/money/money.go:33.4,34.1 1 0
+github.com/newdarwindev/firm-payments/internal/money/money.go:35.3,36.13 2 0
+github.com/newdarwindev/firm-payments/internal/money/money.go:37.4,38.1 1 0
+github.com/newdarwindev/firm-payments/internal/money/money.go:39.3,39.17 1 0
+github.com/newdarwindev/firm-payments/internal/money/money.go:41.2,41.36 1 0
+github.com/newdarwindev/firm-payments/internal/money/money.go:42.3,43.1 1 0
+github.com/newdarwindev/firm-payments/internal/money/money.go:44.2,44.19 1 0

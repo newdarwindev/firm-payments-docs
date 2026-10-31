@@ -1,0 +1,47 @@
+{
+  "id": "unit-1f92ee8f80da27f2",
+  "suite": "unit",
+  "name": "TestPagesPublicationProvenance/wrong-repository",
+  "sha": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
+  "status": "pass",
+  "asserts": "",
+  "sourceURL": "https://github.com/newdarwindev/firm-payments/blob/b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f/tests/gates_test.go#L59",
+  "package": "github.com/newdarwindev/firm-payments/tests",
+  "command": [
+    "go",
+    "tool",
+    "test2json",
+    "-t",
+    "-p",
+    "github.com/newdarwindev/firm-payments/tests",
+    "/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/59830ebc3a418411.test",
+    "-test.v=test2json",
+    "-test.count=1",
+    "-test.timeout=180s",
+    "-test.run=^TestPagesPublicationProvenance$/^wrong-repository$",
+    "-test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/unit-1f92ee8f80da27f2/coverage.out"
+  ],
+  "build": [
+    "go",
+    "test",
+    "-c",
+    "-o",
+    "/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/59830ebc3a418411.test",
+    "-cover",
+    "-covermode=atomic",
+    "."
+  ],
+  "binarySHA256": "33e7f9b8c4f271a641e639fd1b03dc58cfba8e4453965fb262f9db2cb3fbee52",
+  "selected": "TestPagesPublicationProvenance/wrong-repository",
+  "executed": [
+    "TestPagesPublicationProvenance",
+    "TestPagesPublicationProvenance/wrong-repository"
+  ],
+  "group": false,
+  "scope": "Go package test; includes parent setup and teardown. Unit tests may use test doubles. Full-suite race checks run separately.",
+  "total": 0,
+  "covered": 0,
+  "files": [],
+  "profileSHA256": "15e39ee7d1ea1e23c2caa82c7fa07907bc8ae826847b1499a894308734780a89",
+  "gifSHA256": "5761c42540f3ae9ccb9c2fc39812ad9e9b43ae93b0ca04c8051d0b456764a797"
+}

@@ -1,10 +1,10 @@
 {
-  "SourceSHA": "bd252f504e289f53cbc901fcc039b9d1cf90c8d8",
+  "SourceSHA": "b7a40cfc5b8242c5cec6c81a94a2bede88ea1e0f",
   "Mode": "hosted",
-  "VerifiedAt": "2026-10-30T21:09:22Z",
+  "VerifiedAt": "2026-10-31T12:16:31Z",
   "FunctionalCases": 67,
-  "CoveragePercent": 86.9090909090909,
+  "CoveragePercent": 87.27272727272727,
   "Rows": 37,
-  "ServiceURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961066",
-  "ConversationURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41127961095"
+  "ServiceURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870903",
+  "ConversationURL": "https://github.com/newdarwindev/firm-payments/actions/runs/41199870754"
 }

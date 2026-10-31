@@ -1,0 +1,503 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>evidence: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/newdarwindev/firm-payments/tools/evidence/main.go (15.7%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">// Command evidence turns actual Go test events and coverage counters into build artifacts.
+package main
+
+import (
+        "bufio"
+        "encoding/json"
+        "encoding/xml"
+        "errors"
+        "flag"
+        "fmt"
+        "html/template"
+        "io"
+        "os"
+        "path/filepath"
+        "sort"
+        "strconv"
+        "strings"
+)
+
+type testCase struct {
+        Name    string  `json:"name"`
+        Asserts string  `json:"asserts"`
+        Status  string  `json:"status,omitempty"`
+        Seconds float64 `json:"seconds,omitempty"`
+        Output  string  `json:"output,omitempty"`
+}
+type testEvent struct {
+        Action, Package, Test, Output string
+        Elapsed                       float64
+}
+type report struct {
+        Revision      string     `json:"revision"`
+        Passed        int        `json:"passed"`
+        Total         int        `json:"total"`
+        PackagePassed bool       `json:"package_passed"`
+        Cases         []testCase `json:"cases"`
+}
+
+func main() {
+        <span class="cov0" title="0">if err := run(os.Args[1:], os.Stdin); err != nil </span>{
+                <span class="cov0" title="0">fmt.Fprintln(os.Stderr, err)
+                os.Exit(1)
+</span>        }
+}
+func run(args []string, input io.Reader) error {
+        <span class="cov0" title="0">if len(args) == 0 </span>{
+                <span class="cov0" title="0">return errors.New("usage: evidence functional|catalogue|coverage")
+</span>        }
+        <span class="cov0" title="0">flags := flag.NewFlagSet(args[0], flag.ContinueOnError)
+        catalogue := flags.String("catalogue", "testdata/functional-cases.json", "expected functional cases")
+        out := flags.String("out", "artifacts/functional", "artifact directory")
+        revision := flags.String("revision", "working-tree", "source revision")
+        terminal := flags.Bool("terminal", false, "render live terminal dashboard")
+        if err := flags.Parse(args[1:]); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">switch args[0] </span>{
+        case "functional":
+                <span class="cov0" title="0">cases, err := loadCases(*catalogue)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">r, checkErr := consume(input, cases, *revision, *terminal)
+                if err := writeReport(*out, r); err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">return checkErr</span>
+        case "catalogue":
+                <span class="cov0" title="0">cases, err := loadCases(*catalogue)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return err
+</span>                }
+                <span class="cov0" title="0">var b strings.Builder
+                b.WriteString("# Functional test catalogue\n\nEach case runs through actual Go service executables and PostgreSQL. Upstream fault cases use real Nginx redirects/rate limits and PostgreSQL row locks. No case may be skipped or missing from a successful build.\n\n| Test name (`TestFunctional/…`) | Assertions |\n| --- | --- |\n")
+                for _, c := range cases </span>{
+                        <span class="cov0" title="0">fmt.Fprintf(&amp;b, "| `%s` | %s |\n", c.Name, strings.ReplaceAll(c.Asserts, "|", "\\|"))
+</span>                }
+                <span class="cov0" title="0">return os.WriteFile(*out, []byte(b.String()), 0o644)</span>
+        case "coverage":
+                <span class="cov0" title="0">return coverage(*out, flags.Args())</span>
+        default:
+                <span class="cov0" title="0">return errors.New("unknown evidence command")</span>
+        }
+}
+func loadCases(path string) ([]testCase, error) {
+        <span class="cov0" title="0">data, err := os.ReadFile(path)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, err
+</span>        }
+        <span class="cov0" title="0">var cases []testCase
+        if err := json.Unmarshal(data, &amp;cases); err != nil </span>{
+                <span class="cov0" title="0">return nil, err
+</span>        }
+        <span class="cov0" title="0">if len(cases) == 0 </span>{
+                <span class="cov0" title="0">return nil, errors.New("empty functional catalogue")
+</span>        }
+        <span class="cov0" title="0">seen := map[string]bool{}
+        for i := range cases </span>{
+                <span class="cov0" title="0">c := &amp;cases[i]
+                if c.Name == "" || c.Asserts == "" || seen[c.Name] </span>{
+                        <span class="cov0" title="0">return nil, errors.New("missing or duplicate functional specification")
+</span>                }
+                <span class="cov0" title="0">seen[c.Name] = true
+                c.Status = "queued"</span>
+        }
+        <span class="cov0" title="0">return cases, nil</span>
+}
+func consume(input io.Reader, cases []testCase, revision string, terminal bool) (report, error) {
+        <span class="cov7" title="5">r := report{Revision: revision, Cases: cases, Total: len(cases)}
+        indices := map[string]int{}
+        for i, c := range cases </span>{
+                <span class="cov7" title="5">indices["TestFunctional/"+c.Name] = i
+</span>        }
+        <span class="cov7" title="5">packageFailed := false
+        unexpected := false
+        if terminal </span>{
+                <span class="cov0" title="0">defer fmt.Print("\033[?25h")
+                render(r)
+</span>        }
+        <span class="cov7" title="5">scanner := bufio.NewScanner(input)
+        scanner.Buffer(make([]byte, 4096), 8&lt;&lt;20)
+        for scanner.Scan() </span>{
+                <span class="cov10" title="8">var e testEvent
+                if err := json.Unmarshal(scanner.Bytes(), &amp;e); err != nil </span>{
+                        <span class="cov1" title="1">return r, fmt.Errorf("invalid test event: %w", err)
+</span>                }
+                <span class="cov9" title="7">if e.Package != "github.com/newdarwindev/firm-payments/tests/functional" </span>{
+                        <span class="cov1" title="1">return r, errors.New("unexpected test package")
+</span>                }
+                <span class="cov8" title="6">if e.Test == "" </span>{
+                        <span class="cov4" title="2">if e.Action == "pass" </span>{
+                                <span class="cov4" title="2">r.PackagePassed = true
+</span>                        }
+                        <span class="cov4" title="2">if e.Action == "fail" </span>{
+                                <span class="cov0" title="0">packageFailed = true
+</span>                        }
+                }
+                <span class="cov8" title="6">if i, ok := indices[e.Test]; ok </span>{
+                        <span class="cov5" title="3">c := &amp;r.Cases[i]
+                        switch e.Action </span>{
+                        case "run":
+                                <span class="cov1" title="1">if c.Status != "queued" </span>{
+                                        <span class="cov0" title="0">return r, errors.New("duplicate case execution")
+</span>                                }
+                                <span class="cov1" title="1">c.Status = "running"</span>
+                        case "pass", "fail", "skip":
+                                <span class="cov4" title="2">if c.Status != "running" </span>{
+                                        <span class="cov1" title="1">return r, errors.New("case completed without starting")
+</span>                                }
+                                <span class="cov1" title="1">c.Status = e.Action
+                                c.Seconds = e.Elapsed
+                                if e.Action == "pass" </span>{
+                                        <span class="cov0" title="0">r.Passed++
+</span>                                }
+                        case "output":
+                                <span class="cov0" title="0">c.Output += e.Output</span>
+                        }
+                        <span class="cov4" title="2">if terminal &amp;&amp; e.Action != "output" </span>{
+                                <span class="cov0" title="0">render(r)
+</span>                        }
+                } else <span class="cov5" title="3">if strings.HasPrefix(e.Test, "TestFunctional/") </span>{
+                        <span class="cov1" title="1">unexpected = true
+</span>                }
+        }
+        <span class="cov4" title="2">if err := scanner.Err(); err != nil </span>{
+                <span class="cov0" title="0">return r, err
+</span>        }
+        <span class="cov4" title="2">if terminal </span>{
+                <span class="cov0" title="0">render(r)
+</span>        }
+        <span class="cov4" title="2">if packageFailed || !r.PackagePassed || unexpected || r.Passed != r.Total </span>{
+                <span class="cov4" title="2">return r, fmt.Errorf("functional evidence incomplete: %d/%d passed, package passed=%v, package failed=%v, unexpected cases=%v", r.Passed, r.Total, r.PackagePassed, packageFailed, unexpected)
+</span>        }
+        <span class="cov0" title="0">return r, nil</span>
+}
+func render(r report) {
+        <span class="cov0" title="0">var b strings.Builder
+        b.WriteString("\033[?25l\033[H\033[2J\033[1;36mFIRM PAYMENTS  |  LIVE FUNCTIONAL TEST RUN\033[0m\n")
+        fmt.Fprintf(&amp;b, "Revision: %s\nTwo API processes + two ledger processes + real PostgreSQL\nActual go test -json events; rejected requests assert unchanged database state.\n\n", r.Revision)
+        half := (len(r.Cases) + 1) / 2
+        cell := func(c testCase) string </span>{
+                <span class="cov0" title="0">color := "\033[90m"
+                switch c.Status </span>{
+                case "pass":
+                        <span class="cov0" title="0">color = "\033[32m"</span>
+                case "fail", "skip":
+                        <span class="cov0" title="0">color = "\033[31m"</span>
+                case "running":
+                        <span class="cov0" title="0">color = "\033[33m"</span>
+                }
+                <span class="cov0" title="0">return fmt.Sprintf("%s%-7s %-43s %5.2fs\033[0m", color, strings.ToUpper(c.Status), c.Name, c.Seconds)</span>
+        }
+        <span class="cov0" title="0">for i := range half </span>{
+                <span class="cov0" title="0">b.WriteString(cell(r.Cases[i]))
+                if j := i + half; j &lt; len(r.Cases) </span>{
+                        <span class="cov0" title="0">b.WriteString("   ")
+                        b.WriteString(cell(r.Cases[j]))
+</span>                }
+                <span class="cov0" title="0">b.WriteByte('\n')</span>
+        }
+        <span class="cov0" title="0">fmt.Fprintf(&amp;b, "\nPASSED %d / %d | package success: %v\n", r.Passed, r.Total, r.PackagePassed)
+        if r.PackagePassed &amp;&amp; r.Passed == r.Total </span>{
+                <span class="cov0" title="0">b.WriteString("\033[1;32mALL FUNCTIONAL ASSERTIONS PASSED\033[0m\n")
+</span>        }
+        <span class="cov0" title="0">fmt.Print(b.String())</span>
+}
+func writeJSON(path string, value any) error {
+        <span class="cov0" title="0">data, err := json.MarshalIndent(value, "", "  ")
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">return os.WriteFile(path, append(data, '\n'), 0o644)</span>
+}
+func writeReport(out string, r report) error {
+        <span class="cov0" title="0">if err := os.MkdirAll(out, 0o755); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">if err := writeJSON(filepath.Join(out, "results.json"), r); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">type xmlCase struct {
+                Name    string  `xml:"name,attr"`
+                Time    float64 `xml:"time,attr"`
+                Failure *string `xml:"failure,omitempty"`
+                Output  string  `xml:"system-out"`
+</span>        }
+        <span class="cov0" title="0">type xmlSuite struct {
+                XMLName  xml.Name  `xml:"testsuite"`
+                Name     string    `xml:"name,attr"`
+                Tests    int       `xml:"tests,attr"`
+                Failures int       `xml:"failures,attr"`
+                Cases    []xmlCase `xml:"testcase"`
+</span>        }
+        <span class="cov0" title="0">x := xmlSuite{Name: "functional", Tests: r.Total}
+        for _, c := range r.Cases </span>{
+                <span class="cov0" title="0">xc := xmlCase{Name: c.Name, Time: c.Seconds, Output: c.Output}
+                if c.Status != "pass" </span>{
+                        <span class="cov0" title="0">message := "Case did not pass: " + c.Status
+                        xc.Failure = &amp;message
+                        x.Failures++
+</span>                }
+                <span class="cov0" title="0">x.Cases = append(x.Cases, xc)</span>
+        }
+        <span class="cov0" title="0">data, err := xml.MarshalIndent(x, "", "  ")
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">if err := os.WriteFile(filepath.Join(out, "junit.xml"), append([]byte(xml.Header), data...), 0o644); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">const page = `&lt;!doctype html&gt;&lt;html lang="en"&gt;&lt;meta charset="utf-8"&gt;&lt;title&gt;Functional test evidence&lt;/title&gt;&lt;style&gt;body{font:16px system-ui;background:#10151d;color:#e7edf6;max-width:1250px;margin:40px auto;padding:0 24px}a{color:#8dc6ff}table{border-collapse:collapse;width:100%}td,th{padding:12px;border-bottom:1px solid #354256;text-align:left;vertical-align:top}code{font-size:13px}.pass{color:#8de4aa}.fail,.skip,.queued,.running{color:#ffa4a4}video{width:100%}&lt;/style&gt;&lt;h1&gt;Functional test evidence&lt;/h1&gt;&lt;p&gt;Revision &lt;code&gt;{{.Revision}}&lt;/code&gt; · {{.Passed}} / {{.Total}} passed · package success: {{.PackagePassed}}&lt;/p&gt;&lt;video controls preload="metadata" src="functional-tests.mp4" poster="functional-tests-poster.png"&gt;&lt;/video&gt;&lt;p&gt;&lt;a href="results.json"&gt;JSON results&lt;/a&gt; · &lt;a href="junit.xml"&gt;JUnit&lt;/a&gt; · &lt;a href="functional-tests.jsonl"&gt;Original test events&lt;/a&gt; · &lt;a href="coverage.html"&gt;Process coverage&lt;/a&gt;&lt;/p&gt;&lt;table&gt;&lt;tr&gt;&lt;th&gt;Test&lt;/th&gt;&lt;th&gt;Assertions&lt;/th&gt;&lt;th&gt;Actual status&lt;/th&gt;&lt;th&gt;Seconds&lt;/th&gt;&lt;/tr&gt;{{range .Cases}}&lt;tr&gt;&lt;td&gt;&lt;code&gt;{{.Name}}&lt;/code&gt;&lt;/td&gt;&lt;td&gt;{{.Asserts}}&lt;/td&gt;&lt;td class="{{.Status}}"&gt;{{.Status}}&lt;/td&gt;&lt;td&gt;{{printf "%.2f" .Seconds}}&lt;/td&gt;&lt;/tr&gt;{{end}}&lt;/table&gt;&lt;/html&gt;`
+        file, err := os.Create(filepath.Join(out, "index.html"))
+        if err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">tmpl, err := template.New("report").Parse(page)
+        if err != nil </span>{
+                <span class="cov0" title="0">_ = file.Close()
+                return err
+</span>        }
+        <span class="cov0" title="0">return errors.Join(tmpl.Execute(file, r), file.Close())</span>
+}
+
+type block struct {
+        Key                 string
+        Statements, Covered int64
+}
+type coverageResult struct {
+        Name       string  `json:"name"`
+        Statements int64   `json:"statements"`
+        Covered    int64   `json:"covered"`
+        Percent    float64 `json:"percent"`
+}
+
+func readProfile(path string) (map[string]block, error) {
+        <span class="cov0" title="0">f, err := os.Open(path)
+        if err != nil </span>{
+                <span class="cov0" title="0">return nil, err
+</span>        }
+        <span class="cov0" title="0">defer func() </span>{ <span class="cov0" title="0">_ = f.Close() }</span>()
+        <span class="cov0" title="0">scanner := bufio.NewScanner(f)
+        if !scanner.Scan() || scanner.Text() != "mode: atomic" </span>{
+                <span class="cov0" title="0">return nil, errors.New("coverage requires atomic mode")
+</span>        }
+        <span class="cov0" title="0">blocks := map[string]block{}
+        for scanner.Scan() </span>{
+                <span class="cov0" title="0">fields := strings.Fields(scanner.Text())
+                if len(fields) != 3 </span>{
+                        <span class="cov0" title="0">return nil, errors.New("invalid coverage block")
+</span>                }
+                <span class="cov0" title="0">n, e1 := strconv.ParseInt(fields[1], 10, 64)
+                count, e2 := strconv.ParseInt(fields[2], 10, 64)
+                if e1 != nil || e2 != nil || n &lt; 0 || count &lt; 0 </span>{
+                        <span class="cov0" title="0">return nil, errors.New("invalid coverage counters")
+</span>                }
+                <span class="cov0" title="0">b := block{Key: fields[0], Statements: n}
+                if count &gt; 0 </span>{
+                        <span class="cov0" title="0">b.Covered = n
+</span>                }
+                <span class="cov0" title="0">if old, ok := blocks[b.Key]; ok </span>{
+                        <span class="cov0" title="0">if old.Statements != n </span>{
+                                <span class="cov0" title="0">return nil, errors.New("inconsistent coverage blocks")
+</span>                        }
+                        <span class="cov0" title="0">if old.Covered &gt; b.Covered </span>{
+                                <span class="cov0" title="0">b.Covered = old.Covered
+</span>                        }
+                }
+                <span class="cov0" title="0">blocks[b.Key] = b</span>
+        }
+        <span class="cov0" title="0">if len(blocks) == 0 </span>{
+                <span class="cov0" title="0">return nil, errors.New("empty coverage profile")
+</span>        }
+        <span class="cov0" title="0">return blocks, scanner.Err()</span>
+}
+func summarize(name string, blocks map[string]block) coverageResult {
+        <span class="cov0" title="0">r := coverageResult{Name: name}
+        for _, b := range blocks </span>{
+                <span class="cov0" title="0">r.Statements += b.Statements
+                r.Covered += b.Covered
+</span>        }
+        <span class="cov0" title="0">if r.Statements &gt; 0 </span>{
+                <span class="cov0" title="0">r.Percent = 100 * float64(r.Covered) / float64(r.Statements)
+</span>        }
+        <span class="cov0" title="0">return r</span>
+}
+func coverage(out string, paths []string) error {
+        <span class="cov0" title="0">if len(paths) != 3 </span>{
+                <span class="cov0" title="0">return errors.New("coverage requires unit, database-integration and functional profiles")
+</span>        }
+        <span class="cov0" title="0">if err := os.MkdirAll(out, 0o755); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">names := []string{"unit", "database-integration", "functional-processes"}
+        results := []coverageResult{}
+        combined := map[string]block{}
+        for i, path := range paths </span>{
+                <span class="cov0" title="0">blocks, err := readProfile(path)
+                if err != nil </span>{
+                        <span class="cov0" title="0">return fmt.Errorf("%s: %w", path, err)
+</span>                }
+                <span class="cov0" title="0">results = append(results, summarize(names[i], blocks))
+                for key, b := range blocks </span>{
+                        <span class="cov0" title="0">if !strings.Contains(key, "/internal/") &amp;&amp; !strings.Contains(key, "/cmd/") </span>{
+                                <span class="cov0" title="0">continue</span>
+                        }
+                        <span class="cov0" title="0">old, ok := combined[key]
+                        if ok &amp;&amp; old.Statements != b.Statements </span>{
+                                <span class="cov0" title="0">return errors.New("incompatible combined coverage blocks")
+</span>                        }
+                        <span class="cov0" title="0">if !ok || b.Covered &gt; old.Covered </span>{
+                                <span class="cov0" title="0">combined[key] = b
+</span>                        }
+                }
+        }
+        <span class="cov0" title="0">if len(combined) == 0 </span>{
+                <span class="cov0" title="0">return errors.New("no application coverage blocks")
+</span>        }
+        <span class="cov0" title="0">total := summarize("application-union", combined)
+        results = append(results, total)
+        if err := writeJSON(filepath.Join(out, "summary.json"), results); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">keys := make([]string, 0, len(combined))
+        for key := range combined </span>{
+                <span class="cov0" title="0">keys = append(keys, key)
+</span>        }
+        <span class="cov0" title="0">sort.Strings(keys)
+        var profile strings.Builder
+        profile.WriteString("mode: atomic\n")
+        for _, key := range keys </span>{
+                <span class="cov0" title="0">b := combined[key]
+                count := 0
+                if b.Covered &gt; 0 </span>{
+                        <span class="cov0" title="0">count = 1
+</span>                }
+                <span class="cov0" title="0">fmt.Fprintf(&amp;profile, "%s %d %d\n", key, b.Statements, count)</span>
+        }
+        <span class="cov0" title="0">if err := os.WriteFile(filepath.Join(out, "combined.out"), []byte(profile.String()), 0o644); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">var text strings.Builder
+        text.WriteString("Coverage from actual counters. Union includes application cmd/internal packages, excludes test/report tooling.\n")
+        for _, r := range results </span>{
+                <span class="cov0" title="0">fmt.Fprintf(&amp;text, "%-25s %6.2f%% (%d/%d statements)\n", r.Name, r.Percent, r.Covered, r.Statements)
+</span>        }
+        <span class="cov0" title="0">if err := os.WriteFile(filepath.Join(out, "summary.txt"), []byte(text.String()), 0o644); err != nil </span>{
+                <span class="cov0" title="0">return err
+</span>        }
+        <span class="cov0" title="0">svg := fmt.Sprintf(`&lt;svg xmlns="http://www.w3.org/2000/svg" width="220" height="28" role="img" aria-label="Application coverage: %.1f%%"&gt;&lt;rect width="220" height="28" rx="5" fill="#174d37"/&gt;&lt;text x="110" y="19" fill="white" text-anchor="middle" font-family="Verdana" font-size="12"&gt;Application coverage: %.1f%%&lt;/text&gt;&lt;/svg&gt;`, total.Percent, total.Percent)
+        return os.WriteFile(filepath.Join(out, "coverage.svg"), []byte(svg), 0o644)</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

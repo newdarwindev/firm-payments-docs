@@ -1,0 +1,9 @@
+go tool test2json -t -p github.com/newdarwindev/firm-payments/docs/internal/dialog /home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/bin/83f04d902701b3fe.test -test.v=test2json -test.count=1 -test.timeout=180s -test.run=^TestPDFLogFailsClosed$/^horizontal_overflow$ -test.coverprofile=/home/runner/work/firm-payments/firm-payments/artifacts/test-evidence/runs/exporter-73cb5e25f5656501/coverage.out
+=== RUN   TestPDFLogFailsClosed
+=== RUN   TestPDFLogFailsClosed/horizontal_overflow
+--- PASS: TestPDFLogFailsClosed/horizontal_overflow (0.00s)
+--- PASS: TestPDFLogFailsClosed (0.00s)
+PASS
+coverage: 3.7% of statements
+
+Exit status: 0
